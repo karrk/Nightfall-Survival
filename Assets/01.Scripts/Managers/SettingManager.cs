@@ -42,7 +42,7 @@ public class SettingManager : MonoBehaviour
     {
         get
         {
-            return 32;
+            return 8;
         }
     }
 

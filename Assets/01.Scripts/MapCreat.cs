@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MapCreat : MonoBehaviour
 {
+    // 동적으로 텍스쳐 변경이 가능한가
+
     readonly string MapDirPath = "Maps/";
 
     int _rxc_Count;
