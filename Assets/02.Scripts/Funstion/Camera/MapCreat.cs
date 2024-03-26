@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+ï»¿using System;
 using UnityEngine;
 
 public class MapCreat : MonoBehaviour
 {
-    // µ¿ÀûÀ¸·Î ÅØ½ºÃÄ º¯°æÀÌ °¡´ÉÇÑ°¡
+    // ë™ì ìœ¼ë¡œ í…ìŠ¤ì³ ë³€ê²½ì´ ê°€ëŠ¥í•œê°€
 
     readonly string MapDirPath = "Maps/";
 
@@ -15,7 +13,7 @@ public class MapCreat : MonoBehaviour
 
     private void Start()
     {
-        if(_tiledMaps == null)
+        if (_tiledMaps == null)
         {
             _rxc_Count = SettingManager.Instance.RxC_Count;
             tiles_interval = GetIntervalDistance();
@@ -28,14 +26,14 @@ public class MapCreat : MonoBehaviour
 
     void DivideTexure(string mapName)
     {
-        Texture texture = Resources.Load<Texture>($"{MapDirPath+mapName}");
+        Texture texture = Resources.Load<Texture>($"{MapDirPath + mapName}");
 
         for (int i = 0; i < _rxc_Count; i++)
         {
             for (int j = 0; j < _rxc_Count; j++)
             {
                 Rect rect = new Rect(
-                    (texture.width / _rxc_Count) * j, 
+                    (texture.width / _rxc_Count) * j,
                     (texture.height / _rxc_Count) * (_rxc_Count - 1 - i),
                     texture.width / _rxc_Count, texture.height / _rxc_Count);
 
@@ -58,19 +56,19 @@ public class MapCreat : MonoBehaviour
                 Sprite sprite = _tiledMaps[(i * _rxc_Count) + j];
 
                 renderer.sprite = sprite;
-                SetTileOptions(tile,i,j);
+                SetTileOptions(tile, i, j);
             }
         }
     }
 
-    void SetTileOptions(GameObject tile,int row, int column)
+    void SetTileOptions(GameObject tile, int row, int column)
     {
         tile.name = $"tile{(row * _rxc_Count) + column}";
 
         tile.transform.position +=
             Vector3.right * tiles_interval * column;
 
-        tile.transform.position += 
+        tile.transform.position +=
             Vector3.down * tiles_interval * row;
 
         if (column >= _rxc_Count / 2)

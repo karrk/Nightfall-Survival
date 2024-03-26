@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class TileMovement : MonoBehaviour
 {
-    Vector2 CamDistance 
-    { 
-        get 
+    Vector2 CamDistance
+    {
+        get
         {
             return new Vector2(
                 Camera.main.transform.position.x - _currentCenterPos.x,
                 Camera.main.transform.position.y - _currentCenterPos.y
                 );
-        } 
+        }
     }
 
     static float DetectErrorMargin = 0.25f;
@@ -44,13 +42,13 @@ public class TileMovement : MonoBehaviour
 
     void Move()
     {
-        // ¾ç¼ö¶ó¸é x Ãà ÀÌµ¿ÀÌ ÇÊ¿ä
+        // ì–‘ìˆ˜ë¼ë©´ x ì¶• ì´ë™ì´ í•„ìš”
         float axisComparison = Mathf.Abs(CamDistance.x) - Mathf.Abs(CamDistance.y);
         float moveDistance = SettingManager.Instance.MapTextureSize * 0.01f;
 
-        if( -DetectErrorMargin <= axisComparison && axisComparison <= DetectErrorMargin) // ´ë°¢ ÀÌµ¿ÀÌ ÇÊ¿ä <º¸Á¤ ÇÊ¿ä>
+        if (-DetectErrorMargin <= axisComparison && axisComparison <= DetectErrorMargin) // ëŒ€ê° ì´ë™ì´ í•„ìš” <ë³´ì • í•„ìš”>
         {
-            //Debug.Log("´ë°¢");
+            //Debug.Log("ëŒ€ê°");
 
             Vector3 dir = new Vector3(Mathf.Sign(CamDistance.x),
                                     Mathf.Sign(CamDistance.y));
@@ -59,35 +57,35 @@ public class TileMovement : MonoBehaviour
 
         }
 
-        else if (axisComparison > 0) // xÃàÀ¸·Î ÀÌµ¿¹İ°æÀÌ ´õ Å©´Ù¸é
+        else if (axisComparison > 0) // xì¶•ìœ¼ë¡œ ì´ë™ë°˜ê²½ì´ ë” í¬ë‹¤ë©´
         {
-            //Debug.Log("x ÃàÀÌµ¿");
+            //Debug.Log("x ì¶•ì´ë™");
             //Debug.Log($"{gameObject.name} {axisComparison}");
             //Debug.Log($"{CamDistance.x} : {CamDistance.y}");
 
-            if (CamDistance.x < 0) // Å¸ÀÏÀ» ¿À¸¥ÂÊ¿¡¼­ ¿ŞÂÊÀ¸·Î ÀÌµ¿
+            if (CamDistance.x < 0) // íƒ€ì¼ì„ ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ ì´ë™
             {
                 this.transform.position += Vector3.left * moveDistance;
             }
-            else  // Å¸ÀÏÀ» ¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿
+            else  // íƒ€ì¼ì„ ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
             {
                 this.transform.position += Vector3.right * moveDistance;
             }
         }
 
-        else if(axisComparison < 0)
+        else if (axisComparison < 0)
         {
-            //Debug.Log("y ÃàÀÌµ¿");
+            //Debug.Log("y ì¶•ì´ë™");
 
-            if(CamDistance.y > 0) // À§¿¡¼­ ¾Æ·¡·Î ³»¸®±â
+            if (CamDistance.y > 0) // ìœ„ì—ì„œ ì•„ë˜ë¡œ ë‚´ë¦¬ê¸°
             {
                 this.transform.position += Vector3.up * moveDistance;
             }
-            else // ¾Æ·¡¼­ À§·Î ¿Ã¸®±â
+            else // ì•„ë˜ì„œ ìœ„ë¡œ ì˜¬ë¦¬ê¸°
             {
                 this.transform.position += Vector3.down * moveDistance;
             }
         }
-        
+
     }
 }

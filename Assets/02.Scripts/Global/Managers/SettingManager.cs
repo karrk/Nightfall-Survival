@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SettingManager : MonoBehaviour
 {
-    // µ¿ÀÛÇÏ´Â ±â±â¿¡ ´ëÇÑ Á¤º¸³ª, °ÔÀÓÀÇ ¼³Á¤?? °°Àº°ÍÀ» °ü¸®ÇÏ±â À§ÇØ ¸¸µé¾ú½À´Ï´Ù.
+    // ë™ì‘í•˜ëŠ” ê¸°ê¸°ì— ëŒ€í•œ ì •ë³´ë‚˜, ê²Œì„ì˜ ì„¤ì •?? ê°™ì€ê²ƒì„ ê´€ë¦¬í•˜ê¸° ìœ„í•´ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤.
 
     private static SettingManager _instance;
 
@@ -27,7 +25,7 @@ public class SettingManager : MonoBehaviour
 
     public int MapTextureSize
     {
-        get 
+        get
         {
             if (_mapTextureSize <= 0)
                 _mapTextureSize = Resources.Load<Sprite>("Maps/Test").texture.width;

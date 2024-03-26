@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
@@ -13,7 +11,7 @@ public class CameraScript : MonoBehaviour
     float _moveSpeed = 5f;
 
     private void Update()
-    {   // �ӽÿ� �ڵ�
+    {   // 임시용 코드
         if (Input.GetKey(KeyCode.UpArrow))
             this.transform.position += Vector3.up * _moveSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.DownArrow))
