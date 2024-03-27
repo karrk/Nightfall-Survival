@@ -8,7 +8,6 @@ public enum ePoolingType
     Weapon,
     Effect,
     Sound,
-    Text,
+    DamageText,
     Item,
-
 }

@@ -5,117 +5,85 @@ using UnityEngine;
 public abstract class ObjectPool : MonoBehaviour
 {
     protected abstract int InitCount { get; }
+    protected abstract ePoolingType Type { get; }
+
+    protected static int CreateLimitCount = 50;
 
     [SerializeField]
-    protected List<PoolingObj> _prefabs = new List<PoolingObj>();
+    protected PoolingObj _prefab;
 
-    protected Dictionary<int, Queue<PoolingObj>> _dic
-            = new Dictionary<int, Queue<PoolingObj>>();
+    Queue<PoolingObj> pool = new Queue<PoolingObj>();
 
-    protected Dictionary<int, int> _sizeTable
-            = new Dictionary<int, int>();
+    int _maxSize;
 
-    protected void InitPool()
+    private void Start()
     {
-        for (int i = 0; i < _prefabs.Count; i++)
-        {
-            int objNum = _prefabs[i].PoolingNumber;
-
-            if (_dic.ContainsKey(objNum))
-                continue;
-
-            _dic.Add(objNum, new Queue<PoolingObj>());
-
-            for (int j = 0; j < InitCount; j++)
-            {
-                _dic[objNum].Enqueue(CreateObj(i));
-            }
-
-            _sizeTable[objNum] = InitCount;
-        }
-    }
-
-    #region 기능 논의
-    protected void InitPool(bool softClearMode)
-    {
-        RemovePool(softClearMode);
+        FindObjectOfType<ObjPoolManager>().AddPool((eEventType)Type, this);
         InitPool();
     }
 
-    private void RemovePool(bool isSoft)
+    protected void InitPool()
     {
-        if (isSoft)
+        for (int i = 0; i < InitCount; i++)
         {
-            _dic.Clear();
-            return;
+            pool.Enqueue(CreateObj());
         }
 
-        List<int> keys = new List<int>();
-
-        foreach (var e in _dic)
-            keys.Add(e.Key);
-
-        foreach (var e in _dic) // 이거 왠지 에러코드 괜찮은 메서드라면 보완예정
-        {
-            if (keys.Contains(e.Key))
-                continue;
-
-            _dic.Remove(e.Key);
-        }
-
+        _maxSize = InitCount;
     }
-    #endregion
 
-
-    protected PoolingObj CreateObj(int prefabListNum)
+    protected PoolingObj CreateObj()
     {
-        PoolingObj obj = Instantiate(_prefabs[prefabListNum]);
+        PoolingObj obj = Instantiate(_prefab);
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.transform);
 
         return obj;
     }
 
-    public PoolingObj GetObj(int mNumber)
+    public PoolingObj GetObj()
     {
-        if (_dic[mNumber].Count <= 0)
+        if (pool.Count <= 0)
         {
-            _sizeTable[mNumber] *= 2;
+            _maxSize *= 2;
 
-            for (int i = 0; i < mNumber; i++)
-            {
-                _dic[mNumber].Enqueue(GetObj(mNumber));
-            }
+            StartCoroutine(DevideCreate(_maxSize));
         }
 
-        return _dic[mNumber].Dequeue();
+        return pool.Dequeue();
+    }
+
+    IEnumerator DevideCreate(int requestCount)
+    {
+        int count = requestCount;
+
+        while (true)
+        {
+            for (int i = 0; i < CreateLimitCount; i++)
+            {
+                pool.Enqueue(CreateObj());
+            }
+
+            count -= CreateLimitCount;
+
+            if (count <= 0)
+                break;
+
+            yield return null;
+        }
     }
 
     public void ReturnObj(PoolingObj obj = null)
     {
-        if(obj == null)
+        if (obj == null)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
-                ReturnObj (transform.GetChild(i).GetComponent<PoolingObj>());
+                ReturnObj(transform.GetChild(i).GetComponent<PoolingObj>());
             }
         }
 
         obj.gameObject.SetActive(false);
-
-        _dic[obj.PoolingNumber].Enqueue(obj);
+        pool.Enqueue(obj);
     }
 }
-
-//public class MonsterPool : ObjectPool
-//{
-//    protected override int InitCount => 20;
-
-
-//}
-
-//public class WeaponPool : ObjectPool
-//{
-//    protected override int InitCount => 10;
-//}
-

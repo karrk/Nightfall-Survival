@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PoolingObj : MonoBehaviour
+public class Data_Item_Temp : PoolingObj
 {
-
+    int _price;
 }

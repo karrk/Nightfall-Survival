@@ -4,54 +4,30 @@ using UnityEngine;
 
 public class ObjPoolManager : MonoBehaviour
 {
-    Dictionary<ePoolingType, ObjectPool> _dic =
+    Dictionary<ePoolingType, ObjectPool> pools =
         new Dictionary<ePoolingType, ObjectPool>();
 
     private void Awake()
     {
-        GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
+        //GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
     }
 
 
-    public PoolingObj GetObj(ePoolingType poolingType, int poolingNumber)
+    public PoolingObj GetObj(ePoolingType poolingType)
     {
-        return _dic[poolingType].GetObj(poolingNumber);
+        return pools[poolingType].GetObj();
     }
 
     void ReturnAllObj()
     {
-        foreach (var e in _dic)
+        foreach (var e in pools)
         {
             e.Value.ReturnObj();
         }
     }
+
+    public void AddPool(eEventType poolType,ObjectPool pool)
+    {
+        this.pools.Add((ePoolingType)poolType, pool);
+    }
 }
-
-//public static class PoolTypeCheck
-//{
-//    public static PoolingObj GetObj(ePoolingType poolType, eMonster detailType)
-//    {
-//        return null;
-//    }
-
-//    public static PoolingObj GetObj(ePoolingType poolType, eWeapon detailType)
-//    {
-//        return null;
-//    }
-
-//    public static PoolingObj GetObj(ePoolingType poolType, eEffect detailType)
-//    {
-//        return null;
-//    }
-
-//    public static PoolingObj GetObj(ePoolingType poolType, eSound detailType)
-//    {
-//        return null;
-//    }
-
-//    public static PoolingObj GetObj(ePoolingType poolType, eText detailType)
-//    {
-//        return null;
-//    }
-
-//}
