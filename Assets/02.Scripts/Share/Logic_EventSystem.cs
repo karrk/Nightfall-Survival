@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VS.Share
-{
+namespace VS.Share {
     /// <summary>
     /// [대리자] 매개변수가 없는 이벤트 타입입니다.
     /// </summary>
@@ -26,8 +25,7 @@ namespace VS.Share
     /// [기능] 이벤트 타입마다 할당되어 관리되어지는 이벤트 그룹입니다. 
     /// <br> 해당 기능을 통해서 이벤트 그룹안에 새로운 이벤트 타입의 함수를 추가하거나, 제거 하는 기능을 내포합니다.</br>
     /// </summary>
-    public struct EventList
-    {
+    public struct EventList {
         /// <summary>
         /// [기능] 이벤트에 담겨있는 함수 리스트입니다.
         /// </summary>
@@ -44,10 +42,8 @@ namespace VS.Share
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
-        public void AddFUnction<T>(T func)
-        {
-            if (null == _EventList)
-            {
+        public void AddFUnction<T>(T func) {
+            if (null == _EventList) {
                 _EventList = new List<Delegate>();
             }
 
@@ -59,10 +55,8 @@ namespace VS.Share
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
-        public void RemoveFunction<T>(T func)
-        {
-            if (null == _EventList)
-            {
+        public void RemoveFunction<T>(T func) {
+            if (null == _EventList) {
                 return;
             }
             _EventList.Remove(func as Delegate);
@@ -72,10 +66,8 @@ namespace VS.Share
         /// [검사] 이벤트가 비어있는지를 확인합니다. 
         /// </summary>
         /// <returns>true : 비어있음<br>false : 함수가 있음</br></returns>
-        public bool IsEmpty()
-        {
-            if (null == _EventList)
-            {
+        public bool IsEmpty() {
+            if (null == _EventList) {
                 return true;
             }
 
@@ -86,8 +78,7 @@ namespace VS.Share
     }
 
 
-    public class Logic_EventSystem : MonoBehaviour
-    {
+    public class Logic_EventSystem {
         /// <summary>
         /// [데이터] 모든 이벤트가 담겨있는 이벤트 테이블입니다. 
         /// </summary>
@@ -96,10 +87,8 @@ namespace VS.Share
         /// <summary>
         /// [기능] 담겨있는 모든 이벤트를 지웁니다. 
         /// </summary>
-        public void ClearEvent()
-        {
-            if (null != _eventTable)
-            {
+        public void ClearEvent() {
+            if (null != _eventTable) {
                 _eventTable.Clear();
             }
         }
@@ -108,11 +97,9 @@ namespace VS.Share
         /// [검사] 이벤트 테이블에 이벤트가 존재하는지를 확인합니다. 
         /// </summary>
         /// <returns>true : 비어있음<br>false : 이벤트가 존재함</br></returns>
-        private bool IsEventTableNull()
-        {
+        private bool IsEventTableNull() {
 
-            if (null == _eventTable)
-            {
+            if (null == _eventTable) {
                 return true;
             }
 
@@ -123,19 +110,16 @@ namespace VS.Share
         /// [기능] 이벤트 타입에 알맞는 이벤트를 실행시킵니다.
         /// </summary>
         /// <param name="eventType"></param>
-        public void CallEvent(eEventType eventType)
-        {
+        public void CallEvent(eEventType eventType) {
             if (IsEventTableNull()) return;
 
 
             int parseType = (int)eventType;
 
-            if (_eventTable.ContainsKey(parseType))
-            {
+            if (_eventTable.ContainsKey(parseType)) {
                 List<Delegate> eventList = _eventTable[parseType].GetEventList();
 
-                foreach (EventFunc func in eventList)
-                {
+                foreach (EventFunc func in eventList) {
                     if (func.Target is UnityEngine.Object && func.Target.Equals(null)) continue;
                     func();
                 }
@@ -146,18 +130,15 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 타입에 알맞는 이벤트를 실행시킵니다.
         /// </summary>
-        public void CallEvent<T>(eEventType eventType, T param)
-        {
+        public void CallEvent<T>(eEventType eventType, T param) {
             if (IsEventTableNull()) return;
 
             int parseType = (int)eventType;
 
-            if (_eventTable.ContainsKey(parseType))
-            {
+            if (_eventTable.ContainsKey(parseType)) {
                 List<Delegate> eventList = _eventTable[parseType].GetEventList();
 
-                foreach (EventFunc<T> func in eventList)
-                {
+                foreach (EventFunc<T> func in eventList) {
                     if (func.Target is UnityEngine.Object && func.Target.Equals(null)) continue;
                     func(param);
                 }
@@ -168,18 +149,15 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 타입에 알맞는 이벤트를 실행시킵니다.
         /// </summary>
-        public void CallEvent<T1, T2>(eEventType eventType, T1 param1, T2 param2)
-        {
+        public void CallEvent<T1, T2>(eEventType eventType, T1 param1, T2 param2) {
             if (IsEventTableNull()) return;
 
             int parseType = (int)eventType;
 
-            if (_eventTable.ContainsKey(parseType))
-            {
+            if (_eventTable.ContainsKey(parseType)) {
                 List<Delegate> eventList = _eventTable[parseType].GetEventList();
 
-                foreach (EventFunc<T1, T2> func in eventList)
-                {
+                foreach (EventFunc<T1, T2> func in eventList) {
                     if (func.Target is UnityEngine.Object && func.Target.Equals(null)) continue;
                     func(param1, param2);
                 }
@@ -190,18 +168,15 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 타입에 알맞는 이벤트를 실행시킵니다.
         /// </summary>
-        public void CallEvent<T1, T2, T3>(eEventType eventType, T1 param1, T2 param2, T3 param3)
-        {
+        public void CallEvent<T1, T2, T3>(eEventType eventType, T1 param1, T2 param2, T3 param3) {
             if (IsEventTableNull()) return;
 
             int parseType = (int)eventType;
 
-            if (_eventTable.ContainsKey(parseType))
-            {
+            if (_eventTable.ContainsKey(parseType)) {
                 List<Delegate> eventList = _eventTable[parseType].GetEventList();
 
-                foreach (EventFunc<T1, T2, T3> func in eventList)
-                {
+                foreach (EventFunc<T1, T2, T3> func in eventList) {
                     if (func.Target is UnityEngine.Object && func.Target.Equals(null)) continue;
                     func(param1, param2, param3);
                 }
@@ -212,24 +187,19 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에 이벤트를 추가합니다. 
         /// </summary>
-        public void RegisterEvent(eEventType eventType, EventFunc func)
-        {
-            if (null == _eventTable)
-            {
+        public void RegisterEvent(eEventType eventType, EventFunc func) {
+            if (null == _eventTable) {
                 _eventTable = new Dictionary<int, EventList>();
             }
 
             int parseType = (int)eventType;
 
-            if (false == _eventTable.ContainsKey(parseType))
-            {
+            if (false == _eventTable.ContainsKey(parseType)) {
                 EventList list = new EventList();
                 list.AddFUnction(func);
 
                 _eventTable.Add(parseType, list);
-            }
-            else
-            {
+            } else {
                 _eventTable[parseType].AddFUnction(func);
             }
         }
@@ -237,24 +207,19 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에 이벤트를 추가합니다. 
         /// </summary>
-        public void RegisterEvent<T>(eEventType eventType, EventFunc<T> func)
-        {
-            if (null == _eventTable)
-            {
+        public void RegisterEvent<T>(eEventType eventType, EventFunc<T> func) {
+            if (null == _eventTable) {
                 _eventTable = new Dictionary<int, EventList>();
             }
 
             int parseType = (int)eventType;
 
-            if (false == _eventTable.ContainsKey(parseType))
-            {
+            if (false == _eventTable.ContainsKey(parseType)) {
                 EventList list = new EventList();
                 list.AddFUnction(func);
 
                 _eventTable.Add(parseType, list);
-            }
-            else
-            {
+            } else {
                 _eventTable[parseType].AddFUnction(func);
             }
         }
@@ -262,24 +227,19 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에 이벤트를 추가합니다. 
         /// </summary>
-        public void RegisterEvent<T1, T2>(eEventType eventType, EventFunc<T1, T2> func)
-        {
-            if (null == _eventTable)
-            {
+        public void RegisterEvent<T1, T2>(eEventType eventType, EventFunc<T1, T2> func) {
+            if (null == _eventTable) {
                 _eventTable = new Dictionary<int, EventList>();
             }
 
             int parseType = (int)eventType;
 
-            if (false == _eventTable.ContainsKey(parseType))
-            {
+            if (false == _eventTable.ContainsKey(parseType)) {
                 EventList list = new EventList();
                 list.AddFUnction(func);
 
                 _eventTable.Add(parseType, list);
-            }
-            else
-            {
+            } else {
                 _eventTable[parseType].AddFUnction(func);
             }
         }
@@ -287,24 +247,19 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에 이벤트를 추가합니다. 
         /// </summary>
-        public void RegisterEvent<T1, T2, T3>(eEventType eventType, EventFunc<T1, T2, T3> func)
-        {
-            if (null == _eventTable)
-            {
+        public void RegisterEvent<T1, T2, T3>(eEventType eventType, EventFunc<T1, T2, T3> func) {
+            if (null == _eventTable) {
                 _eventTable = new Dictionary<int, EventList>();
             }
 
             int parseType = (int)eventType;
 
-            if (false == _eventTable.ContainsKey(parseType))
-            {
+            if (false == _eventTable.ContainsKey(parseType)) {
                 EventList list = new EventList();
                 list.AddFUnction(func);
 
                 _eventTable.Add(parseType, list);
-            }
-            else
-            {
+            } else {
                 _eventTable[parseType].AddFUnction(func);
             }
         }
@@ -312,14 +267,12 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에서 특정 이벤트를 제거합니다. 
         /// </summary>
-        public void RemoveEvent(eEventType eventType, EventFunc func)
-        {
+        public void RemoveEvent(eEventType eventType, EventFunc func) {
             if (null == _eventTable) { return; }
 
             int parseType = (int)eventType;
 
-            if (true == _eventTable.ContainsKey(parseType))
-            {
+            if (true == _eventTable.ContainsKey(parseType)) {
                 _eventTable[parseType].RemoveFunction(func);
             }
         }
@@ -327,14 +280,12 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에서 특정 이벤트를 제거합니다. 
         /// </summary>
-        public void RemoveEvent<T>(eEventType eventType, EventFunc<T> func)
-        {
+        public void RemoveEvent<T>(eEventType eventType, EventFunc<T> func) {
             if (null == _eventTable) { return; }
 
             int parseType = (int)eventType;
 
-            if (true == _eventTable.ContainsKey(parseType))
-            {
+            if (true == _eventTable.ContainsKey(parseType)) {
                 _eventTable[parseType].RemoveFunction(func);
             }
         }
@@ -342,14 +293,12 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에서 특정 이벤트를 제거합니다. 
         /// </summary>
-        public void RemoveEvent<T1, T2>(eEventType eventType, EventFunc<T1, T2> func)
-        {
+        public void RemoveEvent<T1, T2>(eEventType eventType, EventFunc<T1, T2> func) {
             if (null == _eventTable) { return; }
 
             int parseType = (int)eventType;
 
-            if (true == _eventTable.ContainsKey(parseType))
-            {
+            if (true == _eventTable.ContainsKey(parseType)) {
                 _eventTable[parseType].RemoveFunction(func);
             }
         }
@@ -357,14 +306,12 @@ namespace VS.Share
         /// <summary>
         /// [기능] 이벤트 테이블에서 특정 이벤트를 제거합니다. 
         /// </summary>
-        public void RemoveEvent<T1, T2, T3>(eEventType eventType, EventFunc<T1, T2, T3> func)
-        {
+        public void RemoveEvent<T1, T2, T3>(eEventType eventType, EventFunc<T1, T2, T3> func) {
             if (null == _eventTable) { return; }
 
             int parseType = (int)eventType;
 
-            if (true == _eventTable.ContainsKey(parseType))
-            {
+            if (true == _eventTable.ContainsKey(parseType)) {
                 _eventTable[parseType].RemoveFunction(func);
             }
         }
