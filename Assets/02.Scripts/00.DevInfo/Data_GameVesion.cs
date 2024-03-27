@@ -1,8 +1,10 @@
-namespace VS.Version {
+namespace VS.Version
+{
     /// <summary>
     /// 게임 버전에대한 정보를 지닙니다.
     /// </summary>
-    public class Data_GameVesion {
+    public class Data_GameVesion
+    {
         /// <summary>
         /// [버전] 게임에서 사용되어지는 통합 버전입니다. 
         /// </summary>
@@ -21,7 +23,7 @@ namespace VS.Version {
         /// <summary>
         /// [올드]
         /// </summary>
-        public const string MemberAlld = "0.2";
+        public const string MemberAlld = "0.3";
 
     }
 }
