@@ -11,9 +11,9 @@ namespace VS.Version
         public const string Version = "0.0.1";
 
         /// <summary>
-        /// [동진님] 
+        /// [동진님] 오브젝트 풀링 베이스 구현
         /// </summary>
-        public const string MemberDJ = "0.0";
+        public const string MemberDJ = "0.1";
 
         /// <summary>
         /// [현지님]
