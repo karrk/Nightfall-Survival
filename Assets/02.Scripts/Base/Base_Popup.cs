@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,6 +55,29 @@ namespace VS.Base.Popup
         [SerializeField] protected PopupComponent _component;
 
         /// <summary>
+        /// [상태] 현재 팝업창이 활성화되어있는지를 확인합니다. 
+        /// <br> true : 활성화 </br><br> false : 비활성화</br>
+        /// </summary>
+        private bool isActivePopup = false;
+
+        /// <summary>
+        /// [기능] 암막처리의 페이드가 적용되는 연출시간입니다.
+        /// </summary>
+        private const float duration_fadeDim = 0.1f;
+
+        /// <summary>
+        /// [데이터] 모든 활성화된 팝업창 중에서 우선도가 얼마나 높은지 나타내는 수치입니다. 
+        /// <br> 기본값 : -1</br>
+        /// </summary>
+        public int activeIndex = -1;
+
+        /// <summary>
+        /// [상태] 현재 팝업창이 활성화되어있는지를 확인합니다. 
+        /// </summary>
+        /// <returns>true : 활성화 <br>false : 비활성화</br></returns>
+        protected bool CheckIsActivePopup() => isActivePopup;
+
+        /// <summary>
         /// [콜백함수] 팝업창이 성공적으로 확인버튼이 눌린 경우 호출됩니다. 
         /// </summary>
         protected Action _cb_complete;
@@ -63,8 +87,9 @@ namespace VS.Base.Popup
         #region 초기 베이스 기능
         private void Start()
         {
-            Init();
+            Logic_Init();
         }
+        #endregion
 
         #region 기본 기능
 
@@ -72,21 +97,20 @@ namespace VS.Base.Popup
         /// [초기화] Start 타이밍에 초기화가 진행됩니다. 
         /// <br> Scene이 초기화되고 1회만 실행되는것을 권장합니다. </br>
         /// </summary>
-        private void Init()
+        private void Logic_Init()
         {
             // - 기본 설정은 닫혀있는 상태로 실행 될 수 있도록 합니다. - //
-            ClosePopup();
+            Logic_Close_Base();
 
-            Init_Setting();
+            Logic_Init_Setting();
 
-            Init_Custom();
+            Logic_Init_Base();
         }
 
         /// <summary>
         /// [초기화] 초기화 과정에서 기반설정을 지정합니다.
-        /// <br> 미설정된 부분들은 초기값으로 지정해주고 잘못된 설정들을 바로잡습니다. </br>
         /// </summary>
-        private void Init_Setting()
+        private void Logic_Init_Setting()
         {
             // 그래픽 오브젝트 설정이 없는 경우 대응 //
             if (!CheckExistGraphicObject())
@@ -126,7 +150,7 @@ namespace VS.Base.Popup
                 if (_component.used_closeBlockButton)
                 {
                     if (_component.b_blockingInput.onClick.GetPersistentEventCount() == 0)
-                        _component.b_blockingInput.onClick.AddListener(ClosePopup);
+                        _component.b_blockingInput.onClick.AddListener(Logic_Close_Base);
                 }
                 // ------------------ //
             }
@@ -134,7 +158,108 @@ namespace VS.Base.Popup
         }
 
         /// <summary>
-        /// [조건] 팝업의 본체에 해당하는 graphic 오브젝트가 존재하는지를 확인합니다. 
+        /// [초기화] Start 타이밍에 진행되는 초기화입니다. 
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
+        /// </summary>
+        protected virtual void Logic_Init_Base() { }
+
+        /// <summary>
+        /// [기능] 팝업창을 엽니다.
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
+        /// </summary>
+        protected virtual void Logic_Open_Base()
+        {
+            if (!CheckExistGraphicObject()) return;
+
+            Logic_ActivePopup();
+        }
+
+        /// <summary>
+        /// [기능] 팝업창을 닫습니다. 콜백 없이 진행됩니다.
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
+        /// </summary>
+        protected virtual void Logic_Close_Base()
+        {
+            if (!CheckExistGraphicObject()) return;
+
+            Logic_DeActivePopup();
+        }
+
+        /// <summary>
+        /// [기능] 팝업창을 닫습니다. 
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
+        /// </summary>
+        protected virtual void Logic_Close_Base(Action m_callback)
+        {
+            if (!CheckExistGraphicObject()) return;
+
+            Logic_DeActivePopup();
+
+            m_callback?.Invoke();
+        }
+
+        /// <summary>
+        /// [기능] 팝업창을 열려있다면 닫고, 닫혀있다면 엽니다.
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
+        /// </summary>
+        protected virtual void Logic_Toggle_Base()
+        {
+            if (!CheckExistGraphicObject()) return;
+
+            if (isActivePopup)
+                Logic_Close_Base();
+            else
+                Logic_Open_Base();
+        }
+
+        /// <summary>
+        /// [기능] 팝업을 비활성화 시킵니다.
+        /// </summary>
+        protected void Logic_DeActivePopup()
+        {
+            _component.obj_graphic.gameObject.SetActive(false);
+            isActivePopup = false;
+
+            if (_component.i_dim != null && _component.used_dim)
+            {
+                if (_component.used_fadeDim) FadeOutDim();
+                else _component.i_dim.gameObject.SetActive(false);
+            }
+
+            if (_component.b_blockingInput != null && _component.used_blockingInput)
+            {
+                _component.b_blockingInput.gameObject.SetActive(false);
+            }
+
+            transform.SetAsFirstSibling();
+        }
+
+        /// <summary>
+        /// [기능] 팝업을 활성화 시킵니다. 
+        /// </summary>
+        protected void Logic_ActivePopup()
+        {
+            _component.obj_graphic.gameObject.SetActive(true);
+            isActivePopup = true;
+
+            if (_component.i_dim != null && _component.used_dim)
+            {
+                if (_component.used_fadeDim) FadeInDim();
+                else _component.i_dim.gameObject.SetActive(true);
+            }
+
+            if (_component.b_blockingInput != null && _component.used_blockingInput)
+            {
+                _component.b_blockingInput.gameObject.SetActive(true);
+            }
+
+            transform.SetAsLastSibling();
+            activeIndex = -1;
+        }
+        #endregion
+
+        /// <summary>
+        /// [검사] 팝업의 본체에 해당하는 graphic 오브젝트가 존재하는지를 확인합니다. 
         /// <br> 만약 없을 경우, 에러를 송출합니다. </br>
         /// </summary>
         /// <returns> true : 해당 오브젝트가 존재함 <br> false : 해당 오브젝트가 없음</br></returns>
@@ -142,68 +267,48 @@ namespace VS.Base.Popup
         {
             if (_component.obj_graphic == null)
             {
-                // TODO :: 에러 송출 구문
                 return false;
             }
             return true;
         }
 
         /// <summary>
-        /// [초기화] Start 발생 타이밍에 기본 설정 이후 호출되는 함수입니다.
-        /// <br> Awake 나 Start를 별도로 사용되는것보다는 해당 함수를 통해서 초기화 구문을 진행하는것을 권장합니다. </br>
+        /// [기능] 암막 오브젝트를 페이드인으로 활성화 시킵니다.
         /// </summary>
-        public virtual void Init_Custom() { }
-        #endregion
-
-
-        #region 팝업 기본 기능
-        /// <summary>
-        /// [기능] 팝업을 닫습니다. 
-        /// </summary>
-        protected virtual void ClosePopup()
+        private void FadeInDim()
         {
-            CompleteClose();
+            _component.i_dim.gameObject.SetActive(true);
+            _component.i_dim.DOKill();
+            _component.i_dim.DOFade(0.5f, duration_fadeDim);
         }
 
         /// <summary>
-        /// [콜백함수] 팝업이 닫히는 모든 절차가 성공적으로 완료되면 호출됩니다.
+        /// [기능] 암막 오브젝트를 페이드아웃으로 비활성화 시킵니다.
         /// </summary>
-        protected virtual void CompleteClose() { }
-
-        /// <summary>
-        /// [기능] 팝업을 엽니다.
-        /// </summary>
-        protected virtual void OpenPopup()
+        private void FadeOutDim()
         {
-            CompleteOpen();
+            _component.i_dim.DOKill();
+            _component.i_dim.DOFade(0, duration_fadeDim).OnComplete(() => { _component.i_dim.gameObject.SetActive(false); });
         }
 
+        #region 버튼 콜백
         /// <summary>
-        /// [콜백함수] 팝업이 열리는 모든 절차가 성공적으로 완료되면 호출됩니다.
+        /// [버튼콜백] 확인 버튼이 눌렸을때 팝업창을 닫고 콜백 함수를 실행시킵니다.
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
         /// </summary>
-        protected virtual void CompleteOpen() { }
-        #endregion
-
-
-        #region 콜백 함수
-        // 주의 :: 해당 함수들은 콜백 함수입니다. 참조가 없더라도 애니메이션 및 오브젝트에서 직접 할당되어 사용될 수 있습니다.
-
-        /// <summary>
-        /// [버튼콜백] 팝업창의 확인 버튼이 눌린 경우 호출됩니다. 
-        /// </summary>
-        public void OnClickCancel()
+        public virtual void OnClickOkay_Base()
         {
             _cb_complete?.Invoke();
-
-            ClosePopup();
+            Logic_Close_Base();
         }
 
         /// <summary>
-        /// [버튼콜백] 팝업창의 취소 버튼이 눌린 경우 호출됩니다. 
+        /// [버튼콜백] 취소 버튼이 눌렸을때 팝업창을 닫고 콜백 함수를 실행시킵니다.
+        /// <br> base을 통해서 상위 함수를 실행해야합니다. </br>
         /// </summary>
-        public void OnClickOkay()
+        public virtual void OnClickCancel_Base()
         {
-            ClosePopup();
+            Logic_Close_Base();
         }
         #endregion
     }

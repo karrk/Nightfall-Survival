@@ -1,12 +1,19 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VS.Share;
 
 
-public enum eSceneKind {
-    None = 0,
+public enum eSceneKind
+{
+    None = -1,
+    Load = 0,
+    Intro,
+    MainMenu,
+    GameScene,
 }
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     #region 매니저 구성
     private static GameManager _instance;
 
@@ -20,11 +27,14 @@ public class GameManager : MonoBehaviour {
 
     #endregion
 
-    private void Awake() {
-        if (_instance == null) {
+    private void Awake()
+    {
+        if (_instance == null)
+        {
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
-        } else
+        }
+        else
             Destroy(this.gameObject);
     }
 
@@ -34,31 +44,69 @@ public class GameManager : MonoBehaviour {
     /// [기능] 씬 인덱스를 통해서 씬 전환을 시도합니다.
     /// </summary>
     /// <param name="add"> 새로운 씬을 갱신하지않고 씬을 중첩하여 생성할지를 지정합니다. </param>
-    public void TryChangeScene(int index, bool add = false) {
+    public void TryChangeScene(int index, bool add = false)
+    {
         TryChangeScene((eSceneKind)index, add);
+    }
+
+    /// <summary>
+    /// [기능] 씬 타입을 통해서 씬 전환을 시도합니다.
+    /// </summary>
+    /// <param name="kind"></param>
+    public void TryChangeScene(eSceneKind kind, bool add = false)
+    {
+        TryChangeScene(GetSceneName(kind), add);
     }
 
     /// <summary>
     /// [기능] 씬 이름을 통해서 씬 전환을 시도합니다. 
     /// </summary>
     /// <param name="add"> 새로운 씬을 갱신하지않고 씬을 중첩하여 생성할지를 지정합니다. </param>
-    public void TryChangeScene(string name, bool add = false) {
-        TryChangeScene(GetSceneKind(name), add);
+    public void TryChangeScene(string name, bool add = false)
+    {
+        SceneManager.LoadSceneAsync(name, (add) ? LoadSceneMode.Additive : LoadSceneMode.Single);
     }
 
     /// <summary>
     /// [변환] 씬 이름을 통해서 씬타입을 반환합니다.
     /// </summary>
-    public eSceneKind GetSceneKind(string name) {
-        return eSceneKind.None;
+    public eSceneKind GetSceneKind(string name)
+    {
+        switch (name)
+        {
+            case "Load":
+                return eSceneKind.None;
+            case "Intro":
+                return eSceneKind.Intro;
+            case "MainMenu":
+                return eSceneKind.MainMenu;
+            case "GmaeScene":
+                return eSceneKind.GameScene;
+            default:
+                return eSceneKind.None;
+        }
     }
 
     /// <summary>
-    /// 
+    /// [변환] 씬 타입을 통해서 씬의 이름을 반환합니다.
     /// </summary>
-    /// <param name="kind"></param>
-    public void TryChangeScene(eSceneKind kind, bool add = false) {
-
+    public string GetSceneName(eSceneKind kind)
+    {
+        switch (kind)
+        {
+            case eSceneKind.Load:
+                return "Load";
+            case eSceneKind.Intro:
+                return "Intro";
+            case eSceneKind.MainMenu:
+                return "MainMenu";
+            case eSceneKind.GameScene:
+                return "GmaeScene";
+            default:
+                return string.Empty;
+        }
     }
+
+
     #endregion
 }
