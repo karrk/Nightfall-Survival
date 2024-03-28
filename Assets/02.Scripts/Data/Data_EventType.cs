@@ -10,4 +10,6 @@ public enum eEventType
     Test,
     StartGame,
     EndGame,
+    StageSetupCompleted,
+    StageReady,
 }

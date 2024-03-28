@@ -10,12 +10,9 @@ namespace VS.Version {
 
         /// <summary>
         /// [동진님] 
-        /// 풀링 오브젝트 상속방식 변경,
-        /// 오브젝트 자체 반환 기능추가
-        /// 맵 매니저, 맵 클래스 구현
-        /// 맵 크리에이터 수정
+        /// 스테이지 매니저, 빌더 제작
         /// </summary>
-        public const string MemberDJ = "0.3";
+        public const string MemberDJ = "0.4";
 
         /// <summary>
         /// [현지님]

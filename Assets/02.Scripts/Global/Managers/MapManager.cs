@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapManager : MonoBehaviour , IStageParts
 {
     private static MapManager _instance;
 
@@ -17,6 +17,8 @@ public class MapManager : MonoBehaviour
         }
         else
             Destroy(this.gameObject);
+
+        GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
     }
 
     [SerializeField]
@@ -29,8 +31,25 @@ public class MapManager : MonoBehaviour
         if (_currentMap != null && _currentMap.MapName == mapName)
             return _currentMap;
 
-        return _creator.GetMap(mapName);
+        _currentMap = _creator.GetMap(mapName);
+
+        return _currentMap;
+    }
+
+    public void SendPart()
+    {
+        StageManager.Instance._stageBuilder.SetMap(GetMap("Test"));
+
+        //방식 고려중..
+        //string needMap = CSV.GetInfo(StageManager.Instance.StageNumber).MapName;
+        //StageManager.Instance._stageBuilder.SetMap(GetMap(needMap));
+    }
+
+    public void AddPartsList()
+    {
+        StageManager.Instance._stageBuilder.AddPart(this);
     }
 }
+
 
 
