@@ -1,32 +1,36 @@
 using System;
 using UnityEngine;
 
-public class MapCreat : MonoBehaviour
+public class MapCreator : MonoBehaviour
 {
     // 동적으로 텍스쳐 변경이 가능한가
 
     readonly string MapDirPath = "Maps/";
 
     int _rxc_Count;
-    Sprite[] _tiledMaps;
     float tiles_interval;
 
-    private void Start()
+    bool isInitialized = false;
+
+    public Map GetMap(string mapName)
     {
-        if (_tiledMaps == null)
+        if (!isInitialized)
         {
             _rxc_Count = SettingManager.Instance.RxC_Count;
             tiles_interval = GetIntervalDistance();
-            _tiledMaps = new Sprite[(int)Math.Pow(_rxc_Count, 2)];
         }
 
-        DivideTexure("Test");
-        CreateTileObj();
+        Sprite[] splitSprites = DevideTexure(mapName);
+        Map newMap = new Map(mapName, CreateTileObj(splitSprites));
+
+        return newMap;
     }
 
-    void DivideTexure(string mapName)
+    Sprite[] DevideTexure(string mapName)
     {
         Texture texture = Resources.Load<Texture>($"{MapDirPath + mapName}");
+
+        Sprite[] tempArr = new Sprite[(int)Math.Pow(_rxc_Count, 2)];
 
         for (int i = 0; i < _rxc_Count; i++)
         {
@@ -37,13 +41,17 @@ public class MapCreat : MonoBehaviour
                     (texture.height / _rxc_Count) * (_rxc_Count - 1 - i),
                     texture.width / _rxc_Count, texture.height / _rxc_Count);
 
-                _tiledMaps[(i * _rxc_Count) + j] = Sprite.Create((Texture2D)texture, rect, Vector2.up);
+                tempArr[(i * _rxc_Count) + j] = Sprite.Create((Texture2D)texture, rect, Vector2.up);
             }
         }
+
+        return tempArr;
     }
 
-    void CreateTileObj()
+    GameObject[] CreateTileObj(Sprite[] sprites)
     {
+        GameObject[] tempArr = new GameObject[(int)Math.Pow(_rxc_Count, 2)];
+
         for (int i = 0; i < _rxc_Count; i++)
         {
             for (int j = 0; j < _rxc_Count; j++)
@@ -53,12 +61,16 @@ public class MapCreat : MonoBehaviour
                 SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>();
                 renderer.sortingOrder = -10000;
 
-                Sprite sprite = _tiledMaps[(i * _rxc_Count) + j];
+                Sprite sprite = sprites[(i * _rxc_Count) + j];
 
                 renderer.sprite = sprite;
                 SetTileOptions(tile, i, j);
+
+                tempArr[(i * _rxc_Count) + j] = tile;
             }
         }
+
+        return tempArr;
     }
 
     void SetTileOptions(GameObject tile, int row, int column)

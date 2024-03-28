@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class ObjPoolManager : MonoBehaviour
 {
+    private static ObjPoolManager _instance;
+
+    public static ObjPoolManager Instance => _instance;
+
     Dictionary<ePoolingType, ObjectPool> pools =
         new Dictionary<ePoolingType, ObjectPool>();
 
     private void Awake()
     {
-        //GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+            Destroy(this.gameObject);
+
+        GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
     }
 
-
-    public PoolingObj GetObj(ePoolingType poolingType)
+    public GameObject GetObj(ePoolingType poolingType)
     {
         return pools[poolingType].GetObj();
     }

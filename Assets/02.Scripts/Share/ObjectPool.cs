@@ -10,15 +10,15 @@ public abstract class ObjectPool : MonoBehaviour
     protected static int CreateLimitCount = 50;
 
     [SerializeField]
-    protected PoolingObj _prefab;
+    protected GameObject _prefab;
 
-    Queue<PoolingObj> pool = new Queue<PoolingObj>();
+    Queue<GameObject> pool = new Queue<GameObject>();
 
     int _maxSize;
 
     private void Start()
     {
-        FindObjectOfType<ObjPoolManager>().AddPool((eEventType)Type, this);
+        ObjPoolManager.Instance.AddPool((eEventType)Type, this);
         InitPool();
     }
 
@@ -32,16 +32,16 @@ public abstract class ObjectPool : MonoBehaviour
         _maxSize = InitCount;
     }
 
-    protected PoolingObj CreateObj()
+    protected GameObject CreateObj()
     {
-        PoolingObj obj = Instantiate(_prefab);
+        GameObject obj = Instantiate(_prefab);
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.transform);
 
         return obj;
     }
 
-    public PoolingObj GetObj()
+    public GameObject GetObj()
     {
         if (pool.Count <= 0)
         {
@@ -73,17 +73,17 @@ public abstract class ObjectPool : MonoBehaviour
         }
     }
 
-    public void ReturnObj(PoolingObj obj = null)
+    public void ReturnObj()
     {
-        if (obj == null)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                ReturnObj(transform.GetChild(i).GetComponent<PoolingObj>());
-            }
+            transform.GetChild(i).GetComponent<PoolingObj>().Return();
         }
+    }
 
-        obj.gameObject.SetActive(false);
+    public void ReturnObj(GameObject obj)
+    {
+        obj.SetActive(false);
         pool.Enqueue(obj);
     }
 }

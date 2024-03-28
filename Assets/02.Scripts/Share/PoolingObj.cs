@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PoolingObj : MonoBehaviour
+public interface PoolingObj
 {
-
+    public void Return();
 }
