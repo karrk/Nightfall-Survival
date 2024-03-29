@@ -7,14 +7,16 @@ using static UnityEditor.PlayerSettings;
 
 public class CharacterController : MonoBehaviour
 {
-    // TODO) 캐릭터 이미지가 아닌 스프라이트로 교체 후 거리 맞추기
+    // TODO)
+    // 캐릭터 이미지가 아닌 스프라이트로 교체 후 거리 맞추기
     [SerializeField]
     private JoyStick joystick;
+    //private JoyStick joyStick;
 
-    private Rigidbody2D rigidbody2D;
-
-    public float movementSpeed = 1.0f;
+    ////////////////////////////////
+    public float movementSpeed = 3.0f;
     
+    private Rigidbody2D rigidbody2D;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class CharacterController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 조이스틱 입력 시 move
         if(joystick.GetDirection() != Vector2.zero)
         {
             Move(joystick.GetDirection());
@@ -35,9 +38,11 @@ public class CharacterController : MonoBehaviour
 
     public void Move(Vector2 pos)
     {
-        Vector2 movement = new Vector2(pos.x, pos.y);
-        movement.Normalize();
+        float x = pos.x;
+        float y = pos.y;
 
-        rigidbody2D.velocity = movement * movementSpeed;
+        Vector3 velocity = new Vector3(x, y, 0);
+        velocity *= movementSpeed;
+        rigidbody2D.velocity = velocity;
     }
 }
