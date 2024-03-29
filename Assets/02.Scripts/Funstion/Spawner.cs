@@ -80,36 +80,51 @@ public class Spawner : MonoBehaviour , IStageParts
 
     IEnumerator RotateCreate(GameObject obj, float intervalRot)
     {
-        float minSize = Mathf.Min(_max_CircleX, _max_CircleY);
-        
-        Transform edgePointTr = ellipse_EdgePoint.transform;
-        edgePointTr.position = Vector3.down * minSize;
+        float radius = Mathf.Min(_max_CircleX, _max_CircleY);
 
-        float prevRot = 0;
+        Transform edgeTr = ellipse_EdgePoint.transform;
+        edgeTr.transform.position = Vector3.up * radius; // init
+        center.transform.rotation = Quaternion.Euler(Vector3.zero);
+        
+        Vector3 prevRot = center.transform.rotation.eulerAngles;
 
         while (true)
         {
-            if (prevRot > 360)
-                break;
+            //if (prevRot.z > 360)
+            //    break;
 
-            center.transform.rotation = Quaternion.Euler(Vector3.forward * (prevRot + intervalRot));
-
-            edgePointTr.position = new Vector3(GetXvalue_CircleEdge(edgePointTr.position.y, minSize, minSize),
-                Mathf.Clamp(edgePointTr.position.y, -1 * _max_CircleY, _max_CircleY));
-
-            prevRot += intervalRot;
-
-            //Instantiate(obj).transform.position = edgePointTr.position;
-
+            center.transform.localRotation = Quaternion.Euler(
+                new Vector3(0, 0, center.transform.localRotation.z + intervalRot));
+            
             yield return null;
         }
+
+
+
+        //while (true)
+        //{
+        //    if (prevRot > 360)
+        //        break;
+
+        //    center.transform.rotation = Quaternion.Euler(Vector3.forward * (prevRot + intervalRot));
+
+        //    prevRot += intervalRot;
+
+        //    edgePointTr.position = new Vector3(GetXvalue_CircleEdge(edgePointTr.position.y, minSize, minSize),
+        //       edgePointTr.position.y);
+        //        //Mathf.Clamp(edgePointTr.position.y, -1 * _max_CircleY, _max_CircleY));
+
+        //    //Instantiate(obj).transform.position = edgePointTr.position;
+
+        //    yield return null;
+        //}
     }
 
 
 
     private void Update()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButtonDown(0))
         {
             SetPointRotate();
         }
