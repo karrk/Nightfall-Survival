@@ -7,6 +7,7 @@ public class StageBuilder : MonoBehaviour
     private List<IStageParts> _parts = new List<IStageParts>();
 
     Map _map;
+    Spawner _spawner;
 
     //private void Awake()
     //{
@@ -15,8 +16,9 @@ public class StageBuilder : MonoBehaviour
 
     public Stage Build()
     {
-        return new Stage(_map);
+        return new Stage(_map,_spawner);
     }
+
 
     public void AddPart(IStageParts part)
     {
@@ -31,9 +33,15 @@ public class StageBuilder : MonoBehaviour
         }
     }
 
+
     public void SetMap(Map map)
     {
         this._map = map;
+    }
+
+    public void SetSpawner(Spawner spawner)
+    {
+        this._spawner = spawner;
     }
 }
 
