@@ -12,10 +12,10 @@ namespace VS.Version
 
         /// <summary>
         /// [동진님] 
-        /// 프로젝트 내 폴더명 수정 반영 merge 전 커밋
+        /// 2차 - 프로젝트 내 폴더명 수정 반영 merge 전 커밋
         /// 스포너 기능 구현중
         /// </summary>
-        public const string MemberDJ = "0.5";
+        public const string MemberDJ = "0.6";
 
         /// <summary>
         /// [현지님]
