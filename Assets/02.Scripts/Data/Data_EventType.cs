@@ -37,4 +37,8 @@ public enum eEventType
 
     #endregion
     #endregion
+    StartGame,
+    EndGame,
+    StageSetupCompleted,
+    StageReady,
 }
