@@ -12,9 +12,9 @@ namespace VS.Version
 
         /// <summary>
         /// [동진님] 
-        /// Spawner 제작
+        /// 몬스터 구현시 csv 기능을 전달받기 위한 커밋
         /// </summary>
-        public const string MemberDJ = "0.7";
+        public const string MemberDJ = "0.8";
 
         /// <summary>
         /// [현지님]
