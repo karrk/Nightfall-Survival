@@ -10,17 +10,24 @@ public class Monster : MonoBehaviour, IUnit, IStageParts, IPoolingObj
 
     bool _isDead;
 
-    //private void SetProperties()
-    //{
-    //    _stat = new MonsterStat()
-    //        .SetID(1)
-    //        .SetHp(10)
-    //        .SetArmor(3)
-    //        .SetSpeed(5)
-    //        .SetDamage(1);
-    //}
+    public void SetMonster(eMonsterKind kind)
+    {
+        Data_Monster mobData = Global_Data.mosnterTable[kind];
+
+        _stat = new MonsterStat()
+            .SetID(mobData.ID)
+            .SetHp(mobData.hp)
+            .SetArmor(mobData.armor)
+            .SetSpeed(mobData.moveSpeed)
+            .SetDamage(mobData.moveSpeed);
+    }
 
     Vector3 _basePos = Vector3.zero;
+
+    private void Start()
+    {
+        //Debug.Log(Global_Data.mosnterTable[eMonsterKind.Orc].)
+    }
 
     public void Move()
     {
@@ -34,7 +41,7 @@ public class Monster : MonoBehaviour, IUnit, IStageParts, IPoolingObj
             if(_isDead)
                 break;
 
-            this.transform.Translate(_basePos * Time.deltaTime * _stat._speed);
+            //this.transform.Translate(_basePos * Time.deltaTime * _stat._speed);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -57,7 +64,6 @@ public class Monster : MonoBehaviour, IUnit, IStageParts, IPoolingObj
 
     public void SendPart()
     {
-        //SetProperties();
         StageManager.Instance._stageBuilder.SetMob(Instantiate(this));
     }
 
@@ -79,10 +85,10 @@ public class MonsterStat
     int _id;
     string _name;
     int _type;
-    int _hp;
-    int _damage;   
-    public int _speed;
-    int _armor;
+    float _hp;
+    float _damage;   
+    float _moveSpeed;
+    float _armor;
 
     public MonsterStat SetID(int id)
     {
@@ -96,27 +102,27 @@ public class MonsterStat
         return this;
     }
 
-    public MonsterStat SetHp(int hp)
+    public MonsterStat SetHp(float hp)
     {
         this._hp = hp;
         return this;
     }
 
-    public MonsterStat SetArmor(int armor)
+    public MonsterStat SetArmor(float armor)
     {
         this._armor = armor;
         return this;
     }
 
-    public MonsterStat SetDamage(int damage)
+    public MonsterStat SetDamage(float damage)
     {
         this._damage = damage;
         return this;
     }
 
-    public MonsterStat SetSpeed(int speed)
+    public MonsterStat SetSpeed(float speed)
     {
-        this._speed = speed;
+        this._moveSpeed = speed;
         return this;
     }
 }

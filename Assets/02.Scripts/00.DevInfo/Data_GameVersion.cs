@@ -12,9 +12,10 @@ namespace VS.Version
 
         /// <summary>
         /// [동진님] 
-        /// 몬스터 구현시 csv 기능을 전달받기 위한 커밋
+        /// 몬스터 구현중..
+        /// 그래픽 텍스트 기능을 받기위한 커밋
         /// </summary>
-        public const string MemberDJ = "0.8";
+        public const string MemberDJ = "0.9";
 
         /// <summary>
         /// [현지님]

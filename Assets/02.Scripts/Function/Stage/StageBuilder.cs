@@ -49,7 +49,6 @@ public class StageBuilder : MonoBehaviour
         }
     }
 
-
     public void SetMap(Map map)
     {
         this._map = map;
@@ -59,6 +58,8 @@ public class StageBuilder : MonoBehaviour
     {
         this._spawner = spawner;
     }
+
+    //public void GetMonsterData
 }
 
 
