@@ -25,7 +25,7 @@ namespace VS.Version
         /// <summary>
         /// [올드]
         /// </summary>
-        public const string MemberAlld = "0.5";
+        public const string MemberAlld = "0.6";
 
     }
 }
