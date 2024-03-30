@@ -3,9 +3,13 @@ using UnityEngine;
 
 public class Global_Data : MonoBehaviour
 {
+    #region 동적 데이터
     private static Data_Player _player;
 
+    #endregion
 
+
+    #region 정적 데이터
     private static Dictionary<eMonsterKind, Data_Monster> _mosnterTable = new Dictionary<eMonsterKind, Data_Monster>();
 
     public static Dictionary<eMonsterKind, Data_Monster> mosnterTable => _mosnterTable;
@@ -14,4 +18,5 @@ public class Global_Data : MonoBehaviour
     private static Dictionary<int, Data_Stage> _stageTable = new Dictionary<int, Data_Stage>();
 
     public static Dictionary<int, Data_Stage> stageTable => _stageTable;
+    #endregion 
 }
