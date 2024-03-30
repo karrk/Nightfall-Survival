@@ -7,10 +7,10 @@ public class MapCreator : MonoBehaviour
 
     readonly string MapDirPath = "Maps/";
 
-    int _rxc_Count;
-    float tiles_interval;
+    private int _rxc_Count;
+    private float tiles_interval;
 
-    bool isInitialized = false;
+    private bool isInitialized = false;
 
     public Map GetMap(string mapName)
     {
@@ -26,7 +26,7 @@ public class MapCreator : MonoBehaviour
         return newMap;
     }
 
-    Sprite[] DevideTexure(string mapName)
+    private Sprite[] DevideTexure(string mapName)
     {
         Texture texture = Resources.Load<Texture>($"{MapDirPath + mapName}");
 
@@ -48,7 +48,7 @@ public class MapCreator : MonoBehaviour
         return tempArr;
     }
 
-    GameObject[] CreateTileObj(Sprite[] sprites)
+    private GameObject[] CreateTileObj(Sprite[] sprites)
     {
         GameObject[] tempArr = new GameObject[(int)Math.Pow(_rxc_Count, 2)];
 
@@ -73,7 +73,7 @@ public class MapCreator : MonoBehaviour
         return tempArr;
     }
 
-    void SetTileOptions(GameObject tile, int row, int column)
+    private void SetTileOptions(GameObject tile, int row, int column)
     {
         tile.name = $"tile{(row * _rxc_Count) + column}";
 
@@ -96,7 +96,7 @@ public class MapCreator : MonoBehaviour
         TileMovement.TileSize = GetIntervalDistance();
     }
 
-    float GetIntervalDistance()
+    private float GetIntervalDistance()
     {
         return (SettingManager.Instance.MapTextureSize * 0.01f) * 1 / _rxc_Count;
     }

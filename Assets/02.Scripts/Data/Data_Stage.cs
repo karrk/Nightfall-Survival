@@ -37,5 +37,17 @@ public struct Data_Stage
     /// <br> Index :: monsters의 몬스터 배열 순서 </br>
     /// </summary>
     public int[] frequency;
+
+    /// <summary>
+    /// 해당 스테이지에서 등장하는 네임드 몬스터의 종류입니다.
+    /// <br> Index :: monsters의 몬스터 배열 순서 </br>
+    /// /// </summary>
+    public int[] nameds;
+
+    /// <summary>
+    /// 해당 스테이지에서 등장하는 보스 몬스터의 종류입니다.
+    /// <br> Index :: monsters의 몬스터 배열 순서 </br>
+    /// /// </summary>
+    public int[] bosses;
     #endregion
 }

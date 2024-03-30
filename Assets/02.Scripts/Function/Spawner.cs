@@ -13,6 +13,14 @@ public class Spawner : MonoBehaviour, IStageParts
     public GameObject _center;
     public GameObject _edgePoint;
 
+    public Transform ObjTr => transform;
+
+    private void Awake()
+    {
+        GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
+        GameManager.Instance.Event.RegisterEvent(eEventType.AddStageParts, AddPartsList);
+    }
+
     private void Start()
     {
         _camSize = Camera.main.orthographicSize;

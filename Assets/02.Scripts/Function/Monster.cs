@@ -2,32 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour, IUnit, IStageParts, IPoolingObj
+public class Monster : MonoBehaviour, IUnit, IPoolingObj
 {
     [SerializeField]
     Animation _anim;
     MonsterStat _stat;
+    public MonsterStat Stat => _stat;
 
     bool _isDead;
-
-    public void SetMonster(eMonsterKind kind)
-    {
-        Data_Monster mobData = Global_Data.mosnterTable[kind];
-
-        _stat = new MonsterStat()
-            .SetID(mobData.ID)
-            .SetHp(mobData.hp)
-            .SetArmor(mobData.armor)
-            .SetSpeed(mobData.moveSpeed)
-            .SetDamage(mobData.moveSpeed);
-    }
-
-    Vector3 _basePos = Vector3.zero;
-
-    private void Start()
-    {
-        //Debug.Log(Global_Data.mosnterTable[eMonsterKind.Orc].)
-    }
 
     public void Move()
     {
@@ -62,33 +44,54 @@ public class Monster : MonoBehaviour, IUnit, IStageParts, IPoolingObj
         _anim = GetComponent<Animation>();
     }
 
-    public void SendPart()
-    {
-        StageManager.Instance._stageBuilder.SetMob(Instantiate(this));
-    }
-
-    public void AddPartsList()
-    {
-        StageManager.Instance._stageBuilder.AddPart(this);
-    }
-
     public void Return()
     {
         this.GetComponentInParent<ObjectPool>().ReturnObj(this.gameObject);
     }
 
-    
+    public void SetStats(Data_Monster mobData)
+    {
+        _stat = new MonsterStat()
+            .SetID(mobData.ID)
+            .SetHp(mobData.hp)
+            .SetName(mobData.name)
+            .SetArmor(mobData.armor)
+            .SetSpeed(mobData.moveSpeed)
+            .SetDamage(mobData.damage)
+            .SetType((int)mobData.type);
+    }
+
 }
 
 public class MonsterStat
 {
-    int _id;
-    string _name;
-    int _type;
-    float _hp;
-    float _damage;   
-    float _moveSpeed;
-    float _armor;
+    private string _name;
+    private int _id;
+    private int _type;
+    private float _hp;
+    private float _damage;
+    private float _moveSpeed;
+    private float _armor;
+
+    public int ID => _id;
+
+    public void StatCopy(MonsterStat targetData)
+    {
+        if (targetData.ID != this._id)
+        {
+            targetData.SetHp(this._hp);
+            return;
+        }
+
+        targetData
+            .SetID(this._id)
+            .SetHp(this._hp)
+            .SetName(this._name)
+            .SetArmor(this._armor)
+            .SetSpeed(this._moveSpeed)
+            .SetDamage(this._damage)
+            .SetType((int)this._type);
+    }
 
     public MonsterStat SetID(int id)
     {
@@ -99,6 +102,12 @@ public class MonsterStat
     public MonsterStat SetType(int type)
     {
         this._type = type;
+        return this;
+    }
+
+    public MonsterStat SetName(string name)
+    {
+        this._name = name;
         return this;
     }
 
@@ -125,4 +134,6 @@ public class MonsterStat
         this._moveSpeed = speed;
         return this;
     }
+
+
 }
