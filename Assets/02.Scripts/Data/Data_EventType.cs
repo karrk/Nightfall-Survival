@@ -20,6 +20,10 @@ public enum eEventType
     OnESCPress,
     #endregion
 
+    #region 네트워크 통신
+    /// <summary> 테이블 데이터에 관한 네트워크 응답이 온경우에 반환됩니다.</summary>
+    OnResponseData_Table,
+    #endregion
 
     #region 팝업관련
     #region 공통팝업
