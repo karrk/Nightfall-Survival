@@ -13,8 +13,17 @@ public enum eMonsterKind
 
 public class Data_Monster : Data_Unit
 {
+    #region 파싱 데이터
+
     /// <summary>
     /// 몬스터의 종류를 나타냅니다.
     /// </summary>
     public eMonsterKind kind;
+
+    /// <summary>
+    /// 몬스터를 처치시 주어지는 현상금입니다.
+    /// </summary>
+    public int bounty;
+
+    #endregion
 }

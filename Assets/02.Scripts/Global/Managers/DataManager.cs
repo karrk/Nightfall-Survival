@@ -40,6 +40,7 @@ public class DataManager : Base_Manager
 
         // --- 이벤트 등록 --- //
         GameManager.Instance.Event.RegisterEvent<eDataTableType, string[], int>(eEventType.OnResponseData_Table, OnResponseData);
+        GameManager.Instance.Event.RegisterEvent(eEventType.SetLanguage, LoadData_TextTbale);
         // ------------------- //
     }
 
@@ -50,6 +51,7 @@ public class DataManager : Base_Manager
     {
         LoadData_StageTable();
         LoadData_MonsterTbale();
+        LoadData_TextTbale();
     }
 
     /// <summary>
@@ -100,6 +102,8 @@ public class DataManager : Base_Manager
                 Convert_MonsterTable(m_dataArray);
                 break;
             case eDataTableType.Text:
+                Convert_TextTable(m_dataArray);
+                Logic_TextData.OnChangeLanguage();
                 break;
             default:
                 // TODO :: 에러메시지 출력 (설정되지않은 데이터 타입이 지정되었습니다.)
@@ -117,7 +121,7 @@ public class DataManager : Base_Manager
         _dataTableInfo.stageTableURL = resultData[2];
         _dataTableInfo.monsterTableCount = resultData[3];
         _dataTableInfo.monsterTableURL = resultData[4];
-        _dataTableInfo.textTableCount = resultData[5];
+        GetCountData(resultData[5], out _dataTableInfo.textTableCount);
         _dataTableInfo.textTableURL = resultData[6];
 
         return _dataTableInfo;
@@ -176,22 +180,38 @@ public class DataManager : Base_Manager
         }
     }
 
+    private void Convert_TextTable(string[] m_dataArray)
+    {
+        //TODO :: 수정 필요 
+        // - string 최대 길이를 정규화
+        // - 파싱 데이터가 제대로 카피 되는지 뇌를 안걸침... 
+
+        string[] parsingData_basic = new string[50];
+        string[] parsingData_common = new string[50];
+        string[] dataSegment = m_dataArray[0].Split("\t");
+
+        Array.Copy(dataSegment, parsingData_basic, 50);
+        Array.Copy(dataSegment, 50, parsingData_common, 0, 50);
+
+        Logic_TextData.SetBasicText(parsingData_basic);
+        Logic_TextData.SetCommonText(parsingData_common);
+    }
+
     /// <summary>
     /// 범위 데이터를 사용하여 데이터의 총 크기를 구합니다.
     /// <br> 입력되는 데이터 양식은 A2:B10 같은 형태여야합니다. </br>
     /// </summary>
-    private int GetCountData(string m_data)
+    private int GetCountData(string m_data, out int[] m_count)
     {
-        int totalCount = 0;
-
         string[] tempData = m_data.Split(":");
+        m_count = new int[2];
 
         // 설명 :: A2:B10 데이터 A2부분의 숫자만을 추출하여 totalCount에 담습니다.
-        totalCount = int.Parse(Regex.Replace(tempData[0], @"\D", ""));
+        m_count[0] = int.Parse(Regex.Replace(tempData[0], @"\D", ""));
         // 설명 :: A2:B10 데이터 중 B10 부분의 숫자만을 추출하여 기존 길이값을 빼서 총 길이값을 구합니다.
-        totalCount = int.Parse(Regex.Replace(tempData[1], @"\D", "")) - totalCount;
+        m_count[1] = int.Parse(Regex.Replace(tempData[1], @"\D", ""));
 
-        return totalCount;
+        return m_count[1] - m_count[0];
     }
     #endregion
 }
