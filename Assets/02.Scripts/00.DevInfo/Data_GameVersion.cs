@@ -12,15 +12,9 @@ namespace VS.Version
 
         /// <summary>
         /// [동진님] 
-        /// 스포너 스폰방식 수정
-        /// CSV 로 각 필요한 정보 적용
-        /// 몬스터, 몬스터 스탯 클래스 제작
-        /// 기획된 오브젝트 풀 사용방식 적용완료
-        /// 스테이지 빌더 초기화, 원본 몬스터 테이블 추가
-        /// 
-        /// 스테이지 매니저로 몬스터배치 기능 추가 전 커밋
+        /// Total 브랜치 csv 작업전 커밋
         /// </summary>
-        public const string MemberDJ = "1.0";
+        public const string MemberDJ = "1.1";
 
         /// <summary>
         /// [현지님]
