@@ -69,4 +69,5 @@ public enum eEventType
     EndGame,
     StageSetupCompleted,
     StageReady,
+    AddStageParts,
 }

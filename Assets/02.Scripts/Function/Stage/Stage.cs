@@ -4,12 +4,26 @@ using UnityEngine;
 
 public class Stage
 {
-    Map _map;
-    Spawner _spawner;
+    private int _id;
+    public int ID => _id;
 
-    public Stage(Map map, Spawner spawner)
+    private Dictionary<eUnitType, List<Monster>> _monsterTable;
+
+    public Spawner Spawner => _spawner;
+
+    private Map _map;
+    private Spawner _spawner;
+
+    public Stage(Dictionary<eUnitType, List<Monster>> table, Map map, Spawner spawner)
     {
+        this._monsterTable = table;
         _map = map;
         _spawner = spawner;
     }
+
+    public Monster GetOriginMonster(eUnitType type, int tableIndex)
+    {
+        return _monsterTable[type][tableIndex];
+    }
+
 }

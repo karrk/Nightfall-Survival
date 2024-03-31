@@ -43,8 +43,6 @@ public class SettingManager : MonoBehaviour
         }
     }
 
-
-
     private void Awake()
     {
         if (_instance == null)

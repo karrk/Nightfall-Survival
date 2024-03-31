@@ -8,6 +8,8 @@ public class MapManager : MonoBehaviour , IStageParts
 
     public static MapManager Instance => _instance;
 
+    public Transform ObjTr => transform;
+
     private void Awake()
     {
         if (_instance == null)
@@ -19,12 +21,13 @@ public class MapManager : MonoBehaviour , IStageParts
             Destroy(this.gameObject);
 
         GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
+        GameManager.Instance.Event.RegisterEvent(eEventType.AddStageParts, AddPartsList);
     }
 
     [SerializeField]
-    MapCreator _creator;
+    private MapCreator _creator;
 
-    Map _currentMap;
+    private Map _currentMap;
 
     public Map GetMap(string mapName)
     {

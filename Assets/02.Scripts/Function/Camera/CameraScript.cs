@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class CameraScript : MonoBehaviour
             this.transform.position += Vector3.right * _moveSpeed * Time.deltaTime;
     }
 
-    void SetCollider()
+    private void SetCollider()
     {
         SettingManager set_M = SettingManager.Instance;
 
