@@ -31,9 +31,12 @@ public static class Logic_TextData
     /// </summary>
     private static List<Graphic_Text> _textList = new List<Graphic_Text>();
 
-    public static void SetLanguage()
+    /// <summary>
+    /// [기능] 현재의 언어 설정에 맞쳐서 모든 텍스트를 업데이트합니다.
+    /// <br> 언어 설정이 바뀐 경우 호출됩니다.</br>
+    /// </summary>
+    public static void OnChangeLanguage()
     {
-
         UpdateAllText();
     }
 
@@ -67,19 +70,19 @@ public static class Logic_TextData
     }
 
     /// <summary>
-    /// [설정] 공통 텍스트 리스트의 최대길이를 지정합니다. 
+    /// [설정] 공통 텍스트 리스트를 지정합니다. 
     /// </summary>
-    internal static void SetCommonTextLength(int m_length)
+    internal static void SetCommonText(string[] m_textList)
     {
-        text_common = new string[m_length];
+        text_common = m_textList;
     }
 
     /// <summary>
-    /// [설정] 일반 텍스트 리스트의 최대길이를 지정합니다. 
+    /// [설정] 일반 텍스트 리스트를 지정합니다. 
     /// </summary>
-    internal static void SetBasicTextLength(int m_length)
+    internal static void SetBasicText(string[] m_textList)
     {
-        text_basic = new string[m_length];
+        text_basic = m_textList;
     }
 
     /// <summary>

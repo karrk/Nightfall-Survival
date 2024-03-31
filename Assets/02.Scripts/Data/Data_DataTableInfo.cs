@@ -23,7 +23,7 @@ public class Data_DataTableInfo
     /// <summary>
     /// 텍스트 테이블의 총 갯수입니다. 
     /// </summary>
-    public string textTableCount;
+    public int[] textTableCount;
 
     public string textTableURL;
 

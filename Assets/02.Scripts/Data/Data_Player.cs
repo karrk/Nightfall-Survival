@@ -1,5 +1,17 @@
 using System;
 
+
+/// <summary>
+/// 플레이어 연결정보
+/// </summary>
+public enum eConnectType
+{
+    None = 0, // 비연결 상태
+    OffLine = 1,
+    OnLine_Google = 2,
+    LogOut = 99
+}
+
 /// <summary>
 /// [데이터] 플레이어의 전반적인 정보를 구성합니다. 
 /// </summary>
@@ -14,7 +26,8 @@ public struct Data_Player
     public DateTime accountTime;
     /// <summary> 가장 마지막에 플레이한 날짜를 반영합니다. </summary>
     public DateTime lastPlayTime;
-
+    /// <summary> 현재 접속된 타입을 나타냅니다. </summary>
+    public eConnectType currentConnectType;
     #endregion
 
     #region 진행상황

@@ -36,7 +36,7 @@ public class Logic_WebTableLoader : MonoBehaviour
             case eDataTableType.Monsters:
                 return URL_googleCommon + settingData.monsterTableURL + "&range=" + settingData.monsterTableCount;
             case eDataTableType.Text:
-                return URL_googleCommon + settingData.textTableURL + "&range=" + settingData.textTableCount;
+                return URL_googleCommon + settingData.textTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.textTableCount[0] + Global_Data.GetLanguageChar() + settingData.textTableCount[1];
             default:
                 return null;
         }

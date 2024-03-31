@@ -9,7 +9,7 @@ public enum eSceneKind
     Load = 0,
     Intro,
     MainMenu,
-    GameScene,
+    InGame,
 }
 
 public class GameManager : MonoBehaviour
@@ -80,8 +80,8 @@ public class GameManager : MonoBehaviour
                 return eSceneKind.Intro;
             case "MainMenu":
                 return eSceneKind.MainMenu;
-            case "GmaeScene":
-                return eSceneKind.GameScene;
+            case "InGame":
+                return eSceneKind.InGame;
             default:
                 return eSceneKind.None;
         }
@@ -100,8 +100,8 @@ public class GameManager : MonoBehaviour
                 return "Intro";
             case eSceneKind.MainMenu:
                 return "MainMenu";
-            case eSceneKind.GameScene:
-                return "GmaeScene";
+            case eSceneKind.InGame:
+                return "InGame";
             default:
                 return string.Empty;
         }
