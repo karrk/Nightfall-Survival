@@ -29,7 +29,7 @@ public class ObjPoolManager : MonoBehaviour
         return pools[poolingType].GetObj();
     }
 
-    void ReturnAllObj()
+    private void ReturnAllObj()
     {
         foreach (var e in pools)
         {

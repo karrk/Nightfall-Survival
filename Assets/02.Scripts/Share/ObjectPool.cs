@@ -34,6 +34,9 @@ public abstract class ObjectPool : MonoBehaviour
 
     protected GameObject CreateObj()
     {
+        if (_prefab == null) // 테스트중
+            return null;
+
         GameObject obj = Instantiate(_prefab);
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(this.transform);
@@ -50,7 +53,10 @@ public abstract class ObjectPool : MonoBehaviour
             StartCoroutine(DevideCreate(_maxSize));
         }
 
-        return pool.Dequeue();
+        GameObject obj = pool.Dequeue();
+        obj.SetActive(true);
+
+        return obj;
     }
 
     IEnumerator DevideCreate(int requestCount)

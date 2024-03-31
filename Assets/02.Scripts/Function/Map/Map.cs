@@ -7,7 +7,7 @@ public class Map
     private string _mapName;
     public string MapName => _mapName;
 
-    GameObject[] _tiles;
+    private GameObject[] _tiles;
 
     public Map(string mapName, GameObject[] tiles)
     {

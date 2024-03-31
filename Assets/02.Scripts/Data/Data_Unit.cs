@@ -5,8 +5,9 @@
 public enum eUnitType
 {
     None = 0,
-    A = 1,
-    B = 2,
+    Common = 1,
+    Named = 2,
+    Boss = 3,
 }
 
 public class Data_Unit
