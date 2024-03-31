@@ -144,11 +144,101 @@ public class DataManager : Base_Manager
             }
 
             tempStringData = dataSegment[3].Split(",");
-            parsingData.frequency = new int[tempStringData.Length];
+            parsingData.nameds = new int[tempStringData.Length];
             for (int j = 0; j < tempStringData.Length; j++)
             {
-                parsingData.frequency[j] = int.Parse(tempStringData[j]);
+                parsingData.nameds[j] = int.Parse(tempStringData[j]);
             }
+
+            tempStringData = dataSegment[4].Split(",");
+            parsingData.bosses = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.bosses[j] = int.Parse(tempStringData[j]);
+            }
+
+            parsingData.clearTime = int.Parse(dataSegment[5]);
+
+            tempStringData = dataSegment[6].Split(",");
+            parsingData.rewards = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.rewards[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[7].Split(",");
+            parsingData.mainEventTimes = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.mainEventTimes[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[8].Split(",");
+            parsingData.mainEventBossMobs = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.mainEventBossMobs[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[9].Split(",");
+            parsingData.subEventTimes = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.subEventTimes[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[10].Split(",");
+            parsingData.subEventNamedMobs = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.subEventNamedMobs[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[11].Split(",");
+            parsingData.specialEventTimes = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.specialEventTimes[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[12].Split(",");
+            parsingData.specialEventTypes = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.specialEventTypes[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[13].Split(",");
+            parsingData.mobChangeTimes = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.mobChangeTimes[j] = int.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[14].Split(",");
+            parsingData.mobChanges = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.mobChanges[j] = int.Parse(tempStringData[j]);
+            }
+
+            parsingData.branchDelay = int.Parse(dataSegment[15]);
+
+            tempStringData = dataSegment[16].Split(",");
+            parsingData.startEndSpawnDelay = new int[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.startEndSpawnDelay[j] = int.Parse(tempStringData[j]);
+            }
+
+            parsingData.spawnDelayInterval = float.Parse(dataSegment[17]);
+
+            //tempStringData = dataSegment[3].Split(",");
+            //parsingData.frequency = new int[tempStringData.Length];
+            //for (int j = 0; j < tempStringData.Length; j++)
+            //{
+            //    parsingData.frequency[j] = int.Parse(tempStringData[j]);
+            //}
 
             Global_Data.stageTable.Add(parsingData.index, parsingData);
         }
@@ -171,6 +261,14 @@ public class DataManager : Base_Manager
             parsingData.damage = float.Parse(dataSegment[4]);
             parsingData.moveSpeed = float.Parse(dataSegment[5]);
             parsingData.armor = float.Parse(dataSegment[6]);
+
+            parsingData.namedHp = float.Parse(dataSegment[7]);
+            parsingData.namedDamage = float.Parse(dataSegment[8]);
+            parsingData.namedArmor = float.Parse(dataSegment[9]);
+
+            parsingData.bossHp = float.Parse(dataSegment[10]);
+            parsingData.bossDamage = float.Parse(dataSegment[11]);
+            parsingData.bossArmor = float.Parse(dataSegment[12]);
 
             Global_Data.mosnterTable.Add(parsingData.kind, parsingData);
         }

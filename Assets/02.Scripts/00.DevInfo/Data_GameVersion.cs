@@ -12,9 +12,8 @@ namespace VS.Version
 
         /// <summary>
         /// [동진님] 
-        /// Total 브랜치 csv 작업전 커밋
         /// </summary>
-        public const string MemberDJ = "1.1";
+        public const string MemberDJ = "1.2";
 
         /// <summary>
         /// [현지님]
