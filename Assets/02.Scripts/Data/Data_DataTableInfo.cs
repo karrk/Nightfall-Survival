@@ -21,6 +21,13 @@ public class Data_DataTableInfo
     public string stageTableURL;
 
     /// <summary>
+    /// 무기 테이블의 총 갯수입니다.
+    /// </summary>
+    public string weaponTableCount;
+
+    public string weaponTableURL;
+
+    /// <summary>
     /// 텍스트 테이블의 총 갯수입니다. 
     /// </summary>
     public int[] textTableCount;
