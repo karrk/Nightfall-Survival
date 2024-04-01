@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
@@ -19,6 +20,8 @@ public class StageBuilder : MonoBehaviour
             { eUnitType.Boss , new List<Monster>() },
         };
 
+    public Data_Stage _stageData;
+
     private void Awake()
     {
         GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, GetParts);
@@ -36,7 +39,7 @@ public class StageBuilder : MonoBehaviour
 
         foreach (var part in _parts)
         {
-            part.ObjTr.position = Vector3.zero;
+            part.StagePartTransform.position = Vector3.zero;
         }
     }
 
@@ -58,7 +61,7 @@ public class StageBuilder : MonoBehaviour
         _parts.Add(part);
     }
 
-    private void SetMob(int[] mobs)
+    private void SetMob(eUnitType type,int[] mobs)
     {
         for (int i = 0; i < mobs.Length; i++)
         {
@@ -66,11 +69,25 @@ public class StageBuilder : MonoBehaviour
             Data_Monster data = Global_Data.mosnterTable[(eMonsterKind)mobs[i]];
             mob.SetStats(data);
 
-            mob.name = $"Origin_{data.name}";
+            if(type == eUnitType.Named)
+            {
+                mob.Stat.AddHp(data.namedHp)
+                    .AddDamage(data.namedDamage)
+                    .AddArmor(data.namedArmor);
+            }
+
+            else if (type == eUnitType.Boss)
+            {
+                mob.Stat.AddHp(data.bossHp)
+                    .AddDamage(data.bossDamage)
+                    .AddArmor(data.bossArmor);
+            }
+
+            mob.name = $"Origin_{type}_{data.name}";
             mob.transform.parent = this.transform;
             mob.gameObject.SetActive(false);
 
-            _monsterTable[data.type].Add(mob);
+            _monsterTable[type].Add(mob);
         }
     }
 
@@ -79,15 +96,21 @@ public class StageBuilder : MonoBehaviour
     {
         Init();
         _stageNum = StageManager.Instance.StageNumber;
+        _stageData = Global_Data.stageTable[_stageNum];
+
+        GetMonsterTable();
 
         foreach (var partComponent in _parts)
         {
             partComponent.SendPart();
         }
+    }
 
-        SetMob(Global_Data.stageTable[_stageNum].monsters);
-        //SetMob(Global_Data.stageTable[_stageNum].nameds);
-        //SetMob(Global_Data.stageTable[_stageNum].bosses);
+    private void GetMonsterTable()
+    {
+        SetMob(eUnitType.Common,_stageData.monsters);
+        SetMob(eUnitType.Named,_stageData.nameds);
+        SetMob(eUnitType.Boss,_stageData.bosses);
     }
 
     public void SetMap(Map map)

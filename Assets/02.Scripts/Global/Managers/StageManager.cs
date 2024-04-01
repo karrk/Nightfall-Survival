@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class StageManager : MonoBehaviour
 {
@@ -12,10 +14,10 @@ public class StageManager : MonoBehaviour
 
     private Stage _stage;
 
-    private int _stageNum;
+    private int _stageNum = -1;
     public int StageNumber => _stageNum;
 
-    private ObjPoolManager _poolManager;
+    private StageLancher _lancher;
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class StageManager : MonoBehaviour
     private void Start()
     {
         _stageBuilder = GetComponent<StageBuilder>();
-        _poolManager = FindObjectOfType<ObjPoolManager>();
+        _lancher = GetComponent<StageLancher>();
     }
 
     public void CreateStage(int stageID)
@@ -46,14 +48,17 @@ public class StageManager : MonoBehaviour
             _stageBuilder.ResetBuilder(false);
 
         this._stage = _stageBuilder.Build();
+
+        _lancher.SetStageData(Global_Data.stageTable[_stageNum]);
+        _lancher.SetStage(_stage);
+
+        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted);
     }
 
-    private void Temp()
+    private void Update()
     {
-        GameObject mob = _poolManager.GetObj(ePoolingType.Monster);
-        Monster origin = _stage.GetOriginMonster(eUnitType.Common, 0);
-        origin.Stat.StatCopy(mob.GetComponent<Monster>().Stat);
-        _stage.Spawner.RandomSpawn(mob);
+        if (Input.GetMouseButtonDown(0))
+            CreateStage(1);
     }
 }
 

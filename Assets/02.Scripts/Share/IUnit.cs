@@ -1,6 +1,6 @@
 public interface IUnit
 {
-    void Move();
-    void Dead();
-    void OnDamaged();
+    public void Move();
+    public void Dead();
+    public void OnDamaged(float damage);
 }

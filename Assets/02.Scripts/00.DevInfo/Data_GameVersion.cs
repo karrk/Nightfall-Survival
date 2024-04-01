@@ -13,7 +13,7 @@ namespace VS.Version
         /// <summary>
         /// [동진님] 
         /// </summary>
-        public const string MemberDJ = "1.2";
+        public const string MemberDJ = "1.3";
 
         /// <summary>
         /// [현지님]

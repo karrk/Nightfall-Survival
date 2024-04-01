@@ -5,15 +5,15 @@ using UnityEngine;
 public class Spawner : MonoBehaviour, IStageParts
 {
     float _camSize;
-    readonly float _roundPadding = 0f;
-    readonly float _rectPadding = 0f;
+    readonly float _roundPadding = 0.5f;
+    readonly float _rectPadding = 1f;
 
     Vector3 _screenScale;
 
     public GameObject _center;
     public GameObject _edgePoint;
 
-    public Transform ObjTr => transform;
+    public Transform StagePartTransform => transform;
 
     private void Awake()
     {
@@ -61,9 +61,8 @@ public class Spawner : MonoBehaviour, IStageParts
     /// 카메라 뷰 테두리의 모서리에 외접한 원형태로 몹생성
     /// </summary>
     /// <param name="objs"></param>
-    /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과
-    /// 외접한 원의 반지름에서 시작</param>
-    public void RotationCreate(List<GameObject> objs, float limitDegree = 360)
+    /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
+    public void CircleSpawn(List<GameObject> objs, float limitDegree = 360)
     {
         float rot = limitDegree / objs.Count;
 
