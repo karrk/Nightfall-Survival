@@ -30,13 +30,15 @@ public class Logic_WebTableLoader : MonoBehaviour
         switch (m_type)
         {
             case eDataTableType.GameInfo:
-                return URL_googleCommon + gameInfoSheetsURL + "&range=" + "A2:G2";
+                return URL_googleCommon + gameInfoSheetsURL + "&range=" + "A2:I2";
             case eDataTableType.Stage:
                 return URL_googleCommon + settingData.stageTableURL + "&range=" + settingData.stageTableCount;
             case eDataTableType.Monsters:
                 return URL_googleCommon + settingData.monsterTableURL + "&range=" + settingData.monsterTableCount;
+            case eDataTableType.Weapon:
+                return URL_googleCommon + settingData.weaponTableURL + "&range=" + settingData.weaponTableCount;
             case eDataTableType.Text:
-                return URL_googleCommon + settingData.textTableURL + "&range=" + settingData.textTableCount;
+                return URL_googleCommon + settingData.textTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.textTableCount[0] + Global_Data.GetLanguageChar() + settingData.textTableCount[1];
             default:
                 return null;
         }
@@ -55,6 +57,11 @@ public class Logic_WebTableLoader : MonoBehaviour
     public void TryLoadData_MonstersTable()
     {
         StartCoroutine(LoadData(eDataTableType.Monsters));
+    }
+
+    public void TryLoadData_WeaponTable()
+    {
+        StartCoroutine(LoadData(eDataTableType.Weapon));
     }
 
     public void TryLoadData_TextTable()

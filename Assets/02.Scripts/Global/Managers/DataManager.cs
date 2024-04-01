@@ -12,6 +12,7 @@ public enum eDataTableType
     GameInfo = 0,
     Stage = 1,
     Monsters = 2,
+    Weapon = 3,
     Text = 10,
 }
 
@@ -33,14 +34,15 @@ public class DataManager : Base_Manager
     private Logic_CsvConvert _tableLoader;
 #endif
 
-    private void Awake()
+    protected override void Logic_Init_Custom()
     {
         transform.GetChild(0).TryGetComponent(out _tableLoader);
         if (_tableLoader != null) _tableLoader.TryLoadData_GameInfo();
 
         // --- 이벤트 등록 --- //
         GameManager.Instance.Event.RegisterEvent<eDataTableType, string[], int>(eEventType.OnResponseData_Table, OnResponseData);
-        // ------------------- //
+        GameManager.Instance.Event.RegisterEvent(eEventType.SetLanguage, LoadData_TextTable);
+        // ------------------- //    }
     }
 
     /// <summary>
@@ -49,7 +51,9 @@ public class DataManager : Base_Manager
     public void LoadData()
     {
         LoadData_StageTable();
-        LoadData_MonsterTbale();
+        LoadData_MonsterTable();
+        LoadData_WeaponTable();
+        LoadData_TextTable();
     }
 
     /// <summary>
@@ -63,15 +67,22 @@ public class DataManager : Base_Manager
     /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
-    public void LoadData_MonsterTbale()
+    public void LoadData_MonsterTable()
     {
         _tableLoader.TryLoadData_MonstersTable();
     }
 
     /// <summary>
+    /// [기능] 무기 테이블을 불러와 Global_Data를 갱신합니다.
+    /// </summary>
+    public void LoadData_WeaponTable()
+    {
+        _tableLoader.TryLoadData_MonstersTable();
+    }
+    /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
-    public void LoadData_TextTbale()
+    public void LoadData_TextTable()
     {
         _tableLoader.TryLoadData_TextTable();
     }
@@ -99,7 +110,12 @@ public class DataManager : Base_Manager
             case eDataTableType.Monsters:
                 Convert_MonsterTable(m_dataArray);
                 break;
+            case eDataTableType.Weapon:
+                Convert_WeaponTable(m_dataArray);
+                break;
             case eDataTableType.Text:
+                Convert_TextTable(m_dataArray);
+                Logic_TextData.OnChangeLanguage();
                 break;
             default:
                 // TODO :: 에러메시지 출력 (설정되지않은 데이터 타입이 지정되었습니다.)
@@ -117,8 +133,10 @@ public class DataManager : Base_Manager
         _dataTableInfo.stageTableURL = resultData[2];
         _dataTableInfo.monsterTableCount = resultData[3];
         _dataTableInfo.monsterTableURL = resultData[4];
-        _dataTableInfo.textTableCount = resultData[5];
-        _dataTableInfo.textTableURL = resultData[6];
+        _dataTableInfo.weaponTableCount = resultData[5];
+        _dataTableInfo.weaponTableURL = resultData[6];
+        GetCountData(resultData[7], out _dataTableInfo.textTableCount);
+        _dataTableInfo.textTableURL = resultData[8];
 
         return _dataTableInfo;
     }
@@ -267,22 +285,57 @@ public class DataManager : Base_Manager
         }
     }
 
+    private void Convert_WeaponTable(string[] m_dataArray)
+    {
+        Global_Data.weaponTable.Clear();
+
+        for (int i = 0; i < m_dataArray.Length; i++)
+        {
+            Data_Weapon parsingData = new Data_Weapon();
+            string[] dataSegment = m_dataArray[i].Split("\t");
+
+            parsingData.ID = int.Parse(dataSegment[0]);
+            parsingData.name = dataSegment[1];
+            parsingData.damage = float.Parse(dataSegment[2]);
+            parsingData.speed = float.Parse(dataSegment[3]);
+            parsingData.delay = float.Parse(dataSegment[4]);
+
+            Global_Data.weaponTable.Add(parsingData.ID, parsingData);
+        }
+    }
+
+    private void Convert_TextTable(string[] m_dataArray)
+    {
+        //TODO :: 수정 필요 
+        // - string 최대 길이를 정규화
+        // - 파싱 데이터가 제대로 카피 되는지 뇌를 안걸침... 
+
+        string[] parsingData_basic = new string[50];
+        string[] parsingData_common = new string[50];
+        string[] dataSegment = m_dataArray[0].Split("\t");
+
+        Array.Copy(dataSegment, parsingData_basic, 50);
+        Array.Copy(dataSegment, 50, parsingData_common, 0, 50);
+
+        Logic_TextData.SetBasicText(parsingData_basic);
+        Logic_TextData.SetCommonText(parsingData_common);
+    }
+
     /// <summary>
     /// 범위 데이터를 사용하여 데이터의 총 크기를 구합니다.
     /// <br> 입력되는 데이터 양식은 A2:B10 같은 형태여야합니다. </br>
     /// </summary>
-    private int GetCountData(string m_data)
+    private int GetCountData(string m_data, out int[] m_count)
     {
-        int totalCount = 0;
-
         string[] tempData = m_data.Split(":");
+        m_count = new int[2];
 
         // 설명 :: A2:B10 데이터 A2부분의 숫자만을 추출하여 totalCount에 담습니다.
-        totalCount = int.Parse(Regex.Replace(tempData[0], @"\D", ""));
+        m_count[0] = int.Parse(Regex.Replace(tempData[0], @"\D", ""));
         // 설명 :: A2:B10 데이터 중 B10 부분의 숫자만을 추출하여 기존 길이값을 빼서 총 길이값을 구합니다.
-        totalCount = int.Parse(Regex.Replace(tempData[1], @"\D", "")) - totalCount;
+        m_count[1] = int.Parse(Regex.Replace(tempData[1], @"\D", ""));
 
-        return totalCount;
+        return m_count[1] - m_count[0];
     }
     #endregion
 }
