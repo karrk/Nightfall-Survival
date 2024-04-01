@@ -8,7 +8,7 @@ public class MapManager : MonoBehaviour , IStageParts
 
     public static MapManager Instance => _instance;
 
-    public Transform ObjTr => transform;
+    public Transform StagePartTransform => transform;
 
     private void Awake()
     {
