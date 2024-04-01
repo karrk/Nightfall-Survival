@@ -12,6 +12,7 @@ public enum eDataTableType
     GameInfo = 0,
     Stage = 1,
     Monsters = 2,
+    Weapon = 3,
     Text = 10,
 }
 
@@ -33,15 +34,15 @@ public class DataManager : Base_Manager
     private Logic_CsvConvert _tableLoader;
 #endif
 
-    private void Awake()
+    protected override void Logic_Init_Custom()
     {
         transform.GetChild(0).TryGetComponent(out _tableLoader);
         if (_tableLoader != null) _tableLoader.TryLoadData_GameInfo();
 
         // --- 이벤트 등록 --- //
         GameManager.Instance.Event.RegisterEvent<eDataTableType, string[], int>(eEventType.OnResponseData_Table, OnResponseData);
-        GameManager.Instance.Event.RegisterEvent(eEventType.SetLanguage, LoadData_TextTbale);
-        // ------------------- //
+        GameManager.Instance.Event.RegisterEvent(eEventType.SetLanguage, LoadData_TextTable);
+        // ------------------- //    }
     }
 
     /// <summary>
@@ -50,8 +51,9 @@ public class DataManager : Base_Manager
     public void LoadData()
     {
         LoadData_StageTable();
-        LoadData_MonsterTbale();
-        LoadData_TextTbale();
+        LoadData_MonsterTable();
+        LoadData_WeaponTable();
+        LoadData_TextTable();
     }
 
     /// <summary>
@@ -65,15 +67,22 @@ public class DataManager : Base_Manager
     /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
-    public void LoadData_MonsterTbale()
+    public void LoadData_MonsterTable()
     {
         _tableLoader.TryLoadData_MonstersTable();
     }
 
     /// <summary>
+    /// [기능] 무기 테이블을 불러와 Global_Data를 갱신합니다.
+    /// </summary>
+    public void LoadData_WeaponTable()
+    {
+        _tableLoader.TryLoadData_MonstersTable();
+    }
+    /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
-    public void LoadData_TextTbale()
+    public void LoadData_TextTable()
     {
         _tableLoader.TryLoadData_TextTable();
     }
@@ -101,6 +110,9 @@ public class DataManager : Base_Manager
             case eDataTableType.Monsters:
                 Convert_MonsterTable(m_dataArray);
                 break;
+            case eDataTableType.Weapon:
+                Convert_WeaponTable(m_dataArray);
+                break;
             case eDataTableType.Text:
                 Convert_TextTable(m_dataArray);
                 Logic_TextData.OnChangeLanguage();
@@ -121,8 +133,10 @@ public class DataManager : Base_Manager
         _dataTableInfo.stageTableURL = resultData[2];
         _dataTableInfo.monsterTableCount = resultData[3];
         _dataTableInfo.monsterTableURL = resultData[4];
-        GetCountData(resultData[5], out _dataTableInfo.textTableCount);
-        _dataTableInfo.textTableURL = resultData[6];
+        _dataTableInfo.weaponTableCount = resultData[5];
+        _dataTableInfo.weaponTableURL = resultData[6];
+        GetCountData(resultData[7], out _dataTableInfo.textTableCount);
+        _dataTableInfo.textTableURL = resultData[8];
 
         return _dataTableInfo;
     }
@@ -275,6 +289,25 @@ public class DataManager : Base_Manager
             parsingData.bossArmor = float.Parse(dataSegment[12]);
 
             Global_Data.mosnterTable.Add(parsingData.kind, parsingData);
+        }
+    }
+
+    private void Convert_WeaponTable(string[] m_dataArray)
+    {
+        Global_Data.weaponTable.Clear();
+
+        for (int i = 0; i < m_dataArray.Length; i++)
+        {
+            Data_Weapon parsingData = new Data_Weapon();
+            string[] dataSegment = m_dataArray[i].Split("\t");
+
+            parsingData.ID = int.Parse(dataSegment[0]);
+            parsingData.name = dataSegment[1];
+            parsingData.damage = float.Parse(dataSegment[2]);
+            parsingData.speed = float.Parse(dataSegment[3]);
+            parsingData.delay = float.Parse(dataSegment[4]);
+
+            Global_Data.weaponTable.Add(parsingData.ID, parsingData);
         }
     }
 
