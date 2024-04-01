@@ -13,36 +13,58 @@ public class CharacterController : MonoBehaviour
     public float movementSpeed = 2.0f;
     
     private Rigidbody2D rigidbody2D;
-    private Animator m_animator;
+    private Animator animator;
 
-    private float m_delayToIdle = 0.0f;
-    private int m_facingDirection = 1;
+    private float delayToIdle = 0.0f;
+    private int facingDirection = 1;
+    private bool isDead = false;
+    private bool isDeadNoBlood = false;
+    private bool isHurt = false;
+
+    // getter setter
+    public bool IsDead { get { return isDead; } set { isDead = value; } }
+    public bool IsDeadNoBlood { get { return isDeadNoBlood; } set { isDeadNoBlood = value; } }
+    public bool IsHurt { get {  return isHurt; } set { isHurt = value; } }
 
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        m_animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
     {
+        if(isHurt == true)
+        {
+            animator.SetTrigger("Hurt");
+            return;
+        }
+        
+        if(isDead == true)
+        {
+            animator.SetTrigger("Death");
+            animator.SetBool("noBlood", isDeadNoBlood);
+
+            return;
+        }
+
         // 조이스틱 입력 시 move
         if(joystick.GetDirection() != Vector2.zero)
         {
             Move(joystick.GetDirection());
 
             // Reset timer
-            m_delayToIdle = 0.05f;
-            m_animator.SetInteger("AnimState", 1);
+            delayToIdle = 0.05f;
+            animator.SetInteger("AnimState", 1);
         }
         else
         {
             rigidbody2D.velocity = Vector3.zero;
 
             // Prevents flickering transitions to idle
-            m_delayToIdle -= Time.deltaTime;
-            if (m_delayToIdle < 0)
-                m_animator.SetInteger("AnimState", 0);
+            delayToIdle -= Time.deltaTime;
+            if (delayToIdle < 0)
+                animator.SetInteger("AnimState", 0);
         }
     }
 
@@ -57,16 +79,18 @@ public class CharacterController : MonoBehaviour
         if (velocity.x > 0)
         {
             GetComponent<SpriteRenderer>().flipX = false;
-            m_facingDirection = 1;
+            facingDirection = 1;
 
         }
         else
         {
             GetComponent<SpriteRenderer>().flipX = true;
-            m_facingDirection = -1;
+            facingDirection = -1;
         }
 
         velocity *= movementSpeed;
         rigidbody2D.velocity = velocity;
     }
+
+
 }
