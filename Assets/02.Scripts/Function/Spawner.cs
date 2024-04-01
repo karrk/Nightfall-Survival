@@ -62,7 +62,11 @@ public class Spawner : MonoBehaviour, IStageParts
     /// </summary>
     /// <param name="objs"></param>
     /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
+<<<<<<< HEAD
     public void CircleSpawn(Queue<GameObject> objs, float limitDegree)
+=======
+    public void CircleSpawn(List<GameObject> objs, float limitDegree = 360)
+>>>>>>> 6b9376b (#1.3)
     {
         float rot = limitDegree / objs.Count;
 

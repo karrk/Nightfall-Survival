@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+<<<<<<< HEAD
 using VS.Base.Manager;
+=======
+>>>>>>> 6b9376b (#1.3)
 
 public class StageManager : Base_Manager
 {
@@ -25,8 +28,11 @@ public class StageManager : Base_Manager
         _instance = this;
         _stageBuilder = GetComponent<StageBuilder>();
         _lancher = GetComponent<StageLancher>();
+<<<<<<< HEAD
 
         GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
+=======
+>>>>>>> 6b9376b (#1.3)
     }
 
     public void CreateStage(int stageID) // 스테이지 구성호출
@@ -45,7 +51,11 @@ public class StageManager : Base_Manager
         _lancher.SetStageData(Global_Data.stageTable[_stageNum]);
         _lancher.SetStage(_stage);
 
+<<<<<<< HEAD
         GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted); // 스테이지 호출이벤트
+=======
+        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted);
+>>>>>>> 6b9376b (#1.3)
     }
 
     private void Update()

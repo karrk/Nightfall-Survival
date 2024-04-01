@@ -66,16 +66,28 @@ public class StageBuilder : MonoBehaviour
 
             if(type == eUnitType.Named)
             {
+<<<<<<< HEAD
                 mob.UnitStat.AddHp(data.namedHp)
                             .AddDamage(data.namedDamage)
                             .AddArmor(data.namedArmor);
+=======
+                mob.Stat.AddHp(data.namedHp)
+                    .AddDamage(data.namedDamage)
+                    .AddArmor(data.namedArmor);
+>>>>>>> 6b9376b (#1.3)
             }
 
             else if (type == eUnitType.Boss)
             {
+<<<<<<< HEAD
                 mob.UnitStat.AddHp(data.bossHp)
                             .AddDamage(data.bossDamage)
                             .AddArmor(data.bossArmor);
+=======
+                mob.Stat.AddHp(data.bossHp)
+                    .AddDamage(data.bossDamage)
+                    .AddArmor(data.bossArmor);
+>>>>>>> 6b9376b (#1.3)
             }
 
             mob.name = $"Origin_{type}_{data.name}";

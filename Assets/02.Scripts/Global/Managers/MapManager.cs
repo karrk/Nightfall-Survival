@@ -10,7 +10,13 @@ public class MapManager : Base_Manager, IStageParts
     private MapCreator _creator;
     private Map _currentMap;
 
+<<<<<<< HEAD
     protected override void Logic_Init_Custom()
+=======
+    public Transform StagePartTransform => transform;
+
+    private void Awake()
+>>>>>>> 6b9376b (#1.3)
     {
         _creator = GetComponentInChildren<MapCreator>();
         GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
