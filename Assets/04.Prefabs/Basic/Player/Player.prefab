@@ -55,6 +55,21 @@ PrefabInstance:
       propertyPath: joystick
       value: 
       objectReference: {fileID: 8141155786663538547}
+    - target: {fileID: 3047335259393498033, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517124108755632318, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
+        type: 3}
+      propertyPath: joystick
+      value: 
+      objectReference: {fileID: 8141155786663538547}
+    - target: {fileID: 7517124108755632318, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8579241167273609736, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}
       propertyPath: m_Name
@@ -115,7 +130,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3047335259393498033, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163, type: 3}
 --- !u!4 &2469329532915115711 stripped
 Transform:

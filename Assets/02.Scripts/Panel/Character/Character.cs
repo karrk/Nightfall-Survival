@@ -3,32 +3,77 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
-public class Character : MonoBehaviour
+public class Character : Base_Unit
 {
-    private CharacterController characterController;
+    [SerializeField]
+    private JoyStick joystick;
 
-    // TODO) 임시 이므로 수정해야함
-    int characterType;
-    int weaponType = 0;
+    private float movementSpeed = 2.0f;
+    private float immunityTime = 3.0f;
 
-    int maxHP = 0;
-    int remainHP = 0;
-    int attackPower = 0;
-    int defendPower = 0;
+    private int facingDirection = 1;
+    private float delayToIdle = 0.0f;
 
-    void Start()
+    private Stat characterStat = new Stat();
+
+    // getter setter
+    public override Stat UnitStat { get { return characterStat; } }
+    protected override float ImmunityTime { get { return immunityTime; } }
+
+
+    void FixedUpdate()
     {
-        characterController = GetComponent<CharacterController>();    
+        // 조이스틱 입력 시 move
+        if (joystick.GetDirection() != Vector2.zero)
+        {
+            Move();
+
+            // 타이머 리셋
+            delayToIdle = 0.05f;
+        }
+        else
+        {
+            _rb.velocity = Vector3.zero;
+
+            // Idle 로 전환 시 깜빡임 방지
+            delayToIdle -= Time.deltaTime;
+            if (delayToIdle < 0)
+                Idle();
+        }
     }
 
-    public int CalculateDamage(int damageAmount)
+    protected override void Idle()
     {
-        if(damageAmount <= 0)
+        _anim.SetMoveAnim(false);
+    }
+
+    protected override void Move()
+    {
+        base.Move();
+
+        Vector2 pos = joystick.GetDirection();
+
+        float x = pos.x;
+        float y = pos.y;
+
+        Vector3 velocity = new Vector3(x, y, 0);
+        velocity.Normalize();
+
+        if (velocity.x > 0)
         {
-            return 0;
+            GetComponent<SpriteRenderer>().flipX = false;
+            facingDirection = 1;
+
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+            facingDirection = -1;
         }
 
-        return damageAmount * (1 / (1 + defendPower));
+        velocity *= movementSpeed;
+        _rb.velocity = velocity;
     }
 }
