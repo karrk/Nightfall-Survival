@@ -8,16 +8,14 @@ namespace VS.Base.Manager
     /// </summary>
     public abstract class Base_Manager : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        /// <summary>
+        /// [초기화] 외부에서 매니저를 초기화시키기위해서 진행되는 부분입니다.
+        /// </summary>
+        public void Logic_Init()
         {
-
+            Logic_Init_Custom();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        protected abstract void Logic_Init_Custom();
     }
 }

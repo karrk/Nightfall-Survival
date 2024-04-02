@@ -10,7 +10,10 @@ public enum eEventType
     Test,
 
     #region 게임 진행
-
+    /// <summary> 게임 준비과정을 걸칩니다. </summary>
+    ActGameReady,
+    /// <summary> 준비단계가 완료되면 호출됩니다. </summary>
+    OnGameComplete,
     #endregion
 
     #region 사용 주의 

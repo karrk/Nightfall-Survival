@@ -62,5 +62,10 @@ public class Global_Data : MonoBehaviour
     private static Dictionary<int, Data_Stage> _stageTable = new Dictionary<int, Data_Stage>();
 
     public static Dictionary<int, Data_Stage> stageTable => _stageTable;
+
+
+    private static Dictionary<int, Data_Weapon> _weaponTable = new Dictionary<int, Data_Weapon>();
+
+    public static Dictionary<int, Data_Weapon> weaponTable => _weaponTable;
     #endregion 
 }
