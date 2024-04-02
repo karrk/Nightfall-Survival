@@ -50,11 +50,15 @@ namespace VS.Version
         /// <summary>
         /// [동진님] 
         /// </summary>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         public const string MemberDJ = "1.6";
 =======
         public const string MemberDJ = "1.3";
 >>>>>>> Stashed changes
+=======
+        public const string MemberDJ = "1.4";
+>>>>>>> b757374 (# 1.4)
 
         /// <summary>
         /// [현지님]
