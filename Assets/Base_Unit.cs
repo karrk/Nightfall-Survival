@@ -154,7 +154,7 @@ public abstract class Base_Unit : MonoBehaviour
         this.State = eUnitStates.Idle;
     }
 
-    private void SetSortOrder()
+    protected void SetSortOrder()
     {
         _renderer.sortingOrder = (int)(this.transform.position.y * -100);
     }
