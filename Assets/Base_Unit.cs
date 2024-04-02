@@ -1,4 +1,8 @@
 using System.Collections;
+<<<<<<< HEAD
+=======
+using System.Collections.Generic;
+>>>>>>> d8e30f5 (#1.5)
 using UnityEngine;
 
 public enum eUnitStates
@@ -63,7 +67,11 @@ public abstract class Base_Unit : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     protected virtual void Awake()
+=======
+    private void Awake()
+>>>>>>> d8e30f5 (#1.5)
     {
         _anim = GetComponent<UnitAnimatior>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -71,12 +79,19 @@ public abstract class Base_Unit : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
+<<<<<<< HEAD
     protected virtual void Start()
+=======
+    private void Start()
+>>>>>>> d8e30f5 (#1.5)
     {
         Init();
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d8e30f5 (#1.5)
     public virtual void Init()
     {
         State = eUnitStates.None;
@@ -154,7 +169,11 @@ public abstract class Base_Unit : MonoBehaviour
         this.State = eUnitStates.Idle;
     }
 
+<<<<<<< HEAD
     protected void SetSortOrder()
+=======
+    private void SetSortOrder()
+>>>>>>> d8e30f5 (#1.5)
     {
         _renderer.sortingOrder = (int)(this.transform.position.y * -100);
     }

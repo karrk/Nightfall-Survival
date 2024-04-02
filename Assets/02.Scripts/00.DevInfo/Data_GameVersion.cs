@@ -51,6 +51,7 @@ namespace VS.Version
         /// [동진님] 
         /// </summary>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         public const string MemberDJ = "1.6";
 =======
@@ -59,6 +60,9 @@ namespace VS.Version
 =======
         public const string MemberDJ = "1.4";
 >>>>>>> b757374 (# 1.4)
+=======
+        public const string MemberDJ = "1.5";
+>>>>>>> d8e30f5 (#1.5)
 
         /// <summary>
         /// [현지님]

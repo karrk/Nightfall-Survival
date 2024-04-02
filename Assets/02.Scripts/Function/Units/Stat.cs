@@ -119,9 +119,13 @@ public class Stat
     public float Damage => _damage;
     public float HP => _hp;
 <<<<<<< HEAD
+<<<<<<< HEAD
     public float Armor => _armor;
 =======
 >>>>>>> b757374 (# 1.4)
+=======
+    public float Armor => _armor;
+>>>>>>> d8e30f5 (#1.5)
 
     public void StatCopy(Stat targetData)
     {
