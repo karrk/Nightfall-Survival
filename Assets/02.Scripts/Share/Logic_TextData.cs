@@ -31,6 +31,9 @@ public static class Logic_TextData
     /// </summary>
     private static List<Graphic_Text> _textList = new List<Graphic_Text>();
 
+
+    public static bool IsSettingData() => text_common != null && text_basic != null;
+
     /// <summary>
     /// [기능] 현재의 언어 설정에 맞쳐서 모든 텍스트를 업데이트합니다.
     /// <br> 언어 설정이 바뀐 경우 호출됩니다.</br>

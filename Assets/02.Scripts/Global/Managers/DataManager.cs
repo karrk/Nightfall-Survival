@@ -13,7 +13,8 @@ public enum eDataTableType
     Stage = 1,
     Monsters = 2,
     Weapon = 3,
-    Text = 10,
+    CommonText = 9,
+    BasicText = 10,
 }
 
 /// <summary>
@@ -77,14 +78,15 @@ public class DataManager : Base_Manager
     /// </summary>
     public void LoadData_WeaponTable()
     {
-        _tableLoader.TryLoadData_MonstersTable();
+        _tableLoader.TryLoadData_WeaponTable();
     }
     /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
     public void LoadData_TextTable()
     {
-        _tableLoader.TryLoadData_TextTable();
+        _tableLoader.TryLoadData_BasicTextTable();
+        _tableLoader.TryLoadData_CommonTextTable();
     }
 
 
@@ -113,8 +115,12 @@ public class DataManager : Base_Manager
             case eDataTableType.Weapon:
                 Convert_WeaponTable(m_dataArray);
                 break;
-            case eDataTableType.Text:
-                Convert_TextTable(m_dataArray);
+            case eDataTableType.CommonText:
+                Convert_CommonTextTable(m_dataArray);
+                //Logic_TextData.OnChangeLanguage();
+                break;
+            case eDataTableType.BasicText:
+                Convert_BasicTextTable(m_dataArray);
                 Logic_TextData.OnChangeLanguage();
                 break;
             default:
@@ -135,9 +141,10 @@ public class DataManager : Base_Manager
         _dataTableInfo.monsterTableURL = resultData[4];
         _dataTableInfo.weaponTableCount = resultData[5];
         _dataTableInfo.weaponTableURL = resultData[6];
-        GetCountData(resultData[7], out _dataTableInfo.textTableCount);
-        _dataTableInfo.textTableURL = resultData[8];
-
+        GetCountData(resultData[17], out _dataTableInfo.commonTextTableCount);
+        _dataTableInfo.commonTextTableURL = resultData[18];
+        GetCountData(resultData[19], out _dataTableInfo.basicTextTableCount);
+        _dataTableInfo.basicTextTableURL = resultData[20];
         return _dataTableInfo;
     }
 
@@ -213,21 +220,14 @@ public class DataManager : Base_Manager
         }
     }
 
-    private void Convert_TextTable(string[] m_dataArray)
+    private void Convert_CommonTextTable(string[] m_dataArray)
     {
-        //TODO :: 수정 필요 
-        // - string 최대 길이를 정규화
-        // - 파싱 데이터가 제대로 카피 되는지 뇌를 안걸침... 
+        Logic_TextData.SetCommonText(m_dataArray);
+    }
 
-        string[] parsingData_basic = new string[50];
-        string[] parsingData_common = new string[50];
-        string[] dataSegment = m_dataArray[0].Split("\t");
-
-        Array.Copy(dataSegment, parsingData_basic, 50);
-        Array.Copy(dataSegment, 50, parsingData_common, 0, 50);
-
-        Logic_TextData.SetBasicText(parsingData_basic);
-        Logic_TextData.SetCommonText(parsingData_common);
+    private void Convert_BasicTextTable(string[] m_dataArray)
+    {
+        Logic_TextData.SetBasicText(m_dataArray);
     }
 
     /// <summary>

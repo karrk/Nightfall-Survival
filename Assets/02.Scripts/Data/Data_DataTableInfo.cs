@@ -28,11 +28,18 @@ public class Data_DataTableInfo
     public string weaponTableURL;
 
     /// <summary>
-    /// 텍스트 테이블의 총 갯수입니다. 
+    /// 공통 텍스트 테이블의 총 갯수입니다. 
     /// </summary>
-    public int[] textTableCount;
+    public int[] commonTextTableCount;
 
-    public string textTableURL;
+    public string commonTextTableURL;
 
+
+    /// <summary>
+    /// 기본 텍스트 테이블의 총 갯수입니다. 
+    /// </summary>
+    public int[] basicTextTableCount;
+
+    public string basicTextTableURL;
     #endregion
 }
