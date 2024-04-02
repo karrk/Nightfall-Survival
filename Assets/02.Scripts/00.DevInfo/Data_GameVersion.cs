@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
 namespace VS.Version
 {
     /// <summary>
@@ -29,6 +32,7 @@ namespace VS.Version
         public const string MemberAlld = "0.10";
 
     }
+<<<<<<< HEAD
 =======
 >>>>>>> Stashed changes
 namespace VS.Version
@@ -86,4 +90,6 @@ namespace VS.Version
     }
 >>>>>>> 6b9376b (#1.3)
 >>>>>>> Stashed changes
+=======
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
 }
