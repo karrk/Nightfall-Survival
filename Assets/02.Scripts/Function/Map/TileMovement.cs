@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TileMovement : MonoBehaviour
 {
+    readonly static float DetectErrorMargin = 0.25f;
+
     private Vector2 CamDistance
     {
         get
@@ -13,13 +15,13 @@ public class TileMovement : MonoBehaviour
         }
     }
 
-    static float DetectErrorMargin = 0.25f;
-
     private Vector2 _currentCenterPos
     {
         // global Position
         get { return this.transform.position + new Vector3(_tileSize / 2, -_tileSize / 2); }
     }
+
+    private static float _tileSize = int.MinValue;
 
     public static float TileSize
     {
@@ -29,9 +31,6 @@ public class TileMovement : MonoBehaviour
                 _tileSize = value;
         }
     }
-
-    private static float _tileSize = int.MinValue;
-
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -44,7 +43,7 @@ public class TileMovement : MonoBehaviour
     {
         // 양수라면 x 축 이동이 필요
         float axisComparison = Mathf.Abs(CamDistance.x) - Mathf.Abs(CamDistance.y);
-        float moveDistance = SettingManager.Instance.MapTextureSize * 0.01f;
+        float moveDistance = Global_Data.GetTextureSize() * 0.01f;
 
         if (-DetectErrorMargin <= axisComparison && axisComparison <= DetectErrorMargin) // 대각 이동이 필요 <보정 필요>
         {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using VS.Base.Manager;
 
-public class StageManager : MonoBehaviour
+public class StageManager : Base_Manager
 {
     private static StageManager _instance;
     public static StageManager Instance => _instance;
@@ -19,24 +20,16 @@ public class StageManager : MonoBehaviour
 
     private StageLancher _lancher;
 
-    private void Awake()
+    protected override void Logic_Init_Custom()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-            Destroy(this.gameObject);
-    }
-
-    private void Start()
-    {
+        _instance = this;
         _stageBuilder = GetComponent<StageBuilder>();
         _lancher = GetComponent<StageLancher>();
+
+        GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
     }
 
-    public void CreateStage(int stageID)
+    public void CreateStage(int stageID) // 스테이지 구성호출
     {
         if (_stage == null || stageID == _stage.ID)
         {
@@ -52,7 +45,7 @@ public class StageManager : MonoBehaviour
         _lancher.SetStageData(Global_Data.stageTable[_stageNum]);
         _lancher.SetStage(_stage);
 
-        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted);
+        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted); // 스테이지 호출이벤트
     }
 
     private void Update()
@@ -60,6 +53,8 @@ public class StageManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
             CreateStage(1);
     }
+
+    
 }
 
 

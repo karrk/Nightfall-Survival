@@ -1,21 +1,21 @@
-public class MonsterStat
+public class Stat
 {
     private string _name;
     private float _hp;
 
-    private int _id;
+    private int _id = -1;
     private int _type;
     private float _damage;
     private float _moveSpeed;
     private float _armor;
 
     public int ID => _id;
+    public float MoveSpeed => _moveSpeed;
+    public float Damage => _damage;
+    public float HP => _hp;
 
-    public void StatCopy(MonsterStat targetData)
+    public void StatCopy(Stat targetData)
     {
-        if (targetData == null)
-            targetData = new MonsterStat();
-
         if (targetData.ID == this._id)
         {
             targetData.SetHp(this._hp);
@@ -32,45 +32,59 @@ public class MonsterStat
             .SetType((int)this._type);
     }
 
-    public MonsterStat SetID(int id)
+    public Stat SetStats(Stat stats, Data_Monster mobData)
+    {
+        stats
+            .SetID(mobData.ID)
+            .SetHp(mobData.hp)
+            .SetName(mobData.name)
+            .SetArmor(mobData.armor)
+            .SetSpeed(mobData.moveSpeed)
+            .SetDamage(mobData.damage)
+            .SetType((int)mobData.type);
+
+        return stats;
+    }
+
+    public Stat SetID(int id)
     {
         this._id = id;
         return this;
     }
 
-    public MonsterStat SetType(int type)
+    public Stat SetType(int type)
     {
         this._type = type;
         return this;
     }
 
-    public MonsterStat SetName(string name)
+    public Stat SetName(string name)
     {
         this._name = name;
         return this;
     }
 
-    public MonsterStat SetHp(float hp)
+    public Stat SetHp(float hp)
     {
         this._hp = hp;
         return this;
     }
 
-    public MonsterStat SetArmor(float armor)
+    public Stat SetArmor(float armor)
     {
         this._armor = armor;
         return this;
     }
 
-    public MonsterStat SetDamage(float damage)
+    public Stat SetDamage(float damage)
     {
         this._damage = damage;
         return this;
     }
 
-    public MonsterStat SetSpeed(float speed)
+    public Stat SetSpeed(float speed)
     {
-        this._moveSpeed = speed;
+        this._moveSpeed = speed * 0.1f;
         return this;
     }
 
@@ -79,20 +93,26 @@ public class MonsterStat
         this._hp -= damage;
     }
 
+
     #region 스탯 추가부여
-    public MonsterStat AddHp(float hp)
+    public Stat AddHp(float hp)
     {
         this._hp += hp;
         return this;
     }
-    public MonsterStat AddDamage(float damage)
+    public Stat AddDamage(float damage)
     {
         this._damage += damage;
         return this;
     }
-    public MonsterStat AddArmor(float armor)
+    public Stat AddArmor(float armor)
     {
         this._armor += armor;
+        return this;
+    }
+    public Stat AddSpeed(float speed)
+    {
+        this._moveSpeed += speed;
         return this;
     }
     #endregion

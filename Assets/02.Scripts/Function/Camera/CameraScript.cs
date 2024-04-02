@@ -2,13 +2,22 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    private void Start()
+    private float _tilesInterval;
+
+    private void Awake()
     {
+        Global_Data.SetResolution();
+        _tilesInterval = SetInterval();
         SetCollider();
     }
 
+    private float SetInterval()
+    {
+        return Global_Data.GetTextureSize() / Global_Data.GetRxC_Count();
+    }
+
     [SerializeField]
-    float _moveSpeed = 5f;
+    private float _moveSpeed = 5f;
 
     private void Update()
     {   // 임시용 코드
@@ -24,17 +33,16 @@ public class CameraScript : MonoBehaviour
 
     private void SetCollider()
     {
-        SettingManager set_M = SettingManager.Instance;
+        int textureSize = Global_Data.GetTextureSize();
 
-        int tileInterval = set_M.MapTextureSize / set_M.RxC_Count;
-        float size = tileInterval;
+        float size = _tilesInterval;
 
         while (true)
         {
-            if (size >= set_M.MapTextureSize)
+            if (size >= textureSize)
                 break;
 
-            size += tileInterval;
+            size += _tilesInterval;
         }
 
         size *= 0.01f;

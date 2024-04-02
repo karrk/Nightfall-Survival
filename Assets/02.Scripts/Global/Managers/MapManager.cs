@@ -1,35 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VS.Base.Manager;
 
-public class MapManager : MonoBehaviour , IStageParts
+public class MapManager : Base_Manager, IStageParts
 {
-    private static MapManager _instance;
-
-    public static MapManager Instance => _instance;
-
     public Transform StagePartTransform => transform;
 
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-            Destroy(this.gameObject);
+    private MapCreator _creator;
+    private Map _currentMap;
 
+    protected override void Logic_Init_Custom()
+    {
+        _creator = GetComponentInChildren<MapCreator>();
         GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
         GameManager.Instance.Event.RegisterEvent(eEventType.AddStageParts, AddPartsList);
     }
 
-    [SerializeField]
-    private MapCreator _creator;
-
-    private Map _currentMap;
-
-    public Map GetMap(string mapName)
+    public Map GetMap(eMapTileKind mapName)
     {
         if (_currentMap != null && _currentMap.MapName == mapName)
             return _currentMap;
@@ -41,17 +29,17 @@ public class MapManager : MonoBehaviour , IStageParts
 
     public void SendPart()
     {
-        StageManager.Instance._stageBuilder.SetMap(GetMap("Test"));
-
-        //방식 고려중..
-        //string needMap = CSV.GetInfo(StageManager.Instance.StageNumber).MapName;
-        //StageManager.Instance._stageBuilder.SetMap(GetMap(needMap));
+        int stageNum = StageManager.Instance.StageNumber;
+        eMapTileKind kind = Global_Data.stageTable[stageNum].tileKind;
+        StageManager.Instance._stageBuilder.SetMap(GetMap(kind));
     }
 
     public void AddPartsList()
     {
         StageManager.Instance._stageBuilder.AddPart(this);
     }
+
+    
 }
 
 

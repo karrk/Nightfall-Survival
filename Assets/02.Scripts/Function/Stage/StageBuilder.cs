@@ -27,11 +27,6 @@ public class StageBuilder : MonoBehaviour
         GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, GetParts);
     }
 
-    private void Start()
-    {
-        GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
-    }
-
     public void ResetBuilder(bool hardReset)
     {
         if (hardReset)
@@ -67,20 +62,20 @@ public class StageBuilder : MonoBehaviour
         {
             Monster mob = new GameObject().AddComponent<Monster>();
             Data_Monster data = Global_Data.mosnterTable[(eMonsterKind)mobs[i]];
-            mob.SetStats(data);
+            mob.UnitStat.SetStats(mob.UnitStat,data);
 
             if(type == eUnitType.Named)
             {
-                mob.Stat.AddHp(data.namedHp)
-                    .AddDamage(data.namedDamage)
-                    .AddArmor(data.namedArmor);
+                mob.UnitStat.AddHp(data.namedHp)
+                            .AddDamage(data.namedDamage)
+                            .AddArmor(data.namedArmor);
             }
 
             else if (type == eUnitType.Boss)
             {
-                mob.Stat.AddHp(data.bossHp)
-                    .AddDamage(data.bossDamage)
-                    .AddArmor(data.bossArmor);
+                mob.UnitStat.AddHp(data.bossHp)
+                            .AddDamage(data.bossDamage)
+                            .AddArmor(data.bossArmor);
             }
 
             mob.name = $"Origin_{type}_{data.name}";
@@ -91,7 +86,6 @@ public class StageBuilder : MonoBehaviour
         }
     }
 
-    [ContextMenu("test")]
     private void GetParts()
     {
         Init();
