@@ -13,6 +13,7 @@ public class Stat
     public float MoveSpeed => _moveSpeed;
     public float Damage => _damage;
     public float HP => _hp;
+    public float Armor => _armor;
 
     public void StatCopy(Stat targetData)
     {

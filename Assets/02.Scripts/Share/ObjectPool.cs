@@ -83,7 +83,7 @@ public abstract class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<IPoolingObj>().Return();
+            transform.GetChild(i).GetComponent<IPoolingObj>().ReturnObj();
         }
     }
 
