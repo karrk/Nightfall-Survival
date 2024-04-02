@@ -308,8 +308,8 @@ public class StageLancher : MonoBehaviour
     private GameObject GetMonster(eUnitType unitType, int mobIdx)
     {
         GameObject mob = _poolManager.GetObj(ePoolingType.Monster);
-        IUnit origin = _stage.GetOriginMonster(unitType, mobIdx);
-        Monster clone = mob.GetComponent<Monster>();
+        Base_Unit origin = _stage.GetOriginMonster(unitType, mobIdx);
+        Base_Unit clone = mob.GetComponent<Base_Unit>();
 
         origin.UnitStat.StatCopy(clone.UnitStat);
         clone.Init();

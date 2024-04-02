@@ -4,42 +4,41 @@ using UnityEngine;
 
 public class UnitAnimatior : MonoBehaviour
 {
-    const string DeadAnimParameter = "IsDead";
+    const string DeadParameter = "IsDead";
+    const string MoveParameter = "IsMove";
+    const string OnDamageParameter = "IsOnDamage";
+    const string AttackParameter = "IsAttack";
 
     private Animator _anim;
 
     private void Awake()
     {
-        _anim = GetComponent<Animator>();
+        _anim = GetComponent<Animator>(); 
     }
 
     public void Init()
     {
-        _anim.SetBool(DeadAnimParameter, false);
+        _anim.SetBool(DeadParameter, false);
+        _anim.SetBool(MoveParameter, false);
     }
 
-    public void PlayIdleAnim()
+    public void SetMoveAnim(bool active)
     {
-
+        _anim.SetBool(MoveParameter, active);
     }
 
-    public void PlayMoveAnim()
+    public void SetDeadAnim(bool active)
     {
-
+        _anim.SetBool(DeadParameter, active);
     }
 
-    public void PlayDeadAnim()
+    public void PlayOnDamagedAnim()
     {
-        _anim.SetBool(DeadAnimParameter, true);
+        _anim.SetTrigger(OnDamageParameter);
     }
 
     public void PlayAttackAnim()
     {
-
-    }
-
-    public void OnDamagedAnim()
-    {
-
+        _anim.SetTrigger(AttackParameter);
     }
 }

@@ -1,4 +1,4 @@
 public interface IPoolingObj
 {
-    void Return();
+    void ReturnObj();
 }
