@@ -258,13 +258,6 @@ public class DataManager : Base_Manager
 
             parsingData.spawnDelayInterval = float.Parse(dataSegment[17]);
 
-            //tempStringData = dataSegment[3].Split(",");
-            //parsingData.frequency = new int[tempStringData.Length];
-            //for (int j = 0; j < tempStringData.Length; j++)
-            //{
-            //    parsingData.frequency[j] = int.Parse(tempStringData[j]);
-            //}
-
             Global_Data.stageTable.Add(parsingData.index, parsingData);
         }
     }

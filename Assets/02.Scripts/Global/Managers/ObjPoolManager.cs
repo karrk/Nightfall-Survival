@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VS.Base.Manager;
 
-public class ObjPoolManager : MonoBehaviour
+public class ObjPoolManager : Base_Manager
 {
     private static ObjPoolManager _instance;
-
     public static ObjPoolManager Instance => _instance;
 
     Dictionary<ePoolingType, ObjectPool> pools =
@@ -13,14 +13,11 @@ public class ObjPoolManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-            Destroy(this.gameObject);
+        _instance = this;
+    }
 
+    protected override void Logic_Init_Custom()
+    {
         GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
     }
 
@@ -41,4 +38,6 @@ public class ObjPoolManager : MonoBehaviour
     {
         this.pools.Add((ePoolingType)poolType, pool);
     }
+
+    
 }

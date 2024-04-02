@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
+using VS.Base.Manager;
 
-public class StageManager : MonoBehaviour
+public class StageManager : Base_Manager
 {
     private static StageManager _instance;
     public static StageManager Instance => _instance;
@@ -12,29 +15,21 @@ public class StageManager : MonoBehaviour
 
     private Stage _stage;
 
-    private int _stageNum;
+    private int _stageNum = -1;
     public int StageNumber => _stageNum;
 
-    private ObjPoolManager _poolManager;
+    private StageLancher _lancher;
 
-    private void Awake()
+    protected override void Logic_Init_Custom()
     {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-            Destroy(this.gameObject);
-    }
-
-    private void Start()
-    {
+        _instance = this;
         _stageBuilder = GetComponent<StageBuilder>();
-        _poolManager = FindObjectOfType<ObjPoolManager>();
+        _lancher = GetComponent<StageLancher>();
+
+        GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
     }
 
-    public void CreateStage(int stageID)
+    public void CreateStage(int stageID) // 스테이지 구성호출
     {
         if (_stage == null || stageID == _stage.ID)
         {
@@ -46,15 +41,20 @@ public class StageManager : MonoBehaviour
             _stageBuilder.ResetBuilder(false);
 
         this._stage = _stageBuilder.Build();
+
+        _lancher.SetStageData(Global_Data.stageTable[_stageNum]);
+        _lancher.SetStage(_stage);
+
+        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted); // 스테이지 호출이벤트
     }
 
-    private void Temp()
+    private void Update()
     {
-        GameObject mob = _poolManager.GetObj(ePoolingType.Monster);
-        Monster origin = _stage.GetOriginMonster(eUnitType.Common, 0);
-        origin.Stat.StatCopy(mob.GetComponent<Monster>().Stat);
-        _stage.Spawner.RandomSpawn(mob);
+        if (Input.GetMouseButtonDown(0))
+            CreateStage(1);
     }
+
+    
 }
 
 
