@@ -42,9 +42,11 @@ public class Global_Data : MonoBehaviour
             case eLanguageKind.JP:
                 return "D";
             case eLanguageKind.ZH_CN:
-                return "E";
+                goto case eLanguageKind.KR;
+            //return "E";
             case eLanguageKind.ZH_TW:
-                return "F";
+                goto case eLanguageKind.KR;
+            //return "F";
             default:
                 goto case eLanguageKind.KR;
         }

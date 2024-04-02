@@ -6,6 +6,13 @@ using UnityEngine;
 /// </summary>
 public class Global_Common : MonoBehaviour
 {
+    /// <summary>
+    /// 딜레이 1초
+    /// </summary>
+    public static WaitForSeconds delay_10 = new WaitForSeconds(1f);
+
+
+
     #region 변환
 
     #endregion
