@@ -92,7 +92,7 @@ public class Graphic_Text : MonoBehaviour
         }
         else if (kind_basic_index != -1)
         {
-            t_text.text = Logic_TextData.GetText(-1);
+            t_text.text = Logic_TextData.GetText(kind_basic_index);
         }
     }
 

@@ -30,15 +30,18 @@ public class Logic_WebTableLoader : MonoBehaviour
         switch (m_type)
         {
             case eDataTableType.GameInfo:
-                return URL_googleCommon + gameInfoSheetsURL + "&range=" + "A2:I2";
+                return URL_googleCommon + gameInfoSheetsURL + "&range=" + "A2:U2";
             case eDataTableType.Stage:
                 return URL_googleCommon + settingData.stageTableURL + "&range=" + settingData.stageTableCount;
             case eDataTableType.Monsters:
                 return URL_googleCommon + settingData.monsterTableURL + "&range=" + settingData.monsterTableCount;
             case eDataTableType.Weapon:
                 return URL_googleCommon + settingData.weaponTableURL + "&range=" + settingData.weaponTableCount;
-            case eDataTableType.Text:
-                return URL_googleCommon + settingData.textTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.textTableCount[0] + Global_Data.GetLanguageChar() + settingData.textTableCount[1];
+            case eDataTableType.BasicText:
+                return URL_googleCommon + settingData.basicTextTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[0] + ":" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[1];
+            case eDataTableType.CommonText:
+                return URL_googleCommon + settingData.commonTextTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.commonTextTableCount[0] + ":" + Global_Data.GetLanguageChar() + settingData.commonTextTableCount[1];
+
             default:
                 return null;
         }
@@ -64,9 +67,14 @@ public class Logic_WebTableLoader : MonoBehaviour
         StartCoroutine(LoadData(eDataTableType.Weapon));
     }
 
-    public void TryLoadData_TextTable()
+    public void TryLoadData_BasicTextTable()
     {
-        StartCoroutine(LoadData(eDataTableType.Text));
+        StartCoroutine(LoadData(eDataTableType.BasicText));
+    }
+
+    public void TryLoadData_CommonTextTable()
+    {
+        StartCoroutine(LoadData(eDataTableType.CommonText));
     }
 
 

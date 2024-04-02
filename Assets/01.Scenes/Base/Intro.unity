@@ -1279,7 +1279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 111.74}
+  m_AnchoredPosition: {x: 0, y: 111.73999}
   m_SizeDelta: {x: 654.29, y: 44.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7368293283769487789
@@ -1553,7 +1553,7 @@ GameObject:
   - component: {fileID: 8384454567552271867}
   - component: {fileID: 7581565891032911477}
   m_Layer: 0
-  m_Name: T_Template
+  m_Name: T_TouchScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1573,4 +1573,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   t_text: {fileID: 7581565891032911477}
   kind_base: 0
-  kind_basic_index: -1
+  kind_basic_index: 1
