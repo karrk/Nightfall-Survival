@@ -62,14 +62,14 @@ public class Spawner : MonoBehaviour, IStageParts
     /// </summary>
     /// <param name="objs"></param>
     /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
-    public void CircleSpawn(List<GameObject> objs, float limitDegree = 360)
+    public void CircleSpawn(Queue<GameObject> objs, float limitDegree)
     {
         float rot = limitDegree / objs.Count;
 
         StartCoroutine(RotateCreate(objs, rot, limitDegree));
     }
 
-    IEnumerator RotateCreate(List<GameObject> objs, float intervalRot, float limitDegree = 360)
+    IEnumerator RotateCreate(Queue<GameObject> objs, float intervalRot, float limitDegree = 360)
     {
         Vector3 size = _screenScale;
 
@@ -85,11 +85,9 @@ public class Spawner : MonoBehaviour, IStageParts
         Quaternion prevRot = Quaternion.Euler(0,0, _center.transform.rotation.z);
         Vector3 prevPos = edgeTr.position;
 
-        int idx = 0;
-
         while (true)
         {
-            if (rot >= limitDegree + _center.transform.rotation.z)
+            if (objs.Count <= 0)
                 break;
 
             _center.transform.rotation = prevRot;
@@ -102,7 +100,7 @@ public class Spawner : MonoBehaviour, IStageParts
             prevPos = edgeTr.position;
 
             rot += intervalRot;
-            objs[idx++].transform.position = edgeTr.position;
+            objs.Dequeue().transform.position = edgeTr.position;
 
             yield return null;
         }

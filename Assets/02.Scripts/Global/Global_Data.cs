@@ -8,6 +8,9 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
+    private static int _textureSize;
+
+    private static int _MapTileRowColumnCount = 8;
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -19,6 +22,19 @@ public class Global_Data : MonoBehaviour
     }
 
     /// <summary>
+    /// [기능] 최초 실행시 저장될 해상도값을 설정합니다.
+    /// </summary>
+    public static void SetResolution()
+    {
+        _option.resolution = new Vector2(Screen.width, Screen.height);
+    }
+
+    public static void SetTextureSize(int m_size)
+    {
+        _textureSize = m_size;
+    }
+
+    /// <summary>
     /// [기능] 연결에 성공된 경우 거기에 알맞는 데이터를 변경합니다.
     /// </summary>
     public static void SuccessConnect(eConnectType m_type, string m_playerID)
@@ -26,7 +42,6 @@ public class Global_Data : MonoBehaviour
         _player.currentConnectType = m_type;
         _player.ID = m_playerID;
     }
-
 
     /// <summary>
     /// [기능] 현재 언어의 캐릭터 타입을 반환합니다. 스프레드 데이터 구분에서만 사용됩니다.
@@ -48,6 +63,16 @@ public class Global_Data : MonoBehaviour
             default:
                 goto case eLanguageKind.KR;
         }
+    }
+
+    public static int GetTextureSize()
+    {
+        return _textureSize;
+    }
+
+    public static int GetRxC_Count()
+    {
+        return _MapTileRowColumnCount;
     }
 
     #endregion

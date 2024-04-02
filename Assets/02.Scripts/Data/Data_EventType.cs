@@ -43,7 +43,12 @@ public enum eEventType
     #region 시스템 기능
     /// <summary> 언어 설정 변경을 시도합니다. </summary>
     SetLanguage,
+    /// <summary> 기기별 해상도를 설정을 시도합니다. </summary>
+    SetResolution,
+    /// <summary> 텍스쳐 확인후 이뤄질 이벤트입니다. </summary>
+    SetTextureSize,
     #endregion
+
 
     #region 네트워크 통신
     /// <summary> 테이블 데이터에 관한 네트워크 응답이 온경우에 반환됩니다.</summary>

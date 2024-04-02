@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Map
 {
-    private string _mapName;
-    public string MapName => _mapName;
+    private eMapTileKind _mapKind;
+    public eMapTileKind MapName => _mapKind;
 
     private GameObject[] _tiles;
 
-    public Map(string mapName, GameObject[] tiles)
+    public Map(eMapTileKind mapName, GameObject[] tiles)
     {
-        this._mapName = mapName;
+        this._mapKind = mapName;
         this._tiles = tiles;
     }
 

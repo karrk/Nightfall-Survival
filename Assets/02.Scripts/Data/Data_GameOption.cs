@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public enum eLanguageKind
 {
     /// <summary> [디폴트] 한국어 </summary>
@@ -22,4 +24,6 @@ public class Data_GameOption
     /// 현재 설정된 언어를 나타냅니다.
     /// </summary>
     public eLanguageKind language = eLanguageKind.KR;
+
+    public Vector2 resolution = Vector2.zero;
 }

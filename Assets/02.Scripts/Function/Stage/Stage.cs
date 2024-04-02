@@ -30,7 +30,7 @@ public class Stage
     {
         int count = 0;
 
-        if(type == null)
+        if(type == eUnitType.None)
         {
             foreach (var e in _monsterTable)
                 count += e.Value.Count;

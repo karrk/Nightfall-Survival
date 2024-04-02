@@ -4,32 +4,39 @@ using UnityEngine;
 public class MapCreator : MonoBehaviour
 {
     // 동적으로 텍스쳐 변경이 가능한가
+    // 두개의 스프라이트 배열을 담아두고 서로 교체하는 방식 
+    // [현재 출력되고있는 스프라이트 배열] , [대기중인 스프라이트 배열]
+    // => 타일 스프라이트에 각 적용
 
     readonly string MapDirPath = "Maps/";
 
     private int _rxc_Count;
+
     private float tiles_interval;
 
-    private bool isInitialized = false;
-
-    public Map GetMap(string mapName)
+    private void Awake()
     {
-        if (!isInitialized)
-        {
-            _rxc_Count = SettingManager.Instance.RxC_Count;
-            tiles_interval = GetIntervalDistance();
-        }
+        _rxc_Count = Global_Data.GetRxC_Count();
+        Global_Data.SetTextureSize(LoadTexture((eMapTileKind)1).width);
+        tiles_interval = GetIntervalDistance();
+    }
 
-        Sprite[] splitSprites = DevideTexure(mapName);
-        Map newMap = new Map(mapName, CreateTileObj(splitSprites));
+    private Texture LoadTexture(eMapTileKind mapKind)
+    {
+        return Resources.Load<Texture>($"{MapDirPath + mapKind.ToString()}");
+    }
+
+    public Map GetMap(eMapTileKind map)
+    {
+        Texture texture = LoadTexture(map);
+        Sprite[] splitSprites = DevideTexure(texture);
+        Map newMap = new Map(map, CreateTileObj(splitSprites));
 
         return newMap;
     }
 
-    private Sprite[] DevideTexure(string mapName)
+    private Sprite[] DevideTexure(Texture texture)
     {
-        Texture texture = Resources.Load<Texture>($"{MapDirPath + mapName}");
-
         Sprite[] tempArr = new Sprite[(int)Math.Pow(_rxc_Count, 2)];
 
         for (int i = 0; i < _rxc_Count; i++)
@@ -98,7 +105,7 @@ public class MapCreator : MonoBehaviour
 
     private float GetIntervalDistance()
     {
-        return (SettingManager.Instance.MapTextureSize * 0.01f) * 1 / _rxc_Count;
+        return (Global_Data.GetTextureSize() * 0.01f) * 1 / _rxc_Count;
     }
 
 }
