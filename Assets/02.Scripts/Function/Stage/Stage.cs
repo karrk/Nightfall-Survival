@@ -23,7 +23,22 @@ public class Stage
 
     public Monster GetOriginMonster(eUnitType type, int tableIndex)
     {
-        return _monsterTable[type][tableIndex];
+        return _monsterTable[type][tableIndex-1];
+    }
+
+    public int GetMonsterCount(eUnitType type = eUnitType.None)
+    {
+        int count = 0;
+
+        if(type == eUnitType.None)
+        {
+            foreach (var e in _monsterTable)
+                count += e.Value.Count;
+
+            return count;
+        }
+
+        return _monsterTable[type].Count;
     }
 
 }

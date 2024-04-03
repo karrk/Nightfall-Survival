@@ -10,6 +10,16 @@ public enum eUnitType
     Boss = 3,
 }
 
+public enum eState
+{
+    None = 0,
+    Idle = 1,
+    Move = 2,
+    Attack = 3,
+    OnDamage = 4,
+    Dead = 5,
+}
+
 public class Data_Unit
 {
     #region 파싱 데이터
@@ -41,5 +51,25 @@ public class Data_Unit
     /// 유닛의 방어력입니다.
     /// </summary>
     public float armor;
+
+
+    /// <summary>
+    /// 네임드 몬스터로 전환시 부여되는 추가 스탯들 입니다.
+    /// </summary>
+    public float namedHp;
+
+    public float namedDamage;
+
+    public float namedArmor;
+
+
+    /// <summary>
+    /// 보스 몬스터로 전환시 부여되는 추가 스탯들 입니다.
+    /// </summary>
+    public float bossHp;
+
+    public float bossDamage;
+
+    public float bossArmor;
     #endregion
 }
