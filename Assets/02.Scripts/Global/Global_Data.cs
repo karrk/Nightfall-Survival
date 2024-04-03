@@ -10,7 +10,7 @@ public class Global_Data : MonoBehaviour
 
     private static int _textureSize;
 
-    private static int _MapTileRowColumnCount = 8;
+    private static int _MapTileDevideCount = 4;
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -72,9 +72,9 @@ public class Global_Data : MonoBehaviour
         return _textureSize;
     }
 
-    public static int GetRxC_Count()
+    public static int GetMapDevideCount()
     {
-        return _MapTileRowColumnCount;
+        return _MapTileDevideCount;
     }
 
     #endregion

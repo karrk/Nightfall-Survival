@@ -30,7 +30,7 @@ public class Stat
             .SetArmor(this._armor)
             .SetSpeed(this._moveSpeed)
             .SetDamage(this._damage)
-            .SetType((int)this._type);
+            .SetType((int)this._type); 
     }
 
     public virtual Stat SetStats(Stat stats, Data_Unit data)

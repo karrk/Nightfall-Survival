@@ -1,3 +1,19 @@
+public enum eCollectionType
+{
+    None = 0,
+    Weapon = 1,
+    Acc = 2,
+}
+
+public enum eWeaponType
+{
+    None = 0,
+    Sward = 1,
+    Wand = 2,
+    Knife = 3,
+    Clover = 4,
+}
+
 public struct Data_Weapon
 {
     /// <summary>

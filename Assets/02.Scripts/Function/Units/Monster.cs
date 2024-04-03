@@ -45,7 +45,7 @@ public class Monster : Base_Unit, IPoolingObj
         while (true)
         {
             this.transform.position = Vector3.MoveTowards
-                (this.transform.position, _chaseTarget.transform.position,
+                (this.transform.position, _chaseTarget.transform.position, 
                 _stat.MoveSpeed * Time.deltaTime);
 
             SetForward(_chaseTarget.transform.position.x);
