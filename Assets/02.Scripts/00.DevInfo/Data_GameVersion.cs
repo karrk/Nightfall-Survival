@@ -8,7 +8,7 @@ namespace VS.Version
         /// <summary>
         /// [버전] 게임에서 사용되어지는 통합 버전입니다. 
         /// </summary>
-        public const string Version = "0.0.11";
+        public const string Version = "0.0.13";
 
         /// <summary>
         /// [동진님] 
