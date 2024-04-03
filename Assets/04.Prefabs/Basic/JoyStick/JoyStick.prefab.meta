@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/04.Prefabs/Basic/JoyStick/JoyStick.prefab.meta
 guid: df42a958b3c176b4d8253bece47bea5a
 PrefabImporter:
+========
+guid: 0e3ecdc233d06084a9efd641d6995458
+NativeFormatImporter:
+>>>>>>>> b757374 (# 1.4):Assets/06.Animations/UnitAnims/UnitDead.anim.meta
   externalObjects: {}
+  mainObjectFileID: 7400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

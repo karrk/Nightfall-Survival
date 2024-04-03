@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Character : Base_Unit
 {
@@ -17,12 +18,20 @@ public class Character : Base_Unit
     public override Stat UnitStat { get { return characterStat; } }
     protected override float ImmunityTime { get { return immunityTime; } }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
     void FixedUpdate()
     {
         // 조이스틱 입력 시 move
         if (joystick.GetDirection() != Vector2.zero)
         {
+<<<<<<< HEAD
             Input_Move();
+=======
+            Move();
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
 
             // 타이머 리셋
             delayToIdle = 0.05f;
@@ -32,6 +41,7 @@ public class Character : Base_Unit
             _rb.velocity = Vector3.zero;
 
             // Idle 로 전환 시 깜빡임 방지
+<<<<<<< HEAD
             //delayToIdle -= Time.deltaTime;
             //if (delayToIdle < 0)
             State = eUnitStates.Idle;
@@ -46,12 +56,23 @@ public class Character : Base_Unit
 
     protected override void Idle()
     {
+=======
+            delayToIdle -= Time.deltaTime;
+            if (delayToIdle < 0)
+                Idle();
+        }
+    }
+
+    protected override void Idle()
+    {
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
         _anim.SetMoveAnim(false);
     }
 
     protected override void Move()
     {
         base.Move();
+<<<<<<< HEAD
     }
 
     protected override void OnDamage()
@@ -88,6 +109,29 @@ public class Character : Base_Unit
             facingDirection = -1;
         }
 
+=======
+
+        Vector2 pos = joystick.GetDirection();
+
+        float x = pos.x;
+        float y = pos.y;
+
+        Vector3 velocity = new Vector3(x, y, 0);
+        velocity.Normalize();
+
+        if (velocity.x > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+            facingDirection = 1;
+
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+            facingDirection = -1;
+        }
+
+>>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
         velocity *= movementSpeed;
         _rb.velocity = velocity;
     }
