@@ -7,7 +7,7 @@ public abstract class ObjectPool : MonoBehaviour
     protected abstract int InitCount { get; }
     protected abstract ePoolingType Type { get; }
 
-    protected static int CreateLimitCount = 50;
+    protected static int CreateOnceCount = 50;
 
     [SerializeField]
     protected GameObject _prefab;
@@ -34,7 +34,7 @@ public abstract class ObjectPool : MonoBehaviour
 
     protected GameObject CreateObj()
     {
-        if (_prefab == null) // 테스트중
+        if (_prefab == null) // 테스트중 임시코드
             return null;
 
         GameObject obj = Instantiate(_prefab);
@@ -65,12 +65,12 @@ public abstract class ObjectPool : MonoBehaviour
 
         while (true)
         {
-            for (int i = 0; i < CreateLimitCount; i++)
+            for (int i = 0; i < CreateOnceCount; i++)
             {
                 pool.Enqueue(CreateObj());
             }
 
-            count -= CreateLimitCount;
+            count -= CreateOnceCount;
 
             if (count <= 0)
                 break;
@@ -83,7 +83,7 @@ public abstract class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<IPoolingObj>().Return();
+            transform.GetChild(i).GetComponent<IPoolingObj>().ReturnObj();
         }
     }
 

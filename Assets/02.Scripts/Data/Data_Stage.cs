@@ -19,8 +19,6 @@ public enum eStageEventType
     CircleSpawn = 2,
     /// <summary> 몬스터를 폭발적으로 스폰 </summary>
     BunningSpawn = 3,
-
-
 }
 
 /// <summary>

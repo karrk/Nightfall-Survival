@@ -10,6 +10,16 @@ public enum eUnitType
     Boss = 3,
 }
 
+public enum eState
+{
+    None = 0,
+    Idle = 1,
+    Move = 2,
+    Attack = 3,
+    OnDamage = 4,
+    Dead = 5,
+}
+
 public class Data_Unit
 {
     #region 파싱 데이터
