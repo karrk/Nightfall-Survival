@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum eUnitStates
@@ -64,7 +63,7 @@ public abstract class Base_Unit : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _anim = GetComponent<UnitAnimatior>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -72,10 +71,11 @@ public abstract class Base_Unit : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         Init();
     }
+
 
     public virtual void Init()
     {
