@@ -61,16 +61,17 @@ public class MapCreator : MonoBehaviour
     /// </summary>
     private Sprite[] DevideTexure(Texture texture)
     {
-        Sprite[] tempArr = new Sprite[(int)MathF.Pow(_devideCount,2)];
+        Sprite[] tempArr = new Sprite[(int)MathF.Pow(_devideCount, 2)];
 
         for (int i = 0; i < _devideCount; i++)
         {
             for (int j = 0; j < _devideCount; j++)
             {
                 Rect rect = new Rect(
-                    (texture.width / _columnCount) * j,
-                    (texture.height / _devideCount) * (_devideCount - 1 - i),
-                    texture.width / _devideCount, texture.height / _devideCount);
+                    (texture.width / _columnCount) * j, 
+                    (texture.height / _rowCount) * (_rowCount - 1 - i),
+                    texture.width / _columnCount, 
+                    texture.height / _rowCount);
 
                 tempArr[(i * _devideCount) + j] = Sprite.Create((Texture2D)texture, rect, Vector2.up);
             }
@@ -165,7 +166,7 @@ public class MapCreator : MonoBehaviour
             Init();
             Sprite[] sprites = DevideTexure(LoadTexture((eMapTileKind)1));
             GameObject[] tiles = CreateTileObj(sprites);
-            //SetTileOptions(tiles);
+            SetTileOptions(tiles);
         }
             
     }
