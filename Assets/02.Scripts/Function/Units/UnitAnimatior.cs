@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitAnimatior : MonoBehaviour
@@ -13,7 +11,7 @@ public class UnitAnimatior : MonoBehaviour
 
     private void Awake()
     {
-        _anim = GetComponent<Animator>(); 
+        _anim = GetComponent<Animator>();
     }
 
     public void Init()

@@ -71,11 +71,11 @@ public abstract class Base_Unit : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
+
     protected virtual void Start()
     {
         Init();
     }
-
 
     public virtual void Init()
     {

@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour, IStageParts
 
     Vector3 GetScreenViewScale()
     {
-        return new Vector3(_camSize * 2 * Camera.main.aspect , _camSize * 2);
+        return new Vector3(_camSize * 2 * Camera.main.aspect, _camSize * 2);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour, IStageParts
 
         float randRot = Random.Range(0, 360);
         _center.transform.rotation = Quaternion.Euler(new Vector3(0, 0, randRot));
-        
+
         Transform edgePoint = _edgePoint.transform;
         Transform centerPoint = _center.transform;
 
@@ -54,7 +54,7 @@ public class Spawner : MonoBehaviour, IStageParts
         else
             distance = screenScale.y / Mathf.Abs(dir.y);
 
-        obj.transform.position = dir*(distance + _rectPadding);
+        obj.transform.position = dir * (distance + _rectPadding);
     }
 
     /// <summary>
@@ -77,12 +77,12 @@ public class Spawner : MonoBehaviour, IStageParts
         float radius = cross + _roundPadding;
 
         Transform edgeTr = _edgePoint.transform;
-        
-        edgeTr.transform.position 
+
+        edgeTr.transform.position
             = Vector3.Normalize(edgeTr.position - _center.transform.position) * radius;
 
         float rot = _center.transform.rotation.z;
-        Quaternion prevRot = Quaternion.Euler(0,0, _center.transform.rotation.z);
+        Quaternion prevRot = Quaternion.Euler(0, 0, _center.transform.rotation.z);
         Vector3 prevPos = edgeTr.position;
 
         while (true)

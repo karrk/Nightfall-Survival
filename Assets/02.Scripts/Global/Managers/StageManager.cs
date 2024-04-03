@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using System;
 using VS.Base.Manager;
 
 public class StageManager : Base_Manager
@@ -53,8 +49,5 @@ public class StageManager : Base_Manager
     //        CreateStage(1);
     //}
 
-    
+
 }
-
-
-

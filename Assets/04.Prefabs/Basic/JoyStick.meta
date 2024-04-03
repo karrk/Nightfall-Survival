@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/04.Prefabs/Basic/JoyStick.meta
 guid: 385e52775f01c4b42b9e506ca197ea07
+========
+guid: 9e4ce51462df4a04db7922b1f09b67a4
+>>>>>>>> b757374 (# 1.4):Assets/02.Scripts/Function/Units.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

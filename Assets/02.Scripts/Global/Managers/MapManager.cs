@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VS.Base.Manager;
 
@@ -39,8 +37,5 @@ public class MapManager : Base_Manager, IStageParts
         StageManager.Instance._stageBuilder.AddPart(this);
     }
 
-    
+
 }
-
-
-
