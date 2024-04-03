@@ -1,115 +1,10 @@
-<<<<<<< HEAD
-=======
-<<<<<<<< HEAD:Assets/02.Scripts/Function/MonsterStat.cs
-public class MonsterStat
-{
-    private string _name;
-    private float _hp;
-
-    private int _id;
-    private int _type;
-    private float _damage;
-    private float _moveSpeed;
-    private float _armor;
-
-    public int ID => _id;
-
-    public void StatCopy(MonsterStat targetData)
-    {
-        if (targetData == null)
-            targetData = new MonsterStat();
-
-        if (targetData.ID == this._id)
-        {
-            targetData.SetHp(this._hp);
-            return;
-        }
-
-        targetData
-            .SetID(this._id)
-            .SetHp(this._hp)
-            .SetName(this._name)
-            .SetArmor(this._armor)
-            .SetSpeed(this._moveSpeed)
-            .SetDamage(this._damage)
-            .SetType((int)this._type);
-    }
-
-    public MonsterStat SetID(int id)
-    {
-        this._id = id;
-        return this;
-    }
-
-    public MonsterStat SetType(int type)
-    {
-        this._type = type;
-        return this;
-    }
-
-    public MonsterStat SetName(string name)
-    {
-        this._name = name;
-        return this;
-    }
-
-    public MonsterStat SetHp(float hp)
-    {
-        this._hp = hp;
-        return this;
-    }
-
-    public MonsterStat SetArmor(float armor)
-    {
-        this._armor = armor;
-        return this;
-    }
-
-    public MonsterStat SetDamage(float damage)
-    {
-        this._damage = damage;
-        return this;
-    }
-
-    public MonsterStat SetSpeed(float speed)
-    {
-        this._moveSpeed = speed;
-        return this;
-    }
-
-    public void OnDamage(float damage)
-    {
-        this._hp -= damage;
-    }
-
-    #region 스탯 추가부여
-    public MonsterStat AddHp(float hp)
-    {
-        this._hp += hp;
-        return this;
-    }
-    public MonsterStat AddDamage(float damage)
-    {
-        this._damage += damage;
-        return this;
-    }
-    public MonsterStat AddArmor(float armor)
-    {
-        this._armor += armor;
-        return this;
-    }
-    #endregion
-
-}
-========
->>>>>>> b757374 (# 1.4)
 public class Stat
 {
     private string _name;
     private float _hp;
 
     private int _id = -1;
-    private int _type;
+    private int _type; // 당장은 필요없는기능
     private float _damage;
     private float _moveSpeed;
     private float _armor;
@@ -118,14 +13,7 @@ public class Stat
     public float MoveSpeed => _moveSpeed;
     public float Damage => _damage;
     public float HP => _hp;
-<<<<<<< HEAD
-<<<<<<< HEAD
     public float Armor => _armor;
-=======
->>>>>>> b757374 (# 1.4)
-=======
-    public float Armor => _armor;
->>>>>>> d8e30f5 (#1.5)
 
     public void StatCopy(Stat targetData)
     {
@@ -145,16 +33,16 @@ public class Stat
             .SetType((int)this._type);
     }
 
-    public Stat SetStats(Stat stats, Data_Monster mobData)
+    public virtual Stat SetStats(Stat stats, Data_Unit data)
     {
         stats
-            .SetID(mobData.ID)
-            .SetHp(mobData.hp)
-            .SetName(mobData.name)
-            .SetArmor(mobData.armor)
-            .SetSpeed(mobData.moveSpeed)
-            .SetDamage(mobData.damage)
-            .SetType((int)mobData.type);
+            .SetID(data.ID)
+            .SetHp(data.hp)
+            .SetName(data.name)
+            .SetArmor(data.armor)
+            .SetSpeed(data.moveSpeed)
+            .SetDamage(data.damage)
+            .SetType((int)data.type);
 
         return stats;
     }
@@ -201,17 +89,11 @@ public class Stat
         return this;
     }
 
-<<<<<<< HEAD
     public float OnDamage(float damage)
     {
         this._hp -= damage;
 
         return _hp;
-=======
-    public void OnDamage(float damage)
-    {
-        this._hp -= damage;
->>>>>>> b757374 (# 1.4)
     }
 
 
@@ -237,9 +119,106 @@ public class Stat
         return this;
     }
     #endregion
-
 }
-<<<<<<< HEAD
-=======
->>>>>>>> b757374 (# 1.4):Assets/02.Scripts/Function/Units/Stat.cs
->>>>>>> b757374 (# 1.4)
+
+public class CharacterStat : Stat
+{
+    float _recoverHp;
+    float _lucky;
+    float _throwCount;
+    float _alphaExp;
+    float _alphaGold;
+    float _delay;
+    float _duration;
+
+    public CharacterStat SetRecoverHp(float recoverHp)
+    {
+        this._recoverHp = recoverHp;
+        return this;
+    }
+    public CharacterStat SetLucky(float lucky)
+    {
+        this._recoverHp = lucky;
+        return this;
+    }
+    public CharacterStat SetThrowCount(float count)
+    {
+        this._throwCount = count;
+        return this;
+    }
+    public CharacterStat SetAlphaExp(float alphaPercent)
+    {
+        this._alphaExp = alphaPercent;
+        return this;
+    }
+    public CharacterStat SetAlphaGold(float alphaPercent)
+    {
+        this._alphaGold = alphaPercent;
+        return this;
+    }
+    public CharacterStat SetDelay(float delay)
+    {
+        this._delay = delay;
+        return this;
+    }
+    public CharacterStat SetDuration(float duration)
+    {
+        this._duration = duration;
+        return this;
+    }
+
+
+    #region 추가 스탯부여
+
+    public CharacterStat AddRecoverHp(float recoverHp)
+    {
+        this._recoverHp += recoverHp;
+        return this;
+    }
+    public CharacterStat AddLucky(float lucky)
+    {
+        this._recoverHp += lucky;
+        return this;
+    }
+    public CharacterStat AddThrowCount(float count)
+    {
+        this._throwCount += count;
+        return this;
+    }
+    public CharacterStat AddAlphaExp(float alphaPercent)
+    {
+        this._alphaExp += alphaPercent;
+        return this;
+    }
+    public CharacterStat AddAlphaGold(float alphaPercent)
+    {
+        this._alphaGold += alphaPercent;
+        return this;
+    }
+    public CharacterStat AddDelay(float delay)
+    {
+        this._delay += delay;
+        return this;
+    }
+    public CharacterStat AddDuration(float duration)
+    {
+        this._duration += duration;
+        return this;
+    }
+
+    #endregion
+
+    //public override Stat SetStats(Stat stats, Data_Monster characterData)
+    //{
+    //    stats
+    //        .SetID(characterData.ID)
+    //        .SetHp(characterData.hp)
+    //        .SetName(characterData.name)
+    //        .SetArmor(characterData.armor)
+    //        .SetSpeed(characterData.moveSpeed)
+    //        .SetDamage(characterData.damage)
+    //        .SetType((int)characterData.type);
+
+    //    return stats;
+    //}
+}
