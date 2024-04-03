@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
@@ -56,15 +54,15 @@ public class StageBuilder : MonoBehaviour
         _parts.Add(part);
     }
 
-    private void SetMob(eUnitType type,int[] mobs)
+    private void SetMob(eUnitType type, int[] mobs)
     {
         for (int i = 0; i < mobs.Length; i++)
         {
             Monster mob = new GameObject().AddComponent<Monster>();
             Data_Monster data = Global_Data.mosnterTable[(eMonsterKind)mobs[i]];
-            mob.UnitStat.SetStats(mob.UnitStat,data);
+            mob.UnitStat.SetStats(mob.UnitStat, data);
 
-            if(type == eUnitType.Named)
+            if (type == eUnitType.Named)
             {
                 mob.UnitStat.AddHp(data.namedHp)
                             .AddDamage(data.namedDamage)
@@ -102,9 +100,9 @@ public class StageBuilder : MonoBehaviour
 
     private void GetMonsterTable()
     {
-        SetMob(eUnitType.Common,_stageData.monsters);
-        SetMob(eUnitType.Named,_stageData.nameds);
-        SetMob(eUnitType.Boss,_stageData.bosses);
+        SetMob(eUnitType.Common, _stageData.monsters);
+        SetMob(eUnitType.Named, _stageData.nameds);
+        SetMob(eUnitType.Boss, _stageData.bosses);
     }
 
     public void SetMap(Map map)

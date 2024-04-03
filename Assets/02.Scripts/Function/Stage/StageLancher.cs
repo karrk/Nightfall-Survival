@@ -126,7 +126,7 @@ public class StageLancher : MonoBehaviour
 
     private void InitEventTable()
     {
-        if(_timeEventQueues.Count == 0)
+        if (_timeEventQueues.Count == 0)
         {
             _timeEventQueues.Add(TimeWithEventTypes.MainEvent, new Queue<int[]>());
             _timeEventQueues.Add(TimeWithEventTypes.SubEvent, new Queue<int[]>());
@@ -209,7 +209,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            GameObject bossMob =  GetMonster(eUnitType.Boss, _stageDataTable.bosses[eventNum]);
+            GameObject bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[eventNum]);
             _stage.Spawner.RandomSpawn(bossMob);
         }
 

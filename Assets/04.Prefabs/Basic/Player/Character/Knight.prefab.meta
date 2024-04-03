@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/04.Prefabs/Basic/Player/Character/Knight.prefab.meta
 guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163
 PrefabImporter:
+========
+guid: 33b372022ab3b0941bb73b5497c61cab
+NativeFormatImporter:
+>>>>>>>> b757374 (# 1.4):Assets/06.Animations/UnitAnims/UnitAnimator.controller.meta
   externalObjects: {}
+  mainObjectFileID: 9100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

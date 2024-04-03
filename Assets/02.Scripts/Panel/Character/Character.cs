@@ -87,8 +87,5 @@ public class Character : Base_Unit
             _renderer.flipX = true;
             facingDirection = -1;
         }
-
-        velocity *= movementSpeed;
-        _rb.velocity = velocity;
     }
 }
