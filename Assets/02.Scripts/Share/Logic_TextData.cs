@@ -7,9 +7,40 @@ using System.Collections.Generic;
 public enum eTextKind
 {
     None = 0,
-    // --------- //
-    // 팝업 데이터 //
-    // --------- //
+    #region 공용팝업
+    /// <summary> 안내</summary>
+    CommonP_Information = 1,
+    /// <summary> 확인 </summary>
+    CommonP_Check,
+    /// <summary> 닫기</summary>
+    CommonP_Close,
+
+    #endregion
+
+    #region 인트로
+    /// <summary> 진행을 하려면 화면을 클릭하세요.</summary>
+    Intro_TuchScreen = 9,
+    /// <summary> 오프라인</summary>
+    Intro_Offline,
+    #endregion
+
+    #region 메인메뉴 패널
+    /// <summary> 게임시작</summary>
+    MainMenu_Start = 13,
+    /// <summary> 콜렉션 </summary>
+    MainMenu_Collection,
+    /// <summary> 환경설정 </summary>
+    MainMenu_Option,
+    /// <summary> 재능 </summary>
+    MainMenu_Possibility,
+    /// <summary> 강화 </summary>
+    MainMenu_Upgrade,
+    /// <summary> 크레딧</summary>
+    MainMenu_Credit,
+    /// <summary> 종료</summary>
+    MainMenu_Quit,
+    #endregion
+
 }
 
 
@@ -19,12 +50,12 @@ public static class Logic_TextData
     /// [데이터] 공통으로 사용되어지는 고정 텍스트입니다. 
     /// <br> 해당 텍스트들은 enum으로 관리될수 있습니다. </br>
     /// </summary>
-    internal static string[] text_common;
+    internal static Dictionary<int, string> text_common = new Dictionary<int, string>();
 
     /// <summary>
     /// [데이터] 일반적으로 사용되어지는 텍스트입니다.
     /// </summary>
-    internal static string[] text_basic;
+    internal static Dictionary<int, string> text_basic = new Dictionary<int, string>();
 
     /// <summary>
     /// [캐시] 모든 텍스트를 담는 리스트입니다.
@@ -32,7 +63,7 @@ public static class Logic_TextData
     private static List<Graphic_Text> _textList = new List<Graphic_Text>();
 
 
-    public static bool IsSettingData() => text_common != null && text_basic != null;
+    public static bool IsSettingData() => text_common.Count != 0 && text_basic.Count != 0;
 
     /// <summary>
     /// [기능] 현재의 언어 설정에 맞쳐서 모든 텍스트를 업데이트합니다.
@@ -77,7 +108,12 @@ public static class Logic_TextData
     /// </summary>
     internal static void SetCommonText(string[] m_textList)
     {
-        text_common = m_textList;
+        text_common.Clear();
+        int index = 0;
+        foreach (var text in m_textList)
+        {
+            text_common.Add(index++, text);
+        }
     }
 
     /// <summary>
@@ -85,7 +121,12 @@ public static class Logic_TextData
     /// </summary>
     internal static void SetBasicText(string[] m_textList)
     {
-        text_basic = m_textList;
+        text_basic.Clear();
+        int index = 0;
+        foreach (var text in m_textList)
+        {
+            text_basic.Add(index++, text);
+        }
     }
 
     /// <summary>
