@@ -4,7 +4,7 @@ public class Stat
     private float _hp;
 
     private int _id = -1;
-    private int _type;
+    private int _type; // 당장은 필요없는기능
     private float _damage;
     private float _moveSpeed;
     private float _armor;
@@ -30,19 +30,19 @@ public class Stat
             .SetArmor(this._armor)
             .SetSpeed(this._moveSpeed)
             .SetDamage(this._damage)
-            .SetType((int)this._type);
+            .SetType((int)this._type); 
     }
 
-    public Stat SetStats(Stat stats, Data_Monster mobData)
+    public virtual Stat SetStats(Stat stats, Data_Unit data)
     {
         stats
-            .SetID(mobData.ID)
-            .SetHp(mobData.hp)
-            .SetName(mobData.name)
-            .SetArmor(mobData.armor)
-            .SetSpeed(mobData.moveSpeed)
-            .SetDamage(mobData.damage)
-            .SetType((int)mobData.type);
+            .SetID(data.ID)
+            .SetHp(data.hp)
+            .SetName(data.name)
+            .SetArmor(data.armor)
+            .SetSpeed(data.moveSpeed)
+            .SetDamage(data.damage)
+            .SetType((int)data.type);
 
         return stats;
     }
@@ -117,5 +117,106 @@ public class Stat
         return this;
     }
     #endregion
+}
 
+public class CharacterStat : Stat
+{
+    float _recoverHp;
+    float _lucky;
+    float _throwCount;
+    float _alphaExp;
+    float _alphaGold;
+    float _delay;
+    float _duration;
+
+    public CharacterStat SetRecoverHp(float recoverHp)
+    {
+        this._recoverHp = recoverHp;
+        return this;
+    }
+    public CharacterStat SetLucky(float lucky)
+    {
+        this._recoverHp = lucky;
+        return this;
+    }
+    public CharacterStat SetThrowCount(float count)
+    {
+        this._throwCount = count;
+        return this;
+    }
+    public CharacterStat SetAlphaExp(float alphaPercent)
+    {
+        this._alphaExp = alphaPercent;
+        return this;
+    }
+    public CharacterStat SetAlphaGold(float alphaPercent)
+    {
+        this._alphaGold = alphaPercent;
+        return this;
+    }
+    public CharacterStat SetDelay(float delay)
+    {
+        this._delay = delay;
+        return this;
+    }
+    public CharacterStat SetDuration(float duration)
+    {
+        this._duration = duration;
+        return this;
+    }
+
+
+    #region 추가 스탯부여
+
+    public CharacterStat AddRecoverHp(float recoverHp)
+    {
+        this._recoverHp += recoverHp;
+        return this;
+    }
+    public CharacterStat AddLucky(float lucky)
+    {
+        this._recoverHp += lucky;
+        return this;
+    }
+    public CharacterStat AddThrowCount(float count)
+    {
+        this._throwCount += count;
+        return this;
+    }
+    public CharacterStat AddAlphaExp(float alphaPercent)
+    {
+        this._alphaExp += alphaPercent;
+        return this;
+    }
+    public CharacterStat AddAlphaGold(float alphaPercent)
+    {
+        this._alphaGold += alphaPercent;
+        return this;
+    }
+    public CharacterStat AddDelay(float delay)
+    {
+        this._delay += delay;
+        return this;
+    }
+    public CharacterStat AddDuration(float duration)
+    {
+        this._duration += duration;
+        return this;
+    }
+
+    #endregion
+
+    //public override Stat SetStats(Stat stats, Data_Monster characterData)
+    //{
+    //    stats
+    //        .SetID(characterData.ID)
+    //        .SetHp(characterData.hp)
+    //        .SetName(characterData.name)
+    //        .SetArmor(characterData.armor)
+    //        .SetSpeed(characterData.moveSpeed)
+    //        .SetDamage(characterData.damage)
+    //        .SetType((int)characterData.type);
+
+    //    return stats;
+    //}
 }

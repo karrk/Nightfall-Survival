@@ -13,7 +13,7 @@ public class CameraScript : MonoBehaviour
 
     private float SetInterval()
     {
-        return Global_Data.GetTextureSize() / Global_Data.GetRxC_Count();
+        return Global_Data.GetTextureSize() / Global_Data.GetMapDevideCount();
     }
 
     [SerializeField]

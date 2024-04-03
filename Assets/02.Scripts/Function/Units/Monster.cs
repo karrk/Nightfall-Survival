@@ -45,15 +45,14 @@ public class Monster : Base_Unit, IPoolingObj
     {
         while (true)
         {
-            this.transform.position =
-                Vector3.Lerp(this.transform.position, _chaseTarget.transform.position,
+            this.transform.position = Vector3.MoveTowards
+                (this.transform.position, _chaseTarget.transform.position, 
                 _stat.MoveSpeed * Time.deltaTime);
 
             SetForward(_chaseTarget.transform.position.x);
             SetSortOrder();
 
-            if (Vector3.Distance(transform.position, _chaseTarget.transform.position)
-                <= NearDistance)
+            if (Vector3.Distance(transform.position, _chaseTarget.transform.position) <= NearDistance)
             {
                 State = eUnitStates.Attack;
                 break;
@@ -101,11 +100,6 @@ public class Monster : Base_Unit, IPoolingObj
         this.GetComponentInParent<ObjectPool>().ReturnObj(this.gameObject);
     }
 
-    //protected override void Attack()
-    //{
-
-    //}
-
     //protected override void Dead()
     //{
 
@@ -119,21 +113,6 @@ public class Monster : Base_Unit, IPoolingObj
     //    //Return();
     //    //// 템떨구기
     //    //// 대상
-    //}
-
-    //protected override void Idle()
-    //{
-
-    //}
-
-    //protected override void Move()
-    //{
-
-    //}
-
-    //protected override void OnDamage()
-    //{
-
     //}
 
 }

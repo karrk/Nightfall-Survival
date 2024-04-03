@@ -22,7 +22,7 @@ public class MapManager : Base_Manager, IStageParts
         if (_currentMap != null && _currentMap.MapName == mapName)
             return _currentMap;
 
-        _currentMap = _creator.GetMap(mapName);
+        //_currentMap = _creator.GetMap(mapName);
 
         return _currentMap;
     }

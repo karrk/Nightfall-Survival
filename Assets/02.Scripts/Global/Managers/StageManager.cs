@@ -20,12 +20,11 @@ public class StageManager : Base_Manager
 
     private StageLancher _lancher;
 
-    protected override void Logic_Init_Custom()
+    protected override void Logic_Init_Custom() // start
     {
         _instance = this;
         _stageBuilder = GetComponent<StageBuilder>();
         _lancher = GetComponent<StageLancher>();
-
         GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
     }
 
@@ -48,11 +47,11 @@ public class StageManager : Base_Manager
         GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted); // 스테이지 호출이벤트
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-            CreateStage(1);
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetMouseButtonDown(0))
+    //        CreateStage(1);
+    //}
 
     
 }
