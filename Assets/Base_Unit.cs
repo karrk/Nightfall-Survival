@@ -1,12 +1,4 @@
 using System.Collections;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-using System.Collections.Generic;
->>>>>>> d8e30f5 (#1.5)
-=======
-using System.Collections.Generic;
->>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
 using UnityEngine;
 
 public enum eUnitStates
@@ -71,15 +63,7 @@ public abstract class Base_Unit : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     protected virtual void Awake()
-=======
-    private void Awake()
->>>>>>> d8e30f5 (#1.5)
-=======
-    private void Awake()
->>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
     {
         _anim = GetComponent<UnitAnimatior>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -87,26 +71,12 @@ public abstract class Base_Unit : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     protected virtual void Start()
-=======
-    private void Start()
->>>>>>> d8e30f5 (#1.5)
-=======
-    private void Start()
->>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
     {
         Init();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> d8e30f5 (#1.5)
-=======
->>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
     public virtual void Init()
     {
         State = eUnitStates.None;
@@ -184,15 +154,7 @@ public abstract class Base_Unit : MonoBehaviour
         this.State = eUnitStates.Idle;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     protected void SetSortOrder()
-=======
-    private void SetSortOrder()
->>>>>>> d8e30f5 (#1.5)
-=======
-    protected void SetSortOrder()
->>>>>>> 430c4b9 (#0.0.9 캐릭터를 Base_Unit 상속 구조로 변경)
     {
         _renderer.sortingOrder = (int)(this.transform.position.y * -100);
     }
