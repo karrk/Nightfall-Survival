@@ -89,9 +89,11 @@ public class Stat
         return this;
     }
 
-    public void OnDamage(float damage)
+    public float OnDamage(float damage)
     {
         this._hp -= damage;
+
+        return _hp;
     }
 
 
