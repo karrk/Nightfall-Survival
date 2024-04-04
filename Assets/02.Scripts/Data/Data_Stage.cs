@@ -139,3 +139,14 @@ public struct Data_Stage
 
     #endregion
 }
+
+public struct Data_StageParts
+{
+    /// <summary>
+    /// 스테이지의 구성요소의 목록
+    /// </summary>
+
+    public Map map;
+
+    public Spawner spawner;
+}

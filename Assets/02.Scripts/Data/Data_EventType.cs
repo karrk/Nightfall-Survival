@@ -45,8 +45,6 @@ public enum eEventType
     SetLanguage,
     /// <summary> 기기별 해상도를 설정을 시도합니다. </summary>
     SetResolution,
-    /// <summary> 텍스쳐 확인후 이뤄질 이벤트입니다. </summary>
-    SetTextureSize,
     #endregion
 
 
@@ -75,7 +73,7 @@ public enum eEventType
     #endregion
     StartGame,
     EndGame,
-    StageSetupCompleted,
     StageReady,
+    StageSetupCompleted,
     AddStageParts,
 }

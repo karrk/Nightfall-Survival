@@ -62,7 +62,7 @@ public class Character : Base_Unit
     {
         if (UnitStat.OnDamage(100f) < 0)
         {
-            State = eUnitStates.Dead;
+            UnitState = eUnitStates.Dead;
         }
 
 
@@ -72,7 +72,7 @@ public class Character : Base_Unit
 
     public void Input_Move()
     {
-        State = eUnitStates.Move;
+        UnitState = eUnitStates.Move;
 
         Vector2 pos = joystick.GetDirection();
 

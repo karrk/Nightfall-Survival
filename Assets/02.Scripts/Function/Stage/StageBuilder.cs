@@ -3,12 +3,7 @@ using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
 {
-    private List<IStageParts> _parts = new List<IStageParts>();
-
-    private int _stageNum;
-
-    private Map _map;
-    private Spawner _spawner;
+    // 스테이지 빌더의 용도가 아닌 기능만 담김
 
     private Dictionary<eUnitType, List<Monster>> _monsterTable =
         new Dictionary<eUnitType, List<Monster>>()
@@ -18,42 +13,31 @@ public class StageBuilder : MonoBehaviour
             { eUnitType.Boss , new List<Monster>() },
         };
 
-    public Data_Stage _stageData;
-
-    private void Awake()
-    {
-        GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, GetParts);
-    }
-
-    public void ResetBuilder(bool hardReset)
-    {
-        if (hardReset)
-            Init();
-
-        foreach (var part in _parts)
-        {
-            part.StagePartTransform.position = Vector3.zero;
-        }
-    }
-
-    private void Init()
-    {
-        foreach (var e in _monsterTable)
-        {
-            e.Value.Clear();
-        }
-    }
-
+    /// <summary>
+    /// 스테이지 ID 에 맞는 스테이지를 구성후 해당 스테이지를 반환합니다.
+    /// </summary>
     public Stage Build()
     {
-        return new Stage(_monsterTable, _map, _spawner);
+        SetMonsterTable();
+        Data_StageParts parts = Global_Data.GetStageParts();
+
+        return new Stage(_monsterTable, parts.map, parts.spawner);
     }
 
-    public void AddPart(IStageParts part)
+    #region 몬스터 테이블 생성 // 이미있는경우 처리
+
+    private void SetMonsterTable()
     {
-        _parts.Add(part);
+        Data_Stage _stageData = Global_Data.stageTable[Global_Data._stageNum];
+
+        SetMob(eUnitType.Common, _stageData.monsters);
+        SetMob(eUnitType.Named, _stageData.nameds);
+        SetMob(eUnitType.Boss, _stageData.bosses);
     }
 
+    /// <summary>
+    /// 등급별 원본 몬스터 테이블 생성
+    /// </summary>
     private void SetMob(eUnitType type, int[] mobs)
     {
         for (int i = 0; i < mobs.Length; i++)
@@ -84,36 +68,7 @@ public class StageBuilder : MonoBehaviour
         }
     }
 
-    private void GetParts()
-    {
-        Init();
-        _stageNum = StageManager.Instance.StageNumber;
-        _stageData = Global_Data.stageTable[_stageNum];
-
-        GetMonsterTable();
-
-        foreach (var partComponent in _parts)
-        {
-            partComponent.SendPart();
-        }
-    }
-
-    private void GetMonsterTable()
-    {
-        SetMob(eUnitType.Common, _stageData.monsters);
-        SetMob(eUnitType.Named, _stageData.nameds);
-        SetMob(eUnitType.Boss, _stageData.bosses);
-    }
-
-    public void SetMap(Map map)
-    {
-        this._map = map;
-    }
-
-    public void SetSpawner(Spawner spawner)
-    {
-        this._spawner = spawner;
-    }
+    #endregion
 
 }
 
