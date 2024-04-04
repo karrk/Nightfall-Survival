@@ -23,7 +23,14 @@ public class Monster : Base_Unit, IPoolingObj
 
     public static Base_Unit FindTarget()
     {
-        return GameObject.FindGameObjectWithTag("Player").GetComponent<Base_Unit>();
+        GameObject target = GameObject.FindGameObjectWithTag("Player");
+        
+        if (target == null)
+            return null;
+
+        Base_Unit unit = target.GetComponent<Base_Unit>();
+
+            return unit;
     }
 
     protected override void Idle()
@@ -53,7 +60,7 @@ public class Monster : Base_Unit, IPoolingObj
 
             if (Vector3.Distance(transform.position, _chaseTarget.transform.position) <= NearDistance)
             {
-                State = eUnitStates.Attack;
+                UnitState = eUnitStates.Attack;
                 break;
             }
 
@@ -67,7 +74,7 @@ public class Monster : Base_Unit, IPoolingObj
         {
             if (_chaseTarget != null)
             {
-                State = eUnitStates.Move;
+                UnitState = eUnitStates.Move;
                 break;
             }
 

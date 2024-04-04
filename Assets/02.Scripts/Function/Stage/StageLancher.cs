@@ -66,7 +66,6 @@ public class StageLancher : MonoBehaviour
     private int _activeMobs;
     private int _branchTime;
     private int _startFreq_ms;
-    private int _endFreq_ms;
     private float _clearTime;
     private float _frequency;
 
@@ -76,11 +75,6 @@ public class StageLancher : MonoBehaviour
         = new Dictionary<TimeWithEventTypes, Queue<int[]>>();
 
     private Queue<GameObject> _circleSpawnQueue = new Queue<GameObject>();
-
-    private void Awake()
-    {
-        GameManager.Instance.Event.RegisterEvent(eEventType.StageSetupCompleted, StageStart);
-    }
 
     public void StageStart()
     {
@@ -113,7 +107,6 @@ public class StageLancher : MonoBehaviour
     private void InitVariables()
     {
         _startFreq_ms = _stageDataTable.startEndSpawnDelay[0];
-        _endFreq_ms = _stageDataTable.startEndSpawnDelay[1];
         _branchTime = _stageDataTable.branchDelay;
         _activeMobs = _stageDataTable.mobChanges[0];
         _frequency = _stageDataTable.spawnDelayInterval;
@@ -275,12 +268,9 @@ public class StageLancher : MonoBehaviour
         (eUnitType unitType, int mobIdx, int spawnCount, int degree = 360)
     {
         GameObject mob;
-        Vector3 invisiblePos = Camera.main.transform.position * 100;
-
         for (int i = 0; i < spawnCount; i++)
         {
             mob = GetMonster(unitType, mobIdx);
-            mob.transform.position = invisiblePos;
             _circleSpawnQueue.Enqueue(mob);
         }
 
@@ -377,14 +367,14 @@ public class StageLancher : MonoBehaviour
 
     #endregion
 
-    public void SetStageData(Data_Stage data)
+    public void SetStageData()
     {
-        this._stageDataTable = data;
+        this._stageDataTable = Global_Data.stageTable[Global_Data._stageNum];
     }
 
-    public void SetStage(Stage stage)
+    public void SetStage()
     {
-        this._stage = stage;
+        this._stage = Global_Data.GetStage();
     }
 
     /// <summary>

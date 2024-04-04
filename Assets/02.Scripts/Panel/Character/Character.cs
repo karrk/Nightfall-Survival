@@ -34,7 +34,7 @@ public class Character : Base_Unit
             // Idle 로 전환 시 깜빡임 방지
             //delayToIdle -= Time.deltaTime;
             //if (delayToIdle < 0)
-            State = eUnitStates.Idle;
+            UnitState = eUnitStates.Idle;
         }
     }
 
@@ -58,7 +58,7 @@ public class Character : Base_Unit
     {
         if (UnitStat.OnDamage(100f) < 0)
         {
-            State = eUnitStates.Dead;
+            UnitState = eUnitStates.Dead;
         }
 
 
@@ -67,7 +67,7 @@ public class Character : Base_Unit
 
     public void Input_Move()
     {
-        State = eUnitStates.Move;
+        UnitState = eUnitStates.Move;
 
         Vector2 pos = joystick.GetDirection();
 

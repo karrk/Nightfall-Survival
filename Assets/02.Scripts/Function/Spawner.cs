@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour, IStageParts
+public class Spawner : MonoBehaviour
 {
     float _camSize;
     readonly float _roundPadding = 0.5f;
@@ -13,12 +13,9 @@ public class Spawner : MonoBehaviour, IStageParts
     public GameObject _center;
     public GameObject _edgePoint;
 
-    public Transform StagePartTransform => transform;
-
     private void Awake()
     {
-        GameManager.Instance.Event.RegisterEvent(eEventType.StageReady, SendPart);
-        GameManager.Instance.Event.RegisterEvent(eEventType.AddStageParts, AddPartsList);
+        Global_Data.SetSpawner(this);
     }
 
     private void Start()
@@ -35,7 +32,6 @@ public class Spawner : MonoBehaviour, IStageParts
     /// <summary>
     /// 카메라 뷰 테두리에 오브젝트를 배치
     /// </summary>
-    /// <param name="obj"></param>
     public void RandomSpawn(GameObject obj)
     {
         Vector3 screenScale = _screenScale;
@@ -60,7 +56,6 @@ public class Spawner : MonoBehaviour, IStageParts
     /// <summary>
     /// 카메라 뷰 테두리의 모서리에 외접한 원형태로 몹생성
     /// </summary>
-    /// <param name="objs"></param>
     /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
     public void CircleSpawn(Queue<GameObject> objs, float limitDegree)
     {
@@ -104,16 +99,6 @@ public class Spawner : MonoBehaviour, IStageParts
 
             yield return null;
         }
-    }
-
-    public void AddPartsList()
-    {
-        StageManager.Instance._stageBuilder.AddPart(this);
-    }
-
-    public void SendPart()
-    {
-        StageManager.Instance._stageBuilder.SetSpawner(this);
     }
 
     public void SpawnCenter(GameObject obj)
