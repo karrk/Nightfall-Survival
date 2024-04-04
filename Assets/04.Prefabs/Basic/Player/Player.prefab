@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &513605892245943851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7605121396149014636}
+  - component: {fileID: 787161900046514316}
+  m_Layer: 0
+  m_Name: Weapons
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7605121396149014636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513605892245943851}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6146081175119741373}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &787161900046514316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513605892245943851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e877173b5edf4c4e8621962708a3c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 1885643421273164605, guid: ad7eda4f17635914292dcf5dbbc8e51b, type: 3}
 --- !u!1 &6146081175119741374
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,6 +75,7 @@ RectTransform:
   m_Children:
   - {fileID: 2469329532915115711}
   - {fileID: 4303673724980314097}
+  - {fileID: 7605121396149014636}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -62,6 +108,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7517124108755632318, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}
+      propertyPath: weapons
+      value: 
+      objectReference: {fileID: 787161900046514316}
+    - target: {fileID: 7517124108755632318, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
+        type: 3}
       propertyPath: joystick
       value: 
       objectReference: {fileID: 8141155786663538547}
@@ -69,6 +120,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8424375987818114074, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8579241167273609736, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}
@@ -83,12 +139,12 @@ PrefabInstance:
     - target: {fileID: 8579241167273609737, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8579241167273609737, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 8579241167273609737, guid: 9ea8042d61ff9c74f9d4d5ad9e2a4163,
         type: 3}

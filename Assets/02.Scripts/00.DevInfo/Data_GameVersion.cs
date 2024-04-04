@@ -18,7 +18,7 @@ namespace VS.Version
         /// <summary>
         /// [현지님]
         /// </summary>
-        public const string MemberHJ = "0.9";
+        public const string MemberHJ = "0.10";
 
         /// <summary>
         /// [올드]
