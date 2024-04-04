@@ -14,6 +14,8 @@ public enum eTextKind
     CommonP_Check,
     /// <summary> 닫기</summary>
     CommonP_Close,
+    /// <summary> 텍스트를 입력해주세요.</summary>
+    CommonP_EnterText,
 
     #endregion
 
@@ -39,6 +41,27 @@ public enum eTextKind
     MainMenu_Credit,
     /// <summary> 종료</summary>
     MainMenu_Quit,
+    #endregion
+
+    #region 옵션 팝업
+    /// <summary> 게임설정 </summary>
+    Option_GameSetting,
+    /// <summary> 사운드 </summary>
+    Option_Sound,
+    #endregion
+
+    #region 슬롯 선택 팝업
+    /// <summary> 슬롯 선택</summary>
+    Select_SlotSelect,
+    #endregion
+
+    #region 옵션 메뉴
+    /// <summary> 저장하기 </summary>
+    OptionMenu_Save,
+    /// <summary> 도움말 </summary>
+    OptionMenu_Help,
+    /// <summary> 메인메뉴 </summary>
+    OptionMenu_MainMenu,
     #endregion
 
 }

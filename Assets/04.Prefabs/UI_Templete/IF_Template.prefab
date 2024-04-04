@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   t_text: {fileID: 812789532110636049}
-  kind_base: 0
+  kind_base: 4
   kind_basic_index: -1
 --- !u!114 &812789532110636049
 MonoBehaviour:
