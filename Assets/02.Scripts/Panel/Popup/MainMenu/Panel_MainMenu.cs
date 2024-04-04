@@ -4,6 +4,30 @@ using VS.Base.Popup;
 public class Panel_MainMenu : Base_AnimationPopup
 {
 
+    protected override void Logic_Init_Base()
+    {
+        base.Logic_Init_Base();
+
+        GameManager.Instance.Event.RegisterEvent(eEventType.ActShowMainMenuPanel_MainMenu, ShowPanel);
+    }
+
+
+    /// <summary>
+    /// [기능] 패널을 노출시킵니다.
+    /// </summary>
+    private void ShowPanel()
+    {
+        Logic_Open_Base();
+    }
+
+    /// <summary>
+    /// [기능] 패널을 숨깁니다.
+    /// </summary>
+    private void HidePanel()
+    {
+        Logic_Close_Base();
+    }
+
 
     #region 콜백 함수
     /// <summary>
@@ -11,8 +35,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickGameStart()
     {
-        //TODO :: 임시로 작성됨 추후, 슬롯 선택 로직이 들어가야함
-        GameManager.Instance.TryChangeScene(eSceneKind.InGame);
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowSelectSlotPopup_MainMenu);
     }
 
     /// <summary>
@@ -20,7 +44,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickUpgrade()
     {
-
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowUpgradePopup_MainMenu);
     }
 
     /// <summary>
@@ -28,7 +53,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickCollection()
     {
-
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowCollectionPopup_MainMenu);
     }
 
     /// <summary>
@@ -36,7 +62,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickPossibility()
     {
-
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowPossibilityPopup_MainMenu);
     }
 
     /// <summary>
@@ -44,7 +71,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickOption()
     {
-
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowOptionPopup);
     }
 
     /// <summary>
@@ -52,7 +80,8 @@ public class Panel_MainMenu : Base_AnimationPopup
     /// </summary>
     public void OnClickCredit()
     {
-
+        HidePanel();
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowCredit_MainMenu);
     }
 
     /// <summary>

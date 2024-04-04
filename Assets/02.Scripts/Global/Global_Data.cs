@@ -121,5 +121,10 @@ public class Global_Data : MonoBehaviour
     private static Dictionary<int, Data_Weapon> _weaponTable = new Dictionary<int, Data_Weapon>();
 
     public static Dictionary<int, Data_Weapon> weaponTable => _weaponTable;
+
+
+    private static Dictionary<int, Data_Character> _characterTable = new Dictionary<int, Data_Character>();
+
+    public static Dictionary<int, Data_Character> characterTable => _characterTable;
     #endregion 
 }

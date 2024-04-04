@@ -23,6 +23,6 @@ namespace VS.Version
         /// <summary>
         /// [올드]
         /// </summary>
-        public const string MemberAlld = "0.10";
+        public const string MemberAlld = "0.11";
     }
 }
