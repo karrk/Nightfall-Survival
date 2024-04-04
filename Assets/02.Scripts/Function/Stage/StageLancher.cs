@@ -268,12 +268,9 @@ public class StageLancher : MonoBehaviour
         (eUnitType unitType, int mobIdx, int spawnCount, int degree = 360)
     {
         GameObject mob;
-        Vector3 invisiblePos = Camera.main.transform.position * 100;
-
         for (int i = 0; i < spawnCount; i++)
         {
             mob = GetMonster(unitType, mobIdx);
-            mob.transform.position = invisiblePos;
             _circleSpawnQueue.Enqueue(mob);
         }
 
@@ -370,14 +367,14 @@ public class StageLancher : MonoBehaviour
 
     #endregion
 
-    public void SetStageData(Data_Stage data)
+    public void SetStageData()
     {
-        this._stageDataTable = data;
+        this._stageDataTable = Global_Data.stageTable[Global_Data._stageNum];
     }
 
-    public void SetStage(Stage stage)
+    public void SetStage()
     {
-        this._stage = stage;
+        this._stage = Global_Data.GetStage();
     }
 
     /// <summary>

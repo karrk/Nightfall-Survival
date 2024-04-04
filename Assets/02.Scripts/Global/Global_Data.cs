@@ -8,13 +8,20 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
+    public static int _stageNum = 1;
+
+    private static Stage _stage = null;
+
+    #region 맵 관련 변수
     public static int _textureSize;
 
     public static int _mapTileDevideCount = 4;
 
-    public static int _stageNum = 1;
-
     public static Vector3 _MapSize = Vector3.zero;
+
+    private static Data_StageParts _stageParts;
+    #endregion
+
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -66,6 +73,35 @@ public class Global_Data : MonoBehaviour
                 goto case eLanguageKind.KR;
         }
     }
+
+    #region 스테이지 구성요소 함수
+
+    public static Data_StageParts GetStageParts()
+    {
+        return _stageParts;
+    }
+
+    public static Stage GetStage()
+    {
+        return _stage;
+    }
+
+    public static void SetMap(Map map)
+    {
+        _stageParts.map = map;
+    }
+
+    public static void SetSpawner(Spawner spawner)
+    {
+        _stageParts.spawner = spawner;
+    }
+
+    public static void SetStage(Stage stage)
+    {
+        _stage = stage;
+    }
+
+    #endregion
 
 
     #endregion
