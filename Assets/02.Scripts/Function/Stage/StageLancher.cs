@@ -39,7 +39,7 @@ public class StageLancher : MonoBehaviour
     private ObjPoolManager _poolManager;
     #endregion
 
-    private int PlayMinute
+    private float PlayMinute
     {
         set
         {
@@ -54,27 +54,27 @@ public class StageLancher : MonoBehaviour
     }
 
     [SerializeField]
-    private int _playMinute;
+    private float _playMinute;
     [SerializeField]
     private float _playSecond;
     [SerializeField]
-    private int _nextEventTime;
+    private float _nextEventTime;
     [SerializeField]
     private float _spawnDelay;
     [SerializeField]
     private int[] _activeMobsArr;
 
     private int _activeMobs;
-    private int _branchTime;
-    private int _startFreq_ms;
+    private float _branchTime;
+    private float _startFreq_ms;
     private float _clearTime;
     private float _frequency;
 
     private int _commonMonsterIdx;
     private int _spawnLimitCount = 0;
 
-    private Dictionary<TimeWithEventTypes, Queue<int[]>> _timeEventQueues
-        = new Dictionary<TimeWithEventTypes, Queue<int[]>>();
+    private Dictionary<TimeWithEventTypes, Queue<float[]>> _timeEventQueues
+        = new Dictionary<TimeWithEventTypes, Queue<float[]>>();
 
     private Queue<Base_Unit> _circleSpawnQueue = new Queue<Base_Unit>();
     public static Dictionary<eMonsterKind, int> _mobCounts = new Dictionary<eMonsterKind, int>();
@@ -101,7 +101,7 @@ public class StageLancher : MonoBehaviour
 
         _playMinute = -1;
         _playSecond = 59;
-        _spawnDelay = _startFreq_ms * 0.001f;
+        _spawnDelay = _startFreq_ms;
         _commonMonsterIdx = 0;
 
         _spawnLimitCount = Global_Data._mobLimitCouns;
@@ -118,7 +118,7 @@ public class StageLancher : MonoBehaviour
     private void InitVariables()
     {
         _startFreq_ms = _stageDataTable.startEndSpawnDelay[0];
-        _branchTime = _stageDataTable.branchDelay;
+        _branchTime = _stageDataTable.branchDelay / 60;
         _activeMobs = _stageDataTable.mobChanges[0];
         _frequency = _stageDataTable.spawnDelayInterval;
         _clearTime = _stageDataTable.clearTime;
@@ -132,11 +132,11 @@ public class StageLancher : MonoBehaviour
     {
         if (_timeEventQueues.Count == 0)
         {
-            _timeEventQueues.Add(TimeWithEventTypes.MainEvent, new Queue<int[]>());
-            _timeEventQueues.Add(TimeWithEventTypes.SubEvent, new Queue<int[]>());
-            _timeEventQueues.Add(TimeWithEventTypes.SpectialEvent, new Queue<int[]>());
-            _timeEventQueues.Add(TimeWithEventTypes.MobChange, new Queue<int[]>());
-            _timeEventQueues.Add(TimeWithEventTypes.ReduceFrequency, new Queue<int[]>());
+            _timeEventQueues.Add(TimeWithEventTypes.MainEvent, new Queue<float[]>());
+            _timeEventQueues.Add(TimeWithEventTypes.SubEvent, new Queue<float[]>());
+            _timeEventQueues.Add(TimeWithEventTypes.SpectialEvent, new Queue<float[]>());
+            _timeEventQueues.Add(TimeWithEventTypes.MobChange, new Queue<float[]>());
+            _timeEventQueues.Add(TimeWithEventTypes.ReduceFrequency, new Queue<float[]>());
         }
         else
         {
@@ -146,7 +146,7 @@ public class StageLancher : MonoBehaviour
             }
         }
 
-        Queue<int[]> targetQueue;
+        Queue<float[]> targetQueue;
 
         targetQueue = _timeEventQueues[TimeWithEventTypes.MainEvent];
         EnqueueTimeEvents(
@@ -168,15 +168,15 @@ public class StageLancher : MonoBehaviour
 
         for (int i = 1; i <= _clearTime / _branchTime; i++)
         {
-            targetQueue.Enqueue(new int[] { _branchTime * i, (int)_frequency });
+            targetQueue.Enqueue(new float[] { _branchTime * i, _frequency });
         }
     }
 
-    private void EnqueueTimeEvents(Queue<int[]> queue, int[] times, int[] events)
+    private void EnqueueTimeEvents(Queue<float[]> queue, int[] times, int[] events)
     {
         for (int i = 0; i < times.Length; i++)
         {
-            queue.Enqueue(new int[] { times[i], events[i] });
+            queue.Enqueue(new float[] { times[i], events[i] });
         }
     }
 
@@ -184,10 +184,10 @@ public class StageLancher : MonoBehaviour
 
     #region 다음이벤트 시간탐색
 
-    private int GetNextEventTime()
+    private float GetNextEventTime()
     {
-        int nearMinute = int.MaxValue;
-        int nextTime = int.MaxValue;
+        float nearMinute = int.MaxValue;
+        float nextTime = int.MaxValue;
 
         foreach (var e in _timeEventQueues)
         {
@@ -204,16 +204,16 @@ public class StageLancher : MonoBehaviour
 
     #region 시간별 이벤트 처리로직
 
-    private void PlayEvent(int time)
+    private void PlayEvent(float time)
     {
-        int eventNum;
-        Queue<int[]> queue;
+        float eventNum;
+        Queue<float[]> queue;
 
         queue = _timeEventQueues[TimeWithEventTypes.MainEvent];
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            Base_Unit bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[eventNum]);
+            Base_Unit bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[(int)eventNum]);
             _stage.Spawner.RandomSpawn(bossMob);
         }
 
@@ -221,7 +221,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            Base_Unit namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[eventNum]);
+            Base_Unit namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[(int)eventNum]);
             _stage.Spawner.RandomSpawn(namedMob);
         }
 
@@ -236,14 +236,14 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            this._activeMobs = eventNum;
+            this._activeMobs = (int)eventNum;
             GameManager.Instance.Event.CallEvent(eEventType.SpawnMobChange);
         }
 
         queue = _timeEventQueues[TimeWithEventTypes.ReduceFrequency];
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
-            this._spawnDelay -= queue.Dequeue()[1] * 0.001f;
+            this._spawnDelay -= queue.Dequeue()[1];
         }
 
     }
@@ -368,7 +368,7 @@ public class StageLancher : MonoBehaviour
 
     private IEnumerator StartTimer(float clearTime)
     {
-        int timerMinute = _playMinute;
+        float timerMinute = _playMinute;
         float timerSecond = _playSecond;
 
         int targetMinute = Mathf.FloorToInt(clearTime);
