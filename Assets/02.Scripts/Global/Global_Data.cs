@@ -8,9 +8,20 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
-    private static int _textureSize;
+    public static int _stageNum = 1;
 
-    private static int _MapTileDevideCount = 4;
+    private static Stage _stage = null;
+
+    #region 맵 관련 변수
+    public static int _textureSize;
+
+    public static int _mapTileDevideCount = 4;
+
+    public static Vector3 _MapSize = Vector3.zero;
+
+    private static Data_StageParts _stageParts;
+    #endregion
+
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -20,18 +31,14 @@ public class Global_Data : MonoBehaviour
 
         GameManager.Instance.Event.CallEvent(eEventType.SetLanguage);
     }
-
     /// <summary>
-    /// [기능] 최초 실행시 저장될 해상도값을 설정합니다.
+    /// [기능] 해상도 설정을 변경합니다.
     /// </summary>
     public static void SetResolution()
     {
         _option.resolution = new Vector2(Screen.width, Screen.height);
-    }
 
-    public static void SetTextureSize(int m_size)
-    {
-        _textureSize = m_size;
+        GameManager.Instance.Event.CallEvent(eEventType.SetResolution);
     }
 
     /// <summary>
@@ -67,15 +74,35 @@ public class Global_Data : MonoBehaviour
         }
     }
 
-    public static int GetTextureSize()
+    #region 스테이지 구성요소 함수
+
+    public static Data_StageParts GetStageParts()
     {
-        return _textureSize;
+        return _stageParts;
     }
 
-    public static int GetMapDevideCount()
+    public static Stage GetStage()
     {
-        return _MapTileDevideCount;
+        return _stage;
     }
+
+    public static void SetMap(Map map)
+    {
+        _stageParts.map = map;
+    }
+
+    public static void SetSpawner(Spawner spawner)
+    {
+        _stageParts.spawner = spawner;
+    }
+
+    public static void SetStage(Stage stage)
+    {
+        _stage = stage;
+    }
+
+    #endregion
+
 
     #endregion
 

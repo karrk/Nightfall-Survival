@@ -4,34 +4,41 @@ public class TileMovement : MonoBehaviour
 {
     readonly static float DetectErrorMargin = 0.25f;
 
+    /// <summary>
+    /// 대상 타일 오브젝트와 카메라(중앙)의 거리를 확인,
+    /// 해당 거리를 가로, 세로 비율로 변환한 거리를 반환합니다.
+    /// </summary>
     private Vector2 CamDistance
     {
         get
         {
+            Vector2 tempPos = _currentCenterPos;
+
             return new Vector2(
-                Camera.main.transform.position.x - _currentCenterPos.x,
-                Camera.main.transform.position.y - _currentCenterPos.y
+                (Camera.main.transform.position.x - tempPos.x) * _yRatio,
+                (Camera.main.transform.position.y - tempPos.y) * _xRatio
                 );
         }
     }
 
+    public static float _xRatio;
+    public static float _yRatio;
+
+    /// <summary>
+    /// 타일의 피벗이 (0,1) 값으로 지정되어있기때문에
+    /// 정확한 거리계산을 위해 내부 임시 센터피벗을 잡기위한 프로퍼티
+    /// </summary>
     private Vector2 _currentCenterPos
     {
-        // global Position
         get { return this.transform.position + new Vector3(_tileSize / 2, -_tileSize / 2); }
     }
 
-    private static float _tileSize = int.MinValue;
+    public static float _tileSize = 0;
 
-    public static float TileSize
-    {
-        set
-        {
-            if (_tileSize == int.MinValue)
-                _tileSize = value;
-        }
-    }
 
+    /// <summary>
+    /// 카메라에 부착된 트리거범위를 벗어날경우 타일을 이동시킵니다.
+    /// </summary>
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("MainCamera"))
@@ -39,50 +46,60 @@ public class TileMovement : MonoBehaviour
 
     }
 
+    private static Vector3 _moveDistance = Vector3.zero;
+
+    /// <summary>
+    /// 타일들이 이동되어야할 값을 저장합니다.
+    /// </summary>
+    public static void SetMoveDistance(float x, float y)
+    {
+        _moveDistance.x = x;
+        _moveDistance.y = y;
+
+        _xRatio = _moveDistance.x * 0.01f;
+        _yRatio = _moveDistance.y * 0.01f;
+    }
+
     private void Move()
     {
-        // 양수라면 x 축 이동이 필요
+        // x, y 축중 더 많이 이동된 거리를 확인
         float axisComparison = Mathf.Abs(CamDistance.x) - Mathf.Abs(CamDistance.y);
-        float moveDistance = Global_Data.GetTextureSize() * 0.01f;
 
-        if (-DetectErrorMargin <= axisComparison && axisComparison <= DetectErrorMargin) // 대각 이동이 필요 <보정 필요>
+        // 확인된 값이 대각보정값 범위에 들어올경우 대각으로 이동
+        if (-DetectErrorMargin <= axisComparison && axisComparison <= DetectErrorMargin)
         {
-            //Debug.Log("대각");
-
             Vector3 dir = new Vector3(Mathf.Sign(CamDistance.x),
                                     Mathf.Sign(CamDistance.y));
 
-            this.transform.position += dir * moveDistance;
+            this.transform.position +=
+                new Vector3(dir.x * _moveDistance.x,
+                            dir.y * _moveDistance.y);
 
         }
 
-        else if (axisComparison > 0) // x축으로 이동반경이 더 크다면
+        // x축으로 이동된 거리가 더 크다면
+        else if (axisComparison > 0)
         {
-            //Debug.Log("x 축이동");
-            //Debug.Log($"{gameObject.name} {axisComparison}");
-            //Debug.Log($"{CamDistance.x} : {CamDistance.y}");
-
-            if (CamDistance.x < 0) // 타일을 오른쪽에서 왼쪽으로 이동
+            if (CamDistance.x < 0)
             {
-                this.transform.position += Vector3.left * moveDistance;
+                this.transform.position += Vector3.left * _moveDistance.x;
             }
-            else  // 타일을 왼쪽에서 오른쪽으로 이동
+            else
             {
-                this.transform.position += Vector3.right * moveDistance;
+                this.transform.position += Vector3.right * _moveDistance.x;
             }
         }
 
+        // y축으로 이동된 거리가 더 크다면
         else if (axisComparison < 0)
         {
-            //Debug.Log("y 축이동");
-
-            if (CamDistance.y > 0) // 위에서 아래로 내리기
+            if (CamDistance.y > 0)
             {
-                this.transform.position += Vector3.up * moveDistance;
+                this.transform.position += Vector3.up * _moveDistance.y;
             }
-            else // 아래서 위로 올리기
+            else
             {
-                this.transform.position += Vector3.down * moveDistance;
+                this.transform.position += Vector3.down * _moveDistance.y;
             }
         }
 
