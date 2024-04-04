@@ -23,7 +23,14 @@ public class Monster : Base_Unit, IPoolingObj
 
     public static Base_Unit FindTarget()
     {
-        return GameObject.FindGameObjectWithTag("Player").GetComponent<Base_Unit>();
+        GameObject target = GameObject.FindGameObjectWithTag("Player");
+        
+        if (target == null)
+            return null;
+
+        Base_Unit unit = target.GetComponent<Base_Unit>();
+
+            return unit;
     }
 
     protected override void Idle()

@@ -22,13 +22,14 @@ public class StageManager : Base_Manager
         _stageBuilder = GetComponent<StageBuilder>();
         _lancher = GetComponent<StageLancher>();
         GameManager.Instance.Event.CallEvent(eEventType.AddStageParts);
+        GameManager.Instance.Event.RegisterEvent(eEventType.OnGameComplete, LanchGame);
     }
 
-    public void CreateStage(int stageID) // 스테이지 구성호출
+    public void CreateStage(int stageNum) // 스테이지 구성호출
     {
-        if (_stage == null || stageID == _stage.ID)
+        if (_stage == null || stageNum == _stage.ID)
         {
-            this._stageNum = stageID;
+            this._stageNum = stageNum;
             _stageBuilder.ResetBuilder(true);
             GameManager.Instance.Event.CallEvent(eEventType.StageReady);
         }
@@ -39,15 +40,11 @@ public class StageManager : Base_Manager
 
         _lancher.SetStageData(Global_Data.stageTable[_stageNum]);
         _lancher.SetStage(_stage);
-
-        GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted); // 스테이지 호출이벤트
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetMouseButtonDown(0))
-    //        CreateStage(1);
-    //}
-
+    public void LanchGame()
+    {
+        _lancher.StageStart();
+    }
 
 }

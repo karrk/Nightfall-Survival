@@ -20,14 +20,14 @@ public class MapManager : Base_Manager, IStageParts
         if (_currentMap != null && _currentMap.MapName == mapName)
             return _currentMap;
 
-        //_currentMap = _creator.GetMap(mapName);
+        _currentMap = _creator.GetMap(mapName);
 
         return _currentMap;
     }
 
     public void SendPart()
     {
-        int stageNum = StageManager.Instance.StageNumber;
+        int stageNum = Global_Data._stageNum;
         eMapTileKind kind = Global_Data.stageTable[stageNum].tileKind;
         StageManager.Instance._stageBuilder.SetMap(GetMap(kind));
     }
@@ -36,6 +36,4 @@ public class MapManager : Base_Manager, IStageParts
     {
         StageManager.Instance._stageBuilder.AddPart(this);
     }
-
-
 }

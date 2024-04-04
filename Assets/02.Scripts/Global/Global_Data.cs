@@ -8,9 +8,13 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
-    private static int _textureSize;
+    public static int _textureSize;
 
-    private static int _MapTileDevideCount = 4;
+    public static int _mapTileDevideCount = 4;
+
+    public static int _stageNum = 1;
+
+    public static Vector3 _MapSize = Vector3.zero;
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -20,18 +24,14 @@ public class Global_Data : MonoBehaviour
 
         GameManager.Instance.Event.CallEvent(eEventType.SetLanguage);
     }
-
     /// <summary>
-    /// [기능] 최초 실행시 저장될 해상도값을 설정합니다.
+    /// [기능] 해상도 설정을 변경합니다.
     /// </summary>
     public static void SetResolution()
     {
         _option.resolution = new Vector2(Screen.width, Screen.height);
-    }
 
-    public static void SetTextureSize(int m_size)
-    {
-        _textureSize = m_size;
+        GameManager.Instance.Event.CallEvent(eEventType.SetResolution);
     }
 
     /// <summary>
@@ -67,15 +67,6 @@ public class Global_Data : MonoBehaviour
         }
     }
 
-    public static int GetTextureSize()
-    {
-        return _textureSize;
-    }
-
-    public static int GetMapDevideCount()
-    {
-        return _MapTileDevideCount;
-    }
 
     #endregion
 

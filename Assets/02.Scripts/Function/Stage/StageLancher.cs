@@ -66,7 +66,6 @@ public class StageLancher : MonoBehaviour
     private int _activeMobs;
     private int _branchTime;
     private int _startFreq_ms;
-    private int _endFreq_ms;
     private float _clearTime;
     private float _frequency;
 
@@ -76,11 +75,6 @@ public class StageLancher : MonoBehaviour
         = new Dictionary<TimeWithEventTypes, Queue<int[]>>();
 
     private Queue<GameObject> _circleSpawnQueue = new Queue<GameObject>();
-
-    private void Awake()
-    {
-        GameManager.Instance.Event.RegisterEvent(eEventType.StageSetupCompleted, StageStart);
-    }
 
     public void StageStart()
     {
@@ -113,7 +107,6 @@ public class StageLancher : MonoBehaviour
     private void InitVariables()
     {
         _startFreq_ms = _stageDataTable.startEndSpawnDelay[0];
-        _endFreq_ms = _stageDataTable.startEndSpawnDelay[1];
         _branchTime = _stageDataTable.branchDelay;
         _activeMobs = _stageDataTable.mobChanges[0];
         _frequency = _stageDataTable.spawnDelayInterval;

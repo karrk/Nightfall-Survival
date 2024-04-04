@@ -19,11 +19,20 @@ public class MapCreator : MonoBehaviour
     private int _rowCount;
     private int _columnCount;
 
+    private Sprite[] _sprites;
+    private GameObject[] _tileObjects;
+
     private void Awake()
     {
-        _devideCount = Global_Data.GetMapDevideCount();
-        Global_Data.SetTextureSize(LoadTexture((eMapTileKind)1).width);
-        _tiles_interval = GetIntervalDistance();
+        _devideCount = Global_Data._mapTileDevideCount;
+
+        int textureSize = LoadTexture((eMapTileKind)1).width;
+        Global_Data._textureSize = textureSize;
+        _tiles_interval = GetIntervalDistance(textureSize);
+
+        Init();
+
+        GameManager.Instance.Event.RegisterEvent(eEventType.SetResolution,Init);
     }
 
     public void Init()
@@ -31,19 +40,36 @@ public class MapCreator : MonoBehaviour
         _halfScreenSize = GetScreenViewScale() / 2;
         _createOffsetVec = GetOffset();
 
+        this.transform.position = GetCreateStartPos();
+
         _columnCount = CheckDevideCount(_halfScreenSize.x);
         _rowCount = CheckDevideCount(_halfScreenSize.y);
 
-        // 해상도 1920*1080 rc = 4 일때 88개 타일생성
-        //Debug.Log($"{_halfScreenSize.x} {_halfScreenSize.y}"); 
-        //Debug.Log($"{_columnCount} {_rowCount}");
-
-        this.transform.position = GetCreateStartPos();
+        Global_Data._MapSize = GetMapSize();
     }
 
+    /// <summary>
+    /// 제작된 타일맵을 반환합니다.
+    /// </summary>
+    public Map GetMap(eMapTileKind map)
+    {
+        Texture texture = LoadTexture(map);
+
+        _sprites = DevideTexure(texture);
+        _tileObjects = CreateTileObj(_sprites);
+        SetTileOptions(_tileObjects);
+
+        Map newMap = new Map(map, _tileObjects);
+
+        return newMap;
+    }
+
+    /// <summary>
+    /// 해상도에 맞는 타일 분할수를 결정합니다.
+    /// </summary>
     public int CheckDevideCount(float screenHalfSize)
     {
-        float limit = (screenHalfSize * 2) + (_tiles_interval * 4);
+        float limit = (screenHalfSize * 2) + (_tiles_interval * 4) - (_tiles_interval / 2);
 
         int count = 4;
 
@@ -63,19 +89,21 @@ public class MapCreator : MonoBehaviour
     {
         Sprite[] tempArr = new Sprite[(int)MathF.Pow(_devideCount, 2)];
 
+        float xInterval = texture.width / _columnCount;
+        float yInterval = texture.height / _rowCount;
+
         for (int i = 0; i < _devideCount; i++)
         {
             for (int j = 0; j < _devideCount; j++)
             {
                 Rect rect = new Rect(
-                    (texture.width / _columnCount) * j, 
-                    (texture.height / _rowCount) * (_rowCount - 1 - i),
-                    texture.width / _columnCount, 
-                    texture.height / _rowCount);
+                    (texture.width / _devideCount)*j,
+                (texture.height / _devideCount) * (_devideCount - 1 - i),
+                    texture.width / _devideCount, texture.height / _devideCount);
 
-                tempArr[(i * _devideCount) + j] = Sprite.Create((Texture2D)texture, rect, Vector2.up);
-            }
+            tempArr[(i * _devideCount) + j] = Sprite.Create((Texture2D)texture, rect, Vector2.up);
         }
+    }
 
         return tempArr;
     }
@@ -96,14 +124,10 @@ public class MapCreator : MonoBehaviour
                 SpriteRenderer tileRenderer = tile.AddComponent<SpriteRenderer>();
                 tileRenderer.sortingOrder = -10000;
 
-                //Sprite sprite = sprites[(i * _rxc_Count) + j];
                 Sprite sprite 
                     = sprites[((i * _devideCount) % sprites.Length) + (j % _devideCount)];
 
                 tileRenderer.sprite = sprite;
-                //SetTileOptions(tile, i, j);
-
-                //tempArr[(i * _rxc_Count) + j] = tile;
                 tempArr[(i * _columnCount)+j] = tile;
             }
         }
@@ -134,42 +158,14 @@ public class MapCreator : MonoBehaviour
                 tile.tag = "Map";
 
                 tile.AddComponent<TileMovement>();
-                TileMovement.TileSize = _tiles_interval;
             }
         }
 
-        //tile.name = $"tile{(row * _rxc_Count) + column}";
-
-        //tile.transform.position +=
-        //    Vector3.right * tiles_interval * column;
-
-        //tile.transform.position +=
-        //    Vector3.down * tiles_interval * row;
-
-        //if (column >= _rxc_Count / 2)
-        //    tile.transform.position += Vector3.left * (_rxc_Count) * tiles_interval;
-
-        //if (row >= _rxc_Count / 2)
-        //    tile.transform.position += Vector3.up * (_rxc_Count) * tiles_interval;
-
-        //tile.AddComponent<BoxCollider2D>().isTrigger = true;
-        //tile.tag = "Map";
-
-        //tile.AddComponent<TileMovement>();
-        //TileMovement.TileSize = GetIntervalDistance();
+        TileMovement._tileSize = _tiles_interval;
+        TileMovement.SetMoveDistance(_columnCount * _tiles_interval, _rowCount * _tiles_interval);
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Init();
-            Sprite[] sprites = DevideTexure(LoadTexture((eMapTileKind)1));
-            GameObject[] tiles = CreateTileObj(sprites);
-            SetTileOptions(tiles);
-        }
-            
-    }
+
 
     private Vector3 GetCreateStartPos()
     {
@@ -198,28 +194,23 @@ public class MapCreator : MonoBehaviour
     /// <summary>
     /// 텍스쳐사이즈와 분할수를 확인해 타일오브젝트들의 간격을 지정합니다.
     /// </summary>
-    private float GetIntervalDistance()
+    private float GetIntervalDistance(int size)
     {
-        return (Global_Data.GetTextureSize() * 0.01f) * 1 / _devideCount;
+        return (size * 0.01f) * 1 / _devideCount;
     }
 
-    ///// <summary>
-    ///// 제작된 타일맵을 반환합니다.
-    ///// </summary>
-    //public Map GetMap(eMapTileKind map)
-    //{
-    //    Texture texture = LoadTexture(map);
-    //    Sprite[] splitSprites = DevideTexure(texture);
-    //    Map newMap = new Map(map, CreateTileObj(splitSprites));
-
-    //    return newMap;
-    //}
+    public Vector3 GetMapSize()
+    {
+        return new Vector3
+            ((_tiles_interval * _columnCount), (_tiles_interval * _rowCount));
+    }
 
 
 
 
 
-    
+
+
 
 
 

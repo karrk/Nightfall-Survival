@@ -24,6 +24,7 @@ public class Panel_InGame : MonoBehaviour
     private IEnumerator ManagerInitProcedure()
     {
         // TODO:: 스테이지 필요한거 준비. (풀이라던가)
+        StageManager.Instance.CreateStage(Global_Data._stageNum);
         yield return null;
 
         // TODO::캐릭터 배치
@@ -38,5 +39,4 @@ public class Panel_InGame : MonoBehaviour
         GameManager.Instance.Event.CallEvent(eEventType.OnGameComplete);
         // TODO:: 프로토타입이닌깐, 거기까지준비할 필요없이, 딜레이 이후 바로 시작하셔도됩니다. 자유롭게..
     }
-
 }
