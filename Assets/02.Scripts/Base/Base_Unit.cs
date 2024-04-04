@@ -1,20 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public enum eUnitStates
-{
-    None,
-    Idle,
-    Move,
-    Dead,
-    Attack,
-    OnDamage,
-}
-
 public abstract class Base_Unit : MonoBehaviour
 {
     // 유닛의 스탯 정보 프로퍼티
-    public abstract Stat UnitStat { get; }
+    public abstract BaseStat UnitStat { get; }
     // 무적시간 프로퍼티
     protected abstract float ImmunityTime { get; }
 
@@ -27,7 +17,7 @@ public abstract class Base_Unit : MonoBehaviour
     protected bool _isImmunte;
 
     private eUnitStates _state;
-    protected eUnitStates UnitState // 이벤트성 
+    protected eUnitStates UnitState
     {
         get { return _state; }
         set

@@ -10,14 +10,17 @@ public enum eUnitType
     Boss = 3,
 }
 
-public enum eState
+/// <summary>
+/// 유닛의 상태를 지정합니다.
+/// </summary>
+public enum eUnitStates
 {
-    None = 0,
-    Idle = 1,
-    Move = 2,
-    Attack = 3,
-    OnDamage = 4,
-    Dead = 5,
+    None,
+    Idle,
+    Move,
+    Dead,
+    Attack,
+    OnDamage,
 }
 
 public class Data_Unit

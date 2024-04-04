@@ -2,19 +2,20 @@
 public enum eCharacterKind
 {
     None = 0,
-    Hp,
-    Damage,
-    Speed,
-    Armor,
-    RecoverHp,
-    Lucky,
-    ThrowCount,
-    AttackRange,
-    AttackDelay,
-    AttackDuration,
-    BounsExp,
-    BounsGold,
-    AvoidRate,
+    //Hp,
+    //Damage,
+    //Speed,
+    //Armor,
+    //RecoverHp,
+    //Lucky,
+    //ThrowCount,
+    //ThrowSpeed,
+    //AttackRange,
+    //AttackDelay,
+    //AttackDuration,
+    //BounsExp,
+    //BounsGold,
+    //AvoidRate,
 }
 
 public class Data_Character : Data_Unit
@@ -25,14 +26,6 @@ public class Data_Character : Data_Unit
     /// 캐릭터의 종류를 나타냅니다.
     /// </summary>
     public eCharacterKind kind;
-
-    //public float hp;
-
-    //public float damage;
-
-    //public float speed;
-
-    //public float armor;
 
     /// <summary>
     /// 캐릭터의 회복률 입니다.

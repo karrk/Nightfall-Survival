@@ -13,10 +13,10 @@ public class Character : Base_Unit
 
     private int facingDirection = 1;
 
-    private Stat characterStat = new Stat();
+    private BaseStat characterStat = new BaseStat();
 
     // getter setter
-    public override Stat UnitStat { get { return characterStat; } }
+    public override BaseStat UnitStat { get { return characterStat; } }
     protected override float ImmunityTime { get { return immunityTime; } }
 
 

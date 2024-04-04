@@ -7,10 +7,10 @@ public class Monster : Base_Unit, IPoolingObj
 
     public ObjectPool Mypool => ObjPoolManager.Instance.GetPool(ePoolingType.Monster);
 
-    public override Stat UnitStat => _stat;
+    public override BaseStat UnitStat => _stat;
     protected override float ImmunityTime => 0.3f;
 
-    private Stat _stat = new Stat();
+    private BaseStat _stat = new BaseStat();
 
     private bool _isRight;
     private bool _tempIsRight;
