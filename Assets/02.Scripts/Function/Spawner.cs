@@ -32,8 +32,11 @@ public class Spawner : MonoBehaviour
     /// <summary>
     /// 카메라 뷰 테두리에 오브젝트를 배치
     /// </summary>
-    public void RandomSpawn(GameObject obj)
+    public void RandomSpawn(Base_Unit obj)
     {
+        if (obj == null)
+            return;
+
         Vector3 screenScale = _screenScale;
 
         float randRot = Random.Range(0, 360);
@@ -57,16 +60,17 @@ public class Spawner : MonoBehaviour
     /// 카메라 뷰 테두리의 모서리에 외접한 원형태로 몹생성
     /// </summary>
     /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
-    public void CircleSpawn(Queue<GameObject> objs, float limitDegree)
+    public void CircleSpawn(Queue<Base_Unit> objs, float limitDegree)
     {
         float rot = limitDegree / objs.Count;
 
         StartCoroutine(RotateCreate(objs, rot, limitDegree));
     }
 
-    IEnumerator RotateCreate(Queue<GameObject> objs, float intervalRot, float limitDegree = 360)
+    IEnumerator RotateCreate(Queue<Base_Unit> objs, float intervalRot, float limitDegree = 360)
     {
         Vector3 size = _screenScale;
+        Base_Unit unit = null;
 
         float cross = Mathf.Sqrt(Mathf.Pow(size.x, 2) + Mathf.Pow(size.y, 2));
         float radius = cross + _roundPadding;
@@ -95,7 +99,9 @@ public class Spawner : MonoBehaviour
             prevPos = edgeTr.position;
 
             rot += intervalRot;
-            objs.Dequeue().transform.position = edgeTr.position;
+            unit = objs.Dequeue();
+            unit.transform.position = edgeTr.position;
+            unit.Init();
 
             yield return null;
         }

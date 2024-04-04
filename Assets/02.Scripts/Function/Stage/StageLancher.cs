@@ -34,6 +34,7 @@ public class StageLancher : MonoBehaviour
 
     #region 스테이지 구성요소
     private Data_Stage _stageDataTable;
+
     private Stage _stage;
     private ObjPoolManager _poolManager;
     #endregion
@@ -70,11 +71,20 @@ public class StageLancher : MonoBehaviour
     private float _frequency;
 
     private int _commonMonsterIdx;
+    private int _spawnLimitCount = 0;
 
     private Dictionary<TimeWithEventTypes, Queue<int[]>> _timeEventQueues
         = new Dictionary<TimeWithEventTypes, Queue<int[]>>();
 
-    private Queue<GameObject> _circleSpawnQueue = new Queue<GameObject>();
+    private Queue<Base_Unit> _circleSpawnQueue = new Queue<Base_Unit>();
+    public static Dictionary<eMonsterKind, int> _mobCounts = new Dictionary<eMonsterKind, int>();
+
+
+
+    private void Awake()
+    {
+        _poolManager = FindObjectOfType<ObjPoolManager>();
+    }
 
     public void StageStart()
     {
@@ -85,9 +95,6 @@ public class StageLancher : MonoBehaviour
 
     private void Init()
     {
-        if (_poolManager == null)
-            _poolManager = FindObjectOfType<ObjPoolManager>();
-
         InitVariables();
         InitEventTable();
         SetActiveMobsArr(ref _activeMobsArr);
@@ -97,8 +104,12 @@ public class StageLancher : MonoBehaviour
         _spawnDelay = _startFreq_ms * 0.001f;
         _commonMonsterIdx = 0;
 
+        _spawnLimitCount = Global_Data._mobLimitCouns;
+        _spawnLimitCount = 5;
+
         _circleSpawnQueue.Clear();
 
+        InitMonsterCounts();
         _nextEventTime = GetNextEventTime();
     }
 
@@ -191,7 +202,7 @@ public class StageLancher : MonoBehaviour
 
     #endregion
 
-    #region 시간별 이벤트 선택로직
+    #region 시간별 이벤트 처리로직
 
     private void PlayEvent(int time)
     {
@@ -202,7 +213,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            GameObject bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[eventNum]);
+            Base_Unit bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[eventNum]);
             _stage.Spawner.RandomSpawn(bossMob);
         }
 
@@ -210,7 +221,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            GameObject namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[eventNum]);
+            Base_Unit namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[eventNum]);
             _stage.Spawner.RandomSpawn(namedMob);
         }
 
@@ -226,6 +237,7 @@ public class StageLancher : MonoBehaviour
         {
             eventNum = queue.Dequeue()[1];
             this._activeMobs = eventNum;
+            GameManager.Instance.Event.CallEvent(eEventType.SpawnMobChange);
         }
 
         queue = _timeEventQueues[TimeWithEventTypes.ReduceFrequency];
@@ -267,10 +279,14 @@ public class StageLancher : MonoBehaviour
     private void CircleEventLogic
         (eUnitType unitType, int mobIdx, int spawnCount, int degree = 360)
     {
-        GameObject mob;
+        Base_Unit mob;
         for (int i = 0; i < spawnCount; i++)
         {
             mob = GetMonster(unitType, mobIdx);
+            
+            if (mob == null)
+                break;
+
             _circleSpawnQueue.Enqueue(mob);
         }
 
@@ -295,16 +311,27 @@ public class StageLancher : MonoBehaviour
 
     #region 몬스터 스폰 로직
 
-    private GameObject GetMonster(eUnitType unitType, int mobIdx)
+    private Base_Unit GetMonster(eUnitType unitType, int mobIdx)
     {
-        GameObject mob = _poolManager.GetObj(ePoolingType.Monster);
         Base_Unit origin = _stage.GetOriginMonster(unitType, mobIdx);
-        Base_Unit clone = mob.GetComponent<Base_Unit>();
 
-        origin.UnitStat.StatCopy(clone.UnitStat);
-        clone.Init();
+        if(unitType == eUnitType.Common)
+        {
+            eMonsterKind mobKind = (eMonsterKind)origin.UnitStat.ID;
+           
+            if (_mobCounts[mobKind] > _spawnLimitCount)
+                return null;
 
-        return mob;
+            _mobCounts[mobKind]++;
+        }
+        
+        GameObject mob = _poolManager.GetObj(ePoolingType.Monster,this.transform);
+        mob.TryGetComponent<Monster>(out Monster unit);
+
+        origin.UnitStat.StatCopy(unit.UnitStat);
+        unit.Init();
+
+        return unit;
     }
 
     private void DelaySpawn()
@@ -317,10 +344,22 @@ public class StageLancher : MonoBehaviour
             _commonMonsterIdx = (_commonMonsterIdx + 1) % _activeMobsArr.Length;
         }
 
-        GameObject mob = GetMonster(eUnitType.Common, _commonMonsterIdx + 1);
+        Base_Unit mob = GetMonster(eUnitType.Common, _commonMonsterIdx + 1);
         _stage.Spawner.RandomSpawn(mob);
 
         _commonMonsterIdx = (_commonMonsterIdx + 1) % _activeMobsArr.Length;
+    }
+
+    private void InitMonsterCounts()
+    {
+        List<Monster> list = _stage.GetMonsterList(eUnitType.Common);
+
+        _mobCounts.Clear();
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            _mobCounts.Add((eMonsterKind)list[i].UnitStat.ID, 0);
+        }
     }
 
     #endregion
@@ -380,7 +419,6 @@ public class StageLancher : MonoBehaviour
     /// <summary>
     /// 스폰 대상인 몬스터를 구별하기위한 배열생성로직
     /// </summary>
-    /// <param name="mobArr"></param>
     private void SetActiveMobsArr(ref int[] mobArr)
     {
         mobArr = new int[_stage.GetMonsterCount(eUnitType.Common)];

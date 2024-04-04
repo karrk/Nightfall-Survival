@@ -6,9 +6,6 @@ public class StageManager : Base_Manager
     [HideInInspector]
     public StageBuilder _stageBuilder;
 
-    private int _stageNum = -1;
-    public int StageNumber => _stageNum;
-
     private StageLancher _lancher;
 
     protected override void Logic_Init_Custom()
@@ -29,7 +26,18 @@ public class StageManager : Base_Manager
 
     public void LanchGame()
     {
+        Global_Data._prevStageNum = Global_Data._stageNum;
         _lancher.StageStart();
+    }
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            GameManager.Instance.Event.CallEvent(eEventType.StageReady);
+            GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted);
+            GameManager.Instance.Event.CallEvent(eEventType.OnGameComplete);
+        }
     }
 
 }

@@ -5,6 +5,8 @@ public class Monster : Base_Unit, IPoolingObj
 {
     readonly static float NearDistance = 0.1f;
 
+    public ObjectPool Mypool => ObjPoolManager.Instance.GetPool(ePoolingType.Monster);
+
     public override Stat UnitStat => _stat;
     protected override float ImmunityTime => 0.3f;
 
@@ -103,7 +105,10 @@ public class Monster : Base_Unit, IPoolingObj
 
     public void ReturnObj()
     {
-        this.GetComponentInParent<ObjectPool>().ReturnObj(this.gameObject);
+        StageLancher._mobCounts[(eMonsterKind)UnitStat.ID]--;
+        this.transform.SetParent(Mypool.transform);
+        Mypool.ReturnObj(this.gameObject);
+        //this.GetComponentInParent<ObjectPool>().ReturnObj(this.gameObject);
     }
 
     //protected override void Dead()

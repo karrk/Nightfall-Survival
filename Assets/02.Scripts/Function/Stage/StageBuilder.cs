@@ -18,13 +18,25 @@ public class StageBuilder : MonoBehaviour
     /// </summary>
     public Stage Build()
     {
-        SetMonsterTable();
+        if (Global_Data._prevStageNum != Global_Data._stageNum)
+            SetMonsterTable();
+        else
+            InitTable();
+
         Data_StageParts parts = Global_Data.GetStageParts();
 
         return new Stage(_monsterTable, parts.map, parts.spawner);
     }
 
-    #region 몬스터 테이블 생성 // 이미있는경우 처리
+    public void InitTable()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            _monsterTable[(eUnitType)i].Clear();
+        }
+    }
+
+    #region 몬스터 테이블 생성
 
     private void SetMonsterTable()
     {

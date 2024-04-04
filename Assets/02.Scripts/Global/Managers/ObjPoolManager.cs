@@ -8,7 +8,7 @@ public class ObjPoolManager : Base_Manager
     private static ObjPoolManager _instance;
     public static ObjPoolManager Instance => _instance;
 
-    Dictionary<ePoolingType, ObjectPool> pools =
+    private Dictionary<ePoolingType, ObjectPool> _pools =
         new Dictionary<ePoolingType, ObjectPool>();
 
     private void Awake()
@@ -21,14 +21,14 @@ public class ObjPoolManager : Base_Manager
         GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
     }
 
-    public GameObject GetObj(ePoolingType poolingType)
+    public GameObject GetObj(ePoolingType poolingType,Transform parent)
     {
-        return pools[poolingType].GetObj();
+        return _pools[poolingType].GetObj(parent);
     }
 
     private void ReturnAllObj()
     {
-        foreach (var e in pools)
+        foreach (var e in _pools)
         {
             e.Value.ReturnObj();
         }
@@ -36,8 +36,11 @@ public class ObjPoolManager : Base_Manager
 
     public void AddPool(eEventType poolType,ObjectPool pool)
     {
-        this.pools.Add((ePoolingType)poolType, pool);
+        this._pools.Add((ePoolingType)poolType, pool);
     }
 
-    
+    public ObjectPool GetPool(ePoolingType type)
+    {
+        return _pools[type];
+    }
 }
