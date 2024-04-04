@@ -5,11 +5,13 @@ public class Character : Base_Unit
     [SerializeField]
     private JoyStick joystick;
 
+    [SerializeField]
+    private Weapons weapons;
+
     private float movementSpeed = 2.0f;
     private float immunityTime = 3.0f;
 
     private int facingDirection = 1;
-    private float delayToIdle = 0.0f;
 
     private Stat characterStat = new Stat();
 
@@ -17,23 +19,25 @@ public class Character : Base_Unit
     public override Stat UnitStat { get { return characterStat; } }
     protected override float ImmunityTime { get { return immunityTime; } }
 
+
+    protected override void Start()
+    {
+        base.Start();
+
+        // TODO) 임시 코드
+        weapons.SettingWeapons(3, new WeaponStat()); 
+    }
+
     void FixedUpdate()
     {
         // 조이스틱 입력 시 move
         if (joystick.GetDirection() != Vector2.zero)
         {
             Input_Move();
-
-            // 타이머 리셋
-            delayToIdle = 0.05f;
         }
         else
         {
             _rb.velocity = Vector3.zero;
-
-            // Idle 로 전환 시 깜빡임 방지
-            //delayToIdle -= Time.deltaTime;
-            //if (delayToIdle < 0)
             UnitState = eUnitStates.Idle;
         }
     }
@@ -64,6 +68,7 @@ public class Character : Base_Unit
 
         base.OnDamage();
     }
+
 
     public void Input_Move()
     {

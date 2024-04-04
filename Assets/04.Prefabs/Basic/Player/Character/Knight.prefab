@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ba039c53d32fe47a3d9b79b2f2bd8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  joystick: {fileID: 0}
 --- !u!212 &8424375987818114074
 SpriteRenderer:
   m_ObjectHideFlags: 0

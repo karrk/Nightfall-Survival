@@ -32,11 +32,10 @@ public class Logic_WebTableLoader : MonoBehaviour
             case eDataTableType.GameInfo:
                 return URL_googleCommon + gameInfoSheetsURL + "&range=" + "A2:U2";
             case eDataTableType.Stage:
-                return URL_googleCommon + settingData.stageTableURL + "&range=" + settingData.stageTableCount;
             case eDataTableType.Monsters:
-                return URL_googleCommon + settingData.monsterTableURL + "&range=" + settingData.monsterTableCount;
             case eDataTableType.Weapon:
-                return URL_googleCommon + settingData.weaponTableURL + "&range=" + settingData.weaponTableCount;
+            case eDataTableType.Character:
+                return URL_googleCommon + settingData.dataTableList[m_type].Item2 + "&range=" + settingData.dataTableList[m_type].Item1;
             case eDataTableType.BasicText:
                 return URL_googleCommon + settingData.basicTextTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[0] + ":" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[1];
             case eDataTableType.CommonText:
@@ -47,34 +46,9 @@ public class Logic_WebTableLoader : MonoBehaviour
         }
     }
 
-    public void TryLoadData_GameInfo()
+    public void TryLoadData(eDataTableType m_kind)
     {
-        StartCoroutine(LoadData(eDataTableType.GameInfo));
-    }
-
-    public void TryLoadData_StageTable()
-    {
-        StartCoroutine(LoadData(eDataTableType.Stage));
-    }
-
-    public void TryLoadData_MonstersTable()
-    {
-        StartCoroutine(LoadData(eDataTableType.Monsters));
-    }
-
-    public void TryLoadData_WeaponTable()
-    {
-        StartCoroutine(LoadData(eDataTableType.Weapon));
-    }
-
-    public void TryLoadData_BasicTextTable()
-    {
-        StartCoroutine(LoadData(eDataTableType.BasicText));
-    }
-
-    public void TryLoadData_CommonTextTable()
-    {
-        StartCoroutine(LoadData(eDataTableType.CommonText));
+        StartCoroutine(LoadData(m_kind));
     }
 
 

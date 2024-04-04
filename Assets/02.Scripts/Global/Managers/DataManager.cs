@@ -13,6 +13,11 @@ public enum eDataTableType
     Stage = 1,
     Monsters = 2,
     Weapon = 3,
+    Character = 4,
+    Temp_5,
+    Temp_6,
+    Temp_7,
+    Temp_8,
     CommonText = 9,
     BasicText = 10,
 }
@@ -38,7 +43,7 @@ public class DataManager : Base_Manager
     protected override void Logic_Init_Custom()
     {
         transform.GetChild(0).TryGetComponent(out _tableLoader);
-        if (_tableLoader != null) _tableLoader.TryLoadData_GameInfo();
+        if (_tableLoader != null) _tableLoader.TryLoadData(eDataTableType.GameInfo);
 
         // --- 이벤트 등록 --- //
         GameManager.Instance.Event.RegisterEvent<eDataTableType, string[], int>(eEventType.OnResponseData_Table, OnResponseData);
@@ -54,6 +59,7 @@ public class DataManager : Base_Manager
         LoadData_StageTable();
         LoadData_MonsterTable();
         LoadData_WeaponTable();
+        LoadData_CharacterTable();
         LoadData_TextTable();
     }
 
@@ -62,7 +68,7 @@ public class DataManager : Base_Manager
     /// </summary>
     public void LoadData_StageTable()
     {
-        _tableLoader.TryLoadData_StageTable();
+        _tableLoader.TryLoadData(eDataTableType.Stage);
     }
 
     /// <summary>
@@ -70,7 +76,7 @@ public class DataManager : Base_Manager
     /// </summary>
     public void LoadData_MonsterTable()
     {
-        _tableLoader.TryLoadData_MonstersTable();
+        _tableLoader.TryLoadData(eDataTableType.Monsters);
     }
 
     /// <summary>
@@ -78,15 +84,24 @@ public class DataManager : Base_Manager
     /// </summary>
     public void LoadData_WeaponTable()
     {
-        _tableLoader.TryLoadData_WeaponTable();
+        _tableLoader.TryLoadData(eDataTableType.Weapon);
     }
+
+    /// <summary>
+    /// [기능] 무기 테이블을 불러와 Global_Data를 갱신합니다.
+    /// </summary>
+    public void LoadData_CharacterTable()
+    {
+        _tableLoader.TryLoadData(eDataTableType.Character);
+    }
+
     /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
     public void LoadData_TextTable()
     {
-        _tableLoader.TryLoadData_BasicTextTable();
-        _tableLoader.TryLoadData_CommonTextTable();
+        _tableLoader.TryLoadData(eDataTableType.CommonText);
+        _tableLoader.TryLoadData(eDataTableType.BasicText);
     }
 
 
@@ -115,6 +130,9 @@ public class DataManager : Base_Manager
             case eDataTableType.Weapon:
                 Convert_WeaponTable(m_dataArray);
                 break;
+            case eDataTableType.Character:
+                Convert_CharacterTable(m_dataArray);
+                break;
             case eDataTableType.CommonText:
                 Convert_CommonTextTable(m_dataArray);
                 //Logic_TextData.OnChangeLanguage();
@@ -135,12 +153,12 @@ public class DataManager : Base_Manager
         string[] resultData = m_dataArray[0].Split("\t");
 
         _dataTableInfo.version = resultData[0];
-        _dataTableInfo.stageTableCount = resultData[1];
-        _dataTableInfo.stageTableURL = resultData[2];
-        _dataTableInfo.monsterTableCount = resultData[3];
-        _dataTableInfo.monsterTableURL = resultData[4];
-        _dataTableInfo.weaponTableCount = resultData[5];
-        _dataTableInfo.weaponTableURL = resultData[6];
+
+        for (int i = 1; i < resultData.Length - 4; i += 2)
+        {
+            _dataTableInfo.dataTableList.Add((eDataTableType)((i + 1) / 2), (resultData[i], resultData[i + 1]));
+        }
+
         GetCountData(resultData[17], out _dataTableInfo.commonTextTableCount);
         _dataTableInfo.commonTextTableURL = resultData[18];
         GetCountData(resultData[19], out _dataTableInfo.basicTextTableCount);
@@ -309,6 +327,13 @@ public class DataManager : Base_Manager
 
             Global_Data.weaponTable.Add(parsingData.ID, parsingData);
         }
+    }
+
+    private void Convert_CharacterTable(string[] m_dataArray)
+    {
+        Global_Data.characterTable.Clear();
+
+        // TODO:: 후후.. 동진님이 해주시겠지?
     }
 
     private void Convert_CommonTextTable(string[] m_dataArray)
