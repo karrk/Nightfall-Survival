@@ -38,7 +38,7 @@ public class Character : Base_Unit
         else
         {
             _rb.velocity = Vector3.zero;
-            State = eUnitStates.Idle;
+            UnitState = eUnitStates.Idle;
         }
     }
 
