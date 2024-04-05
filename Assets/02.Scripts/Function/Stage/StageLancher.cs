@@ -105,7 +105,6 @@ public class StageLancher : MonoBehaviour
         _commonMonsterIdx = 0;
 
         _spawnLimitCount = Global_Data._mobLimitCouns;
-        _spawnLimitCount = 5;
 
         _circleSpawnQueue.Clear();
 

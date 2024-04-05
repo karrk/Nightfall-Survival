@@ -18,7 +18,8 @@ public class ObjPoolManager : Base_Manager
 
     protected override void Logic_Init_Custom()
     {
-        GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
+        //GameManager.Instance.Event.RegisterEvent(eEventType.CharacterDead, ReturnAllObj);
+        //수정해야됨
     }
 
     public GameObject GetObj(ePoolingType poolingType,Transform parent)

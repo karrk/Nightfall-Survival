@@ -53,7 +53,7 @@ public class Spawner : MonoBehaviour
         else
             distance = screenScale.y / Mathf.Abs(dir.y);
 
-        obj.transform.position = dir * (distance + _rectPadding);
+        obj.transform.position = this.transform.position + (dir * (distance + _rectPadding));
     }
 
     /// <summary>
@@ -109,6 +109,6 @@ public class Spawner : MonoBehaviour
 
     public void SpawnCenter(GameObject obj)
     {
-        obj.transform.position = this.transform.position;
+        obj.transform.position = Vector3.zero;
     }
 }

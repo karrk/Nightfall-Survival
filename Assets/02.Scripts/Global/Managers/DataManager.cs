@@ -324,6 +324,9 @@ public class DataManager : Base_Manager
             parsingData.damage = float.Parse(dataSegment[2]);
             parsingData.speed = float.Parse(dataSegment[3]);
             parsingData.delay = float.Parse(dataSegment[4]);
+            parsingData.collectType = (eCollectionType)Enum.Parse(typeof(eCollectionType), dataSegment[5]);
+            parsingData.duration = float.Parse(dataSegment[6]);
+            parsingData.throwCount = float.Parse(dataSegment[7]);
 
             Global_Data.weaponTable.Add(parsingData.ID, parsingData);
         }
@@ -340,20 +343,23 @@ public class DataManager : Base_Manager
 
             parsingData.ID = int.Parse(dataSegment[0]);
             parsingData.name = dataSegment[1];
-            parsingData.hp = float.Parse(dataSegment[2]);
-            parsingData.damage = float.Parse(dataSegment[3]);
-            parsingData.moveSpeed = float.Parse(dataSegment[4]);
-            parsingData.armor = float.Parse(dataSegment[5]);
-            parsingData.recoverHp = float.Parse(dataSegment[6]);
-            parsingData.lucky = float.Parse(dataSegment[7]);
-            parsingData.throwCount = float.Parse(dataSegment[8]);
-            parsingData.throwSpeed = float.Parse(dataSegment[9]);
-            parsingData.attackRange = float.Parse(dataSegment[10]);
-            parsingData.attackDelay = float.Parse(dataSegment[11]);
-            parsingData.attackDuration = float.Parse(dataSegment[12]);
-            parsingData.bonusExp = float.Parse(dataSegment[13]);
-            parsingData.bonusGold = float.Parse(dataSegment[14]);
-            parsingData.avoidRate = float.Parse(dataSegment[15]);
+            parsingData.weapon = (eWeaponType)int.Parse(dataSegment[2]);
+            parsingData.hp = float.Parse(dataSegment[3]);
+            parsingData.damage = float.Parse(dataSegment[4]);
+            parsingData.moveSpeed = float.Parse(dataSegment[5]);
+            parsingData.armor = float.Parse(dataSegment[6]);
+            parsingData.recoverHp = float.Parse(dataSegment[7]);
+            parsingData.lucky = float.Parse(dataSegment[8]);
+            parsingData.throwCount = float.Parse(dataSegment[9]);
+            parsingData.throwSpeed = float.Parse(dataSegment[10]);
+            parsingData.attackRange = float.Parse(dataSegment[11]);
+            parsingData.attackDelay = float.Parse(dataSegment[12]);
+            parsingData.attackDuration = float.Parse(dataSegment[13]);
+            parsingData.bonusExp = float.Parse(dataSegment[14]);
+            parsingData.bonusGold = float.Parse(dataSegment[15]);
+            parsingData.avoidRate = float.Parse(dataSegment[16]);
+
+            Global_Data.characterTable.Add(parsingData.ID, parsingData);
         }
     }
 

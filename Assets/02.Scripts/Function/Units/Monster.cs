@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Monster : Base_Unit, IPoolingObj
 {
-    readonly static float NearDistance = 0.1f;
+    readonly static float NearDistance = 0.5f;
 
     public ObjectPool Mypool => ObjPoolManager.Instance.GetPool(ePoolingType.Monster);
 
@@ -16,6 +16,12 @@ public class Monster : Base_Unit, IPoolingObj
     private bool _tempIsRight;
 
     private static Base_Unit _chaseTarget;
+    private Weapon _contactWeapon;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     public override void Init()
     {
@@ -26,13 +32,13 @@ public class Monster : Base_Unit, IPoolingObj
     public static Base_Unit FindTarget()
     {
         GameObject target = GameObject.FindGameObjectWithTag("Player");
-        
+
         if (target == null)
             return null;
 
         Base_Unit unit = target.GetComponent<Base_Unit>();
 
-            return unit;
+        return unit;
     }
 
     protected override void Idle()
@@ -46,6 +52,54 @@ public class Monster : Base_Unit, IPoolingObj
         base.Move();
         StartCoroutine(Chase());
     }
+    protected override void Attack()
+    {
+        base.Attack();
+        _chaseTarget._attacker = this;
+        _chaseTarget.UnitState = eUnitStates.OnDamage;
+
+        this.UnitState = eUnitStates.Idle;
+    }
+    protected override void Dead()
+    {
+        base.Dead();
+        ReturnObj();
+    }
+
+    protected override void OnDamage()
+    {
+        if (_isImmunte)
+            return;
+
+        float hp = ApplyDamage(_contactWeapon.WpStat.Damage);
+
+        if (hp > 0)
+        {
+            _anim.PlayOnDamagedAnim();
+            StartCoroutine(ImmunityRoutines(ImmunityTime));
+            UnitState = eUnitStates.Idle;
+        }
+        else
+        {
+            Debug.Log("죽음");
+            UnitState = eUnitStates.Dead;
+        }
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Weapon"))
+        {
+            if (collision.TryGetComponent<Weapon>(out _contactWeapon))
+            {
+                _attacker = _contactWeapon._user;
+                this.UnitState = eUnitStates.OnDamage;
+            }
+        }
+
+    }
+
+
 
     #region 구체적인 동작 로직
 
@@ -54,7 +108,7 @@ public class Monster : Base_Unit, IPoolingObj
         while (true)
         {
             this.transform.position = Vector3.MoveTowards
-                (this.transform.position, _chaseTarget.transform.position, 
+                (this.transform.position, _chaseTarget.transform.position,
                 _stat.MoveSpeed * Time.deltaTime);
 
             SetForward(_chaseTarget.transform.position.x);
@@ -65,6 +119,8 @@ public class Monster : Base_Unit, IPoolingObj
                 UnitState = eUnitStates.Attack;
                 break;
             }
+            if (this.UnitState != eUnitStates.Move)
+                break;
 
             yield return null;
         }
@@ -74,6 +130,8 @@ public class Monster : Base_Unit, IPoolingObj
     {
         while (true)
         {
+            yield return new WaitForSeconds(0.5f);
+
             if (_chaseTarget != null)
             {
                 UnitState = eUnitStates.Move;
@@ -81,8 +139,6 @@ public class Monster : Base_Unit, IPoolingObj
             }
 
             _chaseTarget = FindTarget();
-
-            yield return new WaitForSeconds(0.5f);
         }
     }
 

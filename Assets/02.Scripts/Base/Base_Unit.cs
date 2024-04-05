@@ -13,11 +13,11 @@ public abstract class Base_Unit : MonoBehaviour
     protected Rigidbody2D _rb;
     protected CapsuleCollider2D _coll;
 
-    protected Base_Unit _attacker;
+    public Base_Unit _attacker;
     protected bool _isImmunte;
 
     private eUnitStates _state;
-    protected eUnitStates UnitState
+    public eUnitStates UnitState
     {
         get { return _state; }
         set
@@ -127,7 +127,7 @@ public abstract class Base_Unit : MonoBehaviour
         return this.UnitStat.HP;
     }
 
-    IEnumerator ImmunityRoutines(float time)
+    protected IEnumerator ImmunityRoutines(float time)
     {
         _isImmunte = true;
 

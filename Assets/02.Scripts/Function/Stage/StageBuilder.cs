@@ -3,7 +3,14 @@ using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
 {
-    // 스테이지 빌더의 용도가 아닌 기능만 담김
+    [SerializeField]
+    private Character _characterPrefab;
+
+    [SerializeField]
+    private GameObject _joyStick;
+
+    //[SerializeField]
+    //private GameObject[] _weaponsPrefab;
 
     private Dictionary<eUnitType, List<Monster>> _monsterTable =
         new Dictionary<eUnitType, List<Monster>>()
@@ -12,6 +19,21 @@ public class StageBuilder : MonoBehaviour
             { eUnitType.Named , new List<Monster>() },
             { eUnitType.Boss , new List<Monster>() },
         };
+
+    public Character GetCharacter(eCharacterKind kind)
+    {
+        Character obj = Instantiate(_characterPrefab);
+        obj.SetStat(kind);
+        obj.SetJoyStick(this._joyStick.GetComponent<JoyStick>());
+        obj.SetKind(kind);
+
+        return obj;
+    }
+
+    public void ActiveJoyStick(bool active)
+    {
+        _joyStick.SetActive(active);
+    }
 
     /// <summary>
     /// 스테이지 ID 에 맞는 스테이지를 구성후 해당 스테이지를 반환합니다.
@@ -81,6 +103,7 @@ public class StageBuilder : MonoBehaviour
     }
 
     #endregion
+
 
 }
 

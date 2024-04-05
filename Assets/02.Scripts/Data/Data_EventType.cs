@@ -93,5 +93,6 @@ public enum eEventType
     StageReady,
     StageSetupCompleted,
     SpawnMobChange,
+    CharacterDead,
     
 }

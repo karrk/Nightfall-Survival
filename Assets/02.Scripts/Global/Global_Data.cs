@@ -15,6 +15,10 @@ public class Global_Data : MonoBehaviour
 
     public static int _mobLimitCouns = 50;
 
+    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+
+    public static Character _character = null;
+
     #region 맵 관련 변수
     public static int _textureSize;
 
@@ -105,7 +109,6 @@ public class Global_Data : MonoBehaviour
     }
 
     #endregion
-
 
     #endregion
 

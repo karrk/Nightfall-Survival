@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class WeaponStat
     private float _delay;
     private float _duration;
     private float _throwCount;
+    private eCollectionType _collectionType;
 
     public int ID => _id;
     public string Name => _name;
@@ -19,17 +21,19 @@ public class WeaponStat
     public float Delay => _delay;
     public float Duration => _duration;
     public float ThrowCount => _throwCount;
+    public eCollectionType CollectionType => _collectionType;
 
-    public WeaponStat SetStats(WeaponStat stats, Data_Weapon wpData)
+    public void SetStats(Data_Weapon wpData)
     {
-        stats
+        this
             .SetID(wpData.ID)
             .SetName(wpData.name)
             .SetSpeed(wpData.speed)
             .SetDamage(wpData.damage)
-            .SetDelay(wpData.delay);
-
-        return stats;
+            .SetDelay(wpData.delay)
+            .SetCollectType(wpData.collectType)
+            .SetDuration(wpData.duration)
+            .SetThrowCount((int)wpData.throwCount);
     }
 
     public void CopyStats(WeaponStat targetData)
@@ -42,7 +46,16 @@ public class WeaponStat
             .SetName(this._name)
             .SetSpeed(this._speed)
             .SetDamage(this._damage)
-            .SetDelay(this._delay);
+            .SetDelay(this._delay)
+            .SetCollectType(this._collectionType)
+            .SetDuration(this._duration)
+            .SetThrowCount((int)this._throwCount);
+    }
+
+    public WeaponStat SetCollectType(eCollectionType type)
+    {
+        this._collectionType = type;
+        return this;
     }
 
     public WeaponStat SetID(int id)
@@ -108,7 +121,7 @@ public class WeaponStat
         this._duration += duration;
         return this;
     }
-    public WeaponStat AddThrowCount(int count)
+    public WeaponStat AddThrowCount(float count)
     {
         this._throwCount += count;
         return this;
