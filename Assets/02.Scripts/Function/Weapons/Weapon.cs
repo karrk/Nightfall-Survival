@@ -10,7 +10,7 @@ public abstract class Weapon : MonoBehaviour, ICollection
     protected CharacterStat _userStat = null;
     protected abstract eWeaponType weaponType { get; }
     public eCollectionType _collectionType = eCollectionType.None;
-    protected WeaponStat _wpStat;
+    protected WeaponStat _wpStat = new WeaponStat();
     protected SpriteRenderer _render;
     protected Base_Unit _target;
 
@@ -19,37 +19,36 @@ public abstract class Weapon : MonoBehaviour, ICollection
     protected void Awake()
     {
         _render = GetComponentInChildren<SpriteRenderer>();
-        SetSprite();
+        SetSprite();   
     }
 
     protected virtual void Init()
     {
-
+        _wpStat = new WeaponStat();
     }
 
     public void ApplyUserStat(Character user)
     {
-        WeaponStat stats = new WeaponStat();
-        stats.SetStats(Global_Data.weaponTable[(int)weaponType]);
+        WeaponStat wpStat = this._wpStat;
+
+        wpStat.SetStats(Global_Data.weaponTable[(int)weaponType]);
 
         this._user = user;
 
         _userStat = (CharacterStat)user.UnitStat;
 
-        stats.AddDamage(_userStat.Damage)
+        wpStat.AddDamage(_userStat.Damage)
             .AddSpeed(_userStat.ThrowSpeed)
             .AddDelay(-1 * _userStat.Delay)
             .AddDuration(_userStat.Duration)
             .AddThrowCount(_userStat.ThrowCount);
 
-        stats.SetCollectType(Global_Data.weaponTable[(int)weaponType].collectType);
-
-        _wpStat = stats;
+        wpStat.SetCollectType(Global_Data.weaponTable[(int)weaponType].collectType);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Monster"))
+        if (collision.gameObject.CompareTag("Monster"))
         {
             collision.TryGetComponent<Base_Unit>(out _target);
         }
@@ -63,7 +62,8 @@ public abstract class Weapon : MonoBehaviour, ICollection
     public abstract void Use();
 }
 
-public abstract class ContinueousWp : Weapon
+
+public abstract class ContinuousWp : Weapon
 {
 
 }

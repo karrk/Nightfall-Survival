@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateWeapon : ContinueousWp
+public class Sword : ContinuousWp
 {
-    protected override eWeaponType weaponType => eWeaponType.Sward;
+    protected override eWeaponType weaponType => eWeaponType.Sword;
 
     Vector3 _initPos = Vector3.zero;
     Vector3 _offsetPos = Vector3.left * 1.5f;

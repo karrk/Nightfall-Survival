@@ -8,18 +8,39 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
-    public static int _prevStageNum = 0;
-    public static int _stageNum = 1;
+    #region 스테이지 데이터
 
     private static Stage _stage = null;
 
-    public static int _mobLimitCouns = 50;
+    private static int _prevStageNum = -1;
+    public static int _stageNum = 1;
 
-    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+    public static bool IsSamePreviousStage => _prevStageNum == _stageNum;
+    // 일반 몬스터별 생성 제한 횟수
+    public static int MobLimitCouns => 50;
+
+    #endregion
+
+    #region 오브젝트 풀 데이터
+    
+    public static int CreateOnceCount => 50;
+
+    #endregion
+
+    #region 캐릭터 데이터
 
     public static Character _character = null;
 
-    #region 맵 관련 변수
+    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+
+    public static Dictionary<eWeaponType, Weapon> _inventory
+        = new Dictionary<eWeaponType, Weapon>();
+
+    public static int LimitWeaponCount => 6;
+
+    #endregion
+
+    #region 맵 관련 테이터
     public static int _textureSize;
 
     public static int _mapTileDevideCount = 4;
@@ -107,6 +128,12 @@ public class Global_Data : MonoBehaviour
     {
         _stage = stage;
     }
+
+    public static void SetPrevStageNum(int num)
+    {
+        _prevStageNum = num;
+    }
+
 
     #endregion
 

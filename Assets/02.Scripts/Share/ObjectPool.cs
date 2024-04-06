@@ -7,19 +7,21 @@ public abstract class ObjectPool : MonoBehaviour
     protected abstract int InitCount { get; }
     protected abstract ePoolingType Type { get; }
 
-    protected static int CreateOnceCount = 50;
+    protected static int CreateOnceCount;
     
-
     [SerializeField]
     protected GameObject _prefab;
 
     protected Queue<GameObject> pool = new Queue<GameObject>();
+    protected List<GameObject> _outObjList = new List<GameObject>();
 
     protected int _maxSize;
+    private Transform tempParent;
 
     private void Start()
     {
-        ObjPoolManager.Instance.AddPool((eEventType)Type, this);
+        GetComponentInParent<ObjPoolManager>().AddPool((eEventType)Type, this);
+        CreateOnceCount = Global_Data.CreateOnceCount;
         InitPool();
     }
 
@@ -47,6 +49,8 @@ public abstract class ObjectPool : MonoBehaviour
 
     public virtual GameObject GetObj(Transform parent)
     {
+        tempParent = parent == null ? this.transform : parent;
+
         if (pool.Count <= 0)
         {
             _maxSize *= 2;
@@ -55,8 +59,10 @@ public abstract class ObjectPool : MonoBehaviour
         }
 
         GameObject obj = pool.Dequeue();
-        obj.transform.SetParent(parent);
+        obj.transform.SetParent(tempParent);
         obj.SetActive(true);
+
+        this._outObjList.Add(obj);
 
         return obj;
     }
@@ -83,14 +89,17 @@ public abstract class ObjectPool : MonoBehaviour
 
     public void ReturnObj()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = _outObjList.Count-1 ; i >= 0; i--)
         {
-            transform.GetChild(i).GetComponent<IPoolingObj>().ReturnObj();
+            ReturnObj(_outObjList[i]);
         }
     }
 
     public void ReturnObj(GameObject obj)
     {
+        this._outObjList.Remove(obj);
+
+        obj.transform.SetParent(this.transform);
         obj.SetActive(false);
         pool.Enqueue(obj);
     }

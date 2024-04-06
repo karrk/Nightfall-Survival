@@ -3,54 +3,62 @@ using UnityEngine;
 
 public class Monster : Base_Unit, IPoolingObj
 {
-    readonly static float NearDistance = 0.5f;
+    private const float IdleDelay = 0.1f;
+    private readonly static WaitForSeconds IdleTime = new WaitForSeconds(IdleDelay);
+    private const float MoveDelay = 0.03f;
+    private readonly static WaitForSeconds MoveTime = new WaitForSeconds(MoveDelay);
+    private readonly static float NearDistance = 0.5f;
 
-    public ObjectPool Mypool => ObjPoolManager.Instance.GetPool(ePoolingType.Monster);
-
-    public override BaseStat UnitStat => _stat;
     protected override float ImmunityTime => 0.3f;
-
+    public override BaseStat UnitStat => _stat;
     private BaseStat _stat = new BaseStat();
+
+    private Weapon _contactWeapon;
+    private static Base_Unit _chaseTarget;
+
+    private CapsuleCollider2D _collidableCollider;
 
     private bool _isRight;
     private bool _tempIsRight;
 
-    private static Base_Unit _chaseTarget;
-    private Weapon _contactWeapon;
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    private Coroutine _stepCoroutine;
 
     public override void Init()
     {
-        base.Init();
+        if (_collidableCollider == null)
+            _collidableCollider = transform.GetChild(0).GetComponent<CapsuleCollider2D>();
+
+        _anim.Init();
         SetStateIdle();
+        _collidableCollider.isTrigger = false;
     }
 
-    public static Base_Unit FindTarget()
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject target = GameObject.FindGameObjectWithTag("Player");
-
-        if (target == null)
-            return null;
-
-        Base_Unit unit = target.GetComponent<Base_Unit>();
-
-        return unit;
+        if (collision.CompareTag("Weapon"))
+        {
+            if (collision.TryGetComponent<Weapon>(out _contactWeapon))
+            {
+                _attacker = _contactWeapon._user;
+                this.UnitState = eUnitStates.OnDamage;
+            }
+        }
     }
+
+    #region 상태머신 Override
 
     protected override void Idle()
     {
-        StartCoroutine(ReadyChase());
+        if (_stepCoroutine != null)
+            StopCoroutine(_stepCoroutine);
+
+        _stepCoroutine = StartCoroutine(ReadyChase());
     }
 
     protected override void Move()
     {
-        StopAllCoroutines();
         base.Move();
-        StartCoroutine(Chase());
+        _stepCoroutine = StartCoroutine(Chase());
     }
     protected override void Attack()
     {
@@ -58,12 +66,17 @@ public class Monster : Base_Unit, IPoolingObj
         _chaseTarget._attacker = this;
         _chaseTarget.UnitState = eUnitStates.OnDamage;
 
+        if(_chaseTarget.UnitState == eUnitStates.Dead)
+            { _chaseTarget = null; }
+
         this.UnitState = eUnitStates.Idle;
     }
     protected override void Dead()
     {
+        _collidableCollider.isTrigger = true;
+        StopAllCoroutines();
         base.Dead();
-        ReturnObj();
+        StartCoroutine(WaitDeadAnim());
     }
 
     protected override void OnDamage()
@@ -81,56 +94,19 @@ public class Monster : Base_Unit, IPoolingObj
         }
         else
         {
-            Debug.Log("죽음");
             UnitState = eUnitStates.Dead;
         }
     }
 
-    protected override void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Weapon"))
-        {
-            if (collision.TryGetComponent<Weapon>(out _contactWeapon))
-            {
-                _attacker = _contactWeapon._user;
-                this.UnitState = eUnitStates.OnDamage;
-            }
-        }
-
-    }
-
-
+    #endregion
 
     #region 구체적인 동작 로직
-
-    IEnumerator Chase()
-    {
-        while (true)
-        {
-            this.transform.position = Vector3.MoveTowards
-                (this.transform.position, _chaseTarget.transform.position,
-                _stat.MoveSpeed * Time.deltaTime);
-
-            SetForward(_chaseTarget.transform.position.x);
-            SetSortOrder();
-
-            if (Vector3.Distance(transform.position, _chaseTarget.transform.position) <= NearDistance)
-            {
-                UnitState = eUnitStates.Attack;
-                break;
-            }
-            if (this.UnitState != eUnitStates.Move)
-                break;
-
-            yield return null;
-        }
-    }
 
     IEnumerator ReadyChase()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return IdleTime;
 
             if (_chaseTarget != null)
             {
@@ -138,8 +114,53 @@ public class Monster : Base_Unit, IPoolingObj
                 break;
             }
 
-            _chaseTarget = FindTarget();
+            _chaseTarget = Global_Data._character;
         }
+    }
+
+    IEnumerator Chase()
+    {
+        Vector3 targetPos;
+
+        while (true)
+        {
+            targetPos = _chaseTarget == null ?  
+                this.transform.position : _chaseTarget.transform.position;
+
+            if (_chaseTarget == null)
+            {
+                UnitState = eUnitStates.Idle;
+                break;
+            }
+
+            this.transform.position = Vector3.MoveTowards
+                (this.transform.position, targetPos,
+                _stat.MoveSpeed * MoveDelay);
+
+            SetForward(targetPos.x);
+            SetSortOrder();
+
+            if (Vector3.Distance(transform.position, targetPos) <= NearDistance)
+            {
+                UnitState = eUnitStates.Attack;
+                break;
+            }
+
+            yield return MoveTime;
+        }
+    }
+
+    IEnumerator WaitDeadAnim()
+    {
+        float duration = _anim.CurrentAnimLength;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(duration);
+            break;
+        }
+
+        ReturnObj();
     }
 
     #endregion
@@ -161,25 +182,6 @@ public class Monster : Base_Unit, IPoolingObj
 
     public void ReturnObj()
     {
-        StageLancher._mobCounts[(eMonsterKind)UnitStat.ID]--;
-        this.transform.SetParent(Mypool.transform);
-        Mypool.ReturnObj(this.gameObject);
-        //this.GetComponentInParent<ObjectPool>().ReturnObj(this.gameObject);
+        ObjPoolManager.Instance.ReturnObj(ePoolingType.Monster, this.gameObject);
     }
-
-    //protected override void Dead()
-    //{
-
-    //    //if(_attacker == 플레이어라면)
-    //    //    //보상이나
-    //    //    //
-
-    //    ////누구의 공격인지 확인하는 데이터
-    //    //_isDead = true;
-    //    //Anim.PlayDeadAnim();
-    //    //Return();
-    //    //// 템떨구기
-    //    //// 대상
-    //}
-
 }
