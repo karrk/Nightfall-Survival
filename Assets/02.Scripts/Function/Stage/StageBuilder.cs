@@ -3,7 +3,14 @@ using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
 {
-    // 스테이지 빌더의 용도가 아닌 기능만 담김
+    [SerializeField]
+    private Character _characterPrefab;
+
+    [SerializeField]
+    private GameObject _joyStick;
+
+    //[SerializeField]
+    //private GameObject[] _weaponsPrefab;
 
     private Dictionary<eUnitType, List<Monster>> _monsterTable =
         new Dictionary<eUnitType, List<Monster>>()
@@ -13,18 +20,45 @@ public class StageBuilder : MonoBehaviour
             { eUnitType.Boss , new List<Monster>() },
         };
 
+    public Character GetCharacter(eCharacterKind kind)
+    {
+        Character obj = Instantiate(_characterPrefab);
+        obj.SetStat(kind);
+        obj.SetJoyStick(this._joyStick.GetComponent<JoyStick>());
+        obj.SetKind(kind);
+
+        return obj;
+    }
+
+    public void ActiveJoyStick(bool active)
+    {
+        _joyStick.SetActive(active);
+    }
+
     /// <summary>
     /// 스테이지 ID 에 맞는 스테이지를 구성후 해당 스테이지를 반환합니다.
     /// </summary>
     public Stage Build()
     {
-        SetMonsterTable();
+        if (Global_Data._prevStageNum != Global_Data._stageNum)
+            SetMonsterTable();
+        else
+            InitTable();
+
         Data_StageParts parts = Global_Data.GetStageParts();
 
         return new Stage(_monsterTable, parts.map, parts.spawner);
     }
 
-    #region 몬스터 테이블 생성 // 이미있는경우 처리
+    public void InitTable()
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            _monsterTable[(eUnitType)i].Clear();
+        }
+    }
+
+    #region 몬스터 테이블 생성
 
     private void SetMonsterTable()
     {
@@ -69,6 +103,7 @@ public class StageBuilder : MonoBehaviour
     }
 
     #endregion
+
 
 }
 

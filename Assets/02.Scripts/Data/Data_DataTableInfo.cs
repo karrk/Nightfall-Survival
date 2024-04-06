@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class Data_DataTableInfo
 {
     #region 파싱 데이터
@@ -6,26 +8,7 @@ public class Data_DataTableInfo
     /// </summary>
     public string version;
 
-    /// <summary>
-    /// 몬스터 테이블의 총 갯수입니다.
-    /// </summary>
-    public string monsterTableCount;
-
-    public string monsterTableURL;
-
-    /// <summary>
-    /// 스테이지 테이블의 총 갯수입니다.
-    /// </summary>
-    public string stageTableCount;
-
-    public string stageTableURL;
-
-    /// <summary>
-    /// 무기 테이블의 총 갯수입니다.
-    /// </summary>
-    public string weaponTableCount;
-
-    public string weaponTableURL;
+    public Dictionary<eDataTableType, (string, string)> dataTableList = new Dictionary<eDataTableType, (string, string)>();
 
     /// <summary>
     /// 공통 텍스트 테이블의 총 갯수입니다. 

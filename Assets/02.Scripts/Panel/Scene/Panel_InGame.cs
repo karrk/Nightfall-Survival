@@ -31,6 +31,10 @@ public class Panel_InGame : MonoBehaviour
         yield return null;
 
         // TODO::캐릭터 배치
+        StageManager.ActiveJoyStick(true);
+        StageManager.SetCharacter(Global_Data._selectedCharacter);
+        Global_Data.GetStageParts().spawner.SpawnCenter(Global_Data._character.gameObject);
+        Camera.main.transform.SetParent(Global_Data._character.transform);
         yield return null;
 
         // TODO:: 기타 필요한거있으면 이런식으로 추가..
@@ -45,7 +49,7 @@ public class Panel_InGame : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Space))
             TempGameStart();
     }
 }

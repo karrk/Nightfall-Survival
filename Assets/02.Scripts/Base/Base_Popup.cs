@@ -112,6 +112,8 @@ namespace VS.Base.Popup
         /// </summary>
         private void Logic_Init_Setting()
         {
+            isActivePopup = _component.obj_graphic.gameObject.activeSelf;
+
             // 그래픽 오브젝트 설정이 없는 경우 대응 //
             if (!CheckExistGraphicObject())
             {

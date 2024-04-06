@@ -28,7 +28,23 @@ public enum eEventType
     #endregion
 
     #region MainMenu
+    /// <summary> 메인 메뉴 패널을 켭니다.</summary>
+    ActShowMainMenuPanel_MainMenu,
+    /// <summary> 크레딧 팝업창을 켭니다.</summary>
+    ActShowCredit_MainMenu,
+    /// <summary> 슬롯 선택 팝업창을 켭니다.</summary>
+    ActShowSelectSlotPopup_MainMenu,
+    /// <summary> 재능 팝업창을 켭니다.</summary>
+    ActShowPossibilityPopup_MainMenu,
+    /// <summary> 강화 팝업창을 켭니다.</summary>
+    ActShowUpgradePopup_MainMenu,
+    /// <summary> 콜렉션을 켭니다.</summary>
+    ActShowCollectionPopup_MainMenu,
+    #endregion
 
+    #region InGame
+    /// <summary> 게임 메뉴를 토글합니다.</summary>
+    ActToggleOptionMenu_InGame,
     #endregion
     #endregion
 
@@ -63,6 +79,8 @@ public enum eEventType
     SetOneButtonPopup,
     /// <summary> 확인과 취소 버튼이 있는 공통 팝업을 설정합니다.</summary>
     SetTwoButtonPopup,
+    /// <summary> 게임설정 팝업창을 켭니다.</summary>
+    ActShowOptionPopup,
     #endregion
 
     #region 팝업조작
@@ -71,9 +89,10 @@ public enum eEventType
 
     #endregion
     #endregion
-    StartGame,
     EndGame,
     StageReady,
     StageSetupCompleted,
-    AddStageParts,
+    SpawnMobChange,
+    CharacterDead,
+    
 }

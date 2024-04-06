@@ -8,13 +8,14 @@ public abstract class ObjectPool : MonoBehaviour
     protected abstract ePoolingType Type { get; }
 
     protected static int CreateOnceCount = 50;
+    
 
     [SerializeField]
     protected GameObject _prefab;
 
-    Queue<GameObject> pool = new Queue<GameObject>();
+    protected Queue<GameObject> pool = new Queue<GameObject>();
 
-    int _maxSize;
+    protected int _maxSize;
 
     private void Start()
     {
@@ -44,7 +45,7 @@ public abstract class ObjectPool : MonoBehaviour
         return obj;
     }
 
-    public GameObject GetObj()
+    public virtual GameObject GetObj(Transform parent)
     {
         if (pool.Count <= 0)
         {
@@ -54,12 +55,13 @@ public abstract class ObjectPool : MonoBehaviour
         }
 
         GameObject obj = pool.Dequeue();
+        obj.transform.SetParent(parent);
         obj.SetActive(true);
 
         return obj;
     }
 
-    IEnumerator DevideCreate(int requestCount)
+    protected IEnumerator DevideCreate(int requestCount)
     {
         int count = requestCount;
 

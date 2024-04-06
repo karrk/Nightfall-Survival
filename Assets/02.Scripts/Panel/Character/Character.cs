@@ -1,51 +1,120 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : Base_Unit
 {
     [SerializeField]
-    private JoyStick joystick;
+    private JoyStick _joystick;
 
     [SerializeField]
-    private Weapons weapons;
+    private Weapon testWeapon;
 
-    private float movementSpeed = 2.0f;
-    private float immunityTime = 3.0f;
+    private float immunityTime = 0.5f;
 
-    private int facingDirection = 1;
+    bool _isMoving = false;
 
-    private Stat characterStat = new Stat();
+    private CharacterStat characterStat = null;
+    private eCharacterKind characterKind = eCharacterKind.None;
 
     // getter setter
-    public override Stat UnitStat { get { return characterStat; } }
+    public override BaseStat UnitStat { get { return characterStat; } }
     protected override float ImmunityTime { get { return immunityTime; } }
 
+    private Dictionary<eWeaponType, Weapon> _inventory
+        = new Dictionary<eWeaponType, Weapon>();
 
-    protected override void Start()
+    private Dictionary<eWeaponType, float> _coolTimes
+        = new Dictionary<eWeaponType, float>();
+
+    private List<int> _weaponsNums = new List<int>();
+
+    public override void Init()
     {
-        base.Start();
+        base.Init();
 
-        // TODO) 임시 코드
-        weapons.SettingWeapons(3, new WeaponStat()); 
+        _isDead = false;
+
+        Data_Character data = Global_Data.characterTable[(int)characterKind];
+
+        GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon, this.transform);
+        Weapon wp = obj.AddComponent<RotateWeapon>();
+
+        wp.ApplyUserStat(this);
+
+        _inventory.Add(data.weapon, wp);
+        _coolTimes.Add(data.weapon, wp.WpStat.Delay);
+        _weaponsNums.Add((int)wp.WpStat.ID);
+
+        obj.SetActive(false);
+        StartCoroutine(TimerStart(0.1f));
+    }
+
+    IEnumerator TimerStart(float frequency)
+    {
+        while (true)
+        {
+            for (int i = 0; i < _weaponsNums.Count; i++)
+            {
+                _coolTimes[(eWeaponType)_weaponsNums[i]] -= frequency;
+                
+                if (_coolTimes[(eWeaponType)_weaponsNums[i]] <= 0)
+                {
+                    _inventory[(eWeaponType)_weaponsNums[i]].Use();
+                    _coolTimes[(eWeaponType)_weaponsNums[i]] =
+                         _inventory[(eWeaponType)_weaponsNums[i]].WpStat.Delay;
+                }
+            }
+
+            yield return new WaitForSeconds(frequency);
+        }
+    }
+
+
+    public void SetKind(eCharacterKind kind)
+    {
+        characterKind = kind;
+    }
+    
+    public void SetJoyStick(JoyStick joyStick)
+    {
+        this._joystick = joyStick;
     }
 
     void FixedUpdate()
     {
+        if (_isDead)
+            return;
+
         // 조이스틱 입력 시 move
-        if (joystick.GetDirection() != Vector2.zero)
+        if (_joystick.GetDirection() != Vector2.zero)
         {
+            if(!_isMoving)
+            {
+                _isMoving = true;
+                UnitState = eUnitStates.Move;
+            }
+
             Input_Move();
         }
         else
         {
+            if(_isMoving)
+            {
+                _isMoving = false;
+                UnitState = eUnitStates.Idle;
+            }
+
             _rb.velocity = Vector3.zero;
-            UnitState = eUnitStates.Idle;
         }
     }
 
+    #region 상태
     protected override void Dead()
     {
         base.Dead();
-        // TODO :: GameManager_Instance.Event.CallEvent(eEventType. Char_Dead);
+        GameManager.Instance.Event.CallEvent(eEventType. CharacterDead);
     }
 
     protected override void Idle()
@@ -60,21 +129,22 @@ public class Character : Base_Unit
 
     protected override void OnDamage()
     {
-        if (UnitStat.OnDamage(100f) < 0)
-        {
-            UnitState = eUnitStates.Dead;
-        }
-
-
         base.OnDamage();
     }
 
+    bool _isDead;
+    #endregion
+
+    public void SetStat(eCharacterKind kind)
+    {
+        CharacterStat stat = new CharacterStat();
+        stat.SetStats(stat, Global_Data.characterTable[(int)kind]);
+        this.characterStat = stat;
+    }
 
     public void Input_Move()
     {
-        UnitState = eUnitStates.Move;
-
-        Vector2 pos = joystick.GetDirection();
+        Vector2 pos = _joystick.GetDirection();
 
         float x = pos.x;
         float y = pos.y;
@@ -85,12 +155,14 @@ public class Character : Base_Unit
         if (velocity.x > 0)
         {
             _renderer.flipX = false;
-            facingDirection = 1;
+            //facingDirection = 1;
         }
         else
         {
             _renderer.flipX = true;
-            facingDirection = -1;
+            //facingDirection = -1;
         }
+
+        this.transform.position += velocity * UnitStat.MoveSpeed * Time.fixedDeltaTime;
     }
 }

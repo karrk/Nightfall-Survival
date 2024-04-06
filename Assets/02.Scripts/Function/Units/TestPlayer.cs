@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TestPlayer : Base_Unit
 {
-    public override Stat UnitStat => _stat;
-    private Stat _stat = new Stat();
+    public override BaseStat UnitStat => _stat;
+    private BaseStat _stat = new BaseStat();
 
     protected override float ImmunityTime => 0.2f;
 }

@@ -3,11 +3,7 @@ using VS.Base.Manager;
 
 public class StageManager : Base_Manager
 {
-    [HideInInspector]
-    public StageBuilder _stageBuilder;
-
-    private int _stageNum = -1;
-    public int StageNumber => _stageNum;
+    private static StageBuilder _stageBuilder;
 
     private StageLancher _lancher;
 
@@ -29,7 +25,30 @@ public class StageManager : Base_Manager
 
     public void LanchGame()
     {
+        Global_Data._prevStageNum = Global_Data._stageNum;
         _lancher.StageStart();
+    }
+
+    public static void SetCharacter(eCharacterKind kind)
+    {
+        Global_Data._character = _stageBuilder.GetCharacter(kind);
+    }
+
+    public static void ActiveJoyStick(bool Active)
+    {
+        _stageBuilder.ActiveJoyStick(Active);
+    }
+
+
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            //GameManager.Instance.Event.CallEvent(eEventType.StageReady);
+            //GameManager.Instance.Event.CallEvent(eEventType.StageSetupCompleted);
+            //GameManager.Instance.Event.CallEvent(eEventType.OnGameComplete);
+        }
     }
 
 }

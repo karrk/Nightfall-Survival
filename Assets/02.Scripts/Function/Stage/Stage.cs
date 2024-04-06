@@ -39,4 +39,9 @@ public class Stage
         return _monsterTable[type].Count;
     }
 
+    public List<Monster> GetMonsterList(eUnitType type)
+    {
+        return _monsterTable[type];
+    }
+
 }

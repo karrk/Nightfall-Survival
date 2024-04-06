@@ -8,9 +8,16 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
+    public static int _prevStageNum = 0;
     public static int _stageNum = 1;
 
     private static Stage _stage = null;
+
+    public static int _mobLimitCouns = 50;
+
+    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+
+    public static Character _character = null;
 
     #region 맵 관련 변수
     public static int _textureSize;
@@ -103,7 +110,6 @@ public class Global_Data : MonoBehaviour
 
     #endregion
 
-
     #endregion
 
 
@@ -121,5 +127,10 @@ public class Global_Data : MonoBehaviour
     private static Dictionary<int, Data_Weapon> _weaponTable = new Dictionary<int, Data_Weapon>();
 
     public static Dictionary<int, Data_Weapon> weaponTable => _weaponTable;
+
+
+    private static Dictionary<int, Data_Character> _characterTable = new Dictionary<int, Data_Character>();
+
+    public static Dictionary<int, Data_Character> characterTable => _characterTable;
     #endregion 
 }

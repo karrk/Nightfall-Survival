@@ -1,20 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public enum eUnitStates
-{
-    None,
-    Idle,
-    Move,
-    Dead,
-    Attack,
-    OnDamage,
-}
-
 public abstract class Base_Unit : MonoBehaviour
 {
     // 유닛의 스탯 정보 프로퍼티
-    public abstract Stat UnitStat { get; }
+    public abstract BaseStat UnitStat { get; }
     // 무적시간 프로퍼티
     protected abstract float ImmunityTime { get; }
 
@@ -23,11 +13,11 @@ public abstract class Base_Unit : MonoBehaviour
     protected Rigidbody2D _rb;
     protected CapsuleCollider2D _coll;
 
-    protected Base_Unit _attacker;
+    public Base_Unit _attacker;
     protected bool _isImmunte;
 
     private eUnitStates _state;
-    protected eUnitStates UnitState // 이벤트성 
+    public eUnitStates UnitState
     {
         get { return _state; }
         set
@@ -137,7 +127,7 @@ public abstract class Base_Unit : MonoBehaviour
         return this.UnitStat.HP;
     }
 
-    IEnumerator ImmunityRoutines(float time)
+    protected IEnumerator ImmunityRoutines(float time)
     {
         _isImmunte = true;
 

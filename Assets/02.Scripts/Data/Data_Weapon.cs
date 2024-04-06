@@ -36,4 +36,11 @@ public struct Data_Weapon
     /// 무기의 딜레이입니다.
     /// </summary>
     public float delay;
+
+    public eCollectionType collectType;
+
+    public float duration;
+
+    public float throwCount;
+
 }

@@ -116,14 +116,14 @@ public struct Data_Stage
     /// <summary>
     /// 해당 값마다 일반몬스터 출현빈도시간을 줄여줍니다.
     /// </summary>
-    public int branchDelay;
+    public float branchDelay;
 
     /// <summary>
     /// 해당 스테이지의 시작과 끝의 출현 빈도수를 담는 목록입니다.
     /// <br> Index :: Index[0] 시작시 설정되는 일반 몬스터 출현빈도 
     /// Index[1] 게임이 끝날시 설정 되어야할 일반 몬스터 출현빈도</br>
     /// </summary>
-    public int[] startEndSpawnDelay;
+    public float[] startEndSpawnDelay;
 
     /// <summary>
     /// 해당 스테이지의 BranchDelay의 시간이 지날때마다 줄어들어야할 출현 빈도수 값입니다.
