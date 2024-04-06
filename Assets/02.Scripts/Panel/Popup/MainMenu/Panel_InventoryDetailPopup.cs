@@ -4,23 +4,33 @@ using UnityEngine;
 using VS.Base.Popup;
 using static UnityEngine.InputSystem.InputSettings;
 
-public class Panel_InventoryPopup : Base_AnimationPopup
+public class Panel_InventoryDetailPopup : Base_AnimationPopup
 {
-    // Parameter
-    private bool isDetailPopupOpened = false;
+    [Header("Buttons")]
+    [SerializeField]
+    private GameObject setBtn;
+
+    [SerializeField]
+    private GameObject unsetBtn;
+
+
     protected override void Logic_Init_Base()
     {
         base.Logic_Init_Base();
 
-        GameManager.Instance.Event.RegisterEvent(eEventType.ActShowInventoryPopup_MainMenu, ShowPopup);
+        GameManager.Instance.Event.RegisterEvent<bool>(eEventType.ActShowInventoryDetailPopup_MainMenu, ShowPopup);
     }
 
     /// <summary>
     /// [기능] 팝업을 엽니다.
     /// </summary>
-    private void ShowPopup()
+    private void ShowPopup(bool isSetting)
     {
         base.Logic_Toggle_Base();
+
+        setBtn.SetActive(isSetting);
+        unsetBtn.SetActive(!isSetting);
+
     }
 
     /// <summary>
@@ -29,6 +39,7 @@ public class Panel_InventoryPopup : Base_AnimationPopup
     private void HidePopup()
     {
         base.Logic_Close_Base();
+
     }
 
     protected override void Logic_Close_CompleteCallback_Custom()
@@ -48,12 +59,29 @@ public class Panel_InventoryPopup : Base_AnimationPopup
     }
 
     /// <summary>
-    /// [버튼 콜백] 아이템 슬롯을 클릭 시 자세히 팝업창을 엽니다.
-    /// <br> 해당 아이템이 착용했는지의 여부에 따라 적절한 버튼을 활성화합니다. </br>
+    /// [버튼 콜백] 자세히 버튼을 클릭 시의 이벤트 입니다.
     /// </summary>
-    public void OnClickItemSlot(bool isSetting)
+    public void OnClickDetailBtn()
     {
-        GameManager.Instance.Event.CallEvent<bool>(eEventType.ActShowInventoryDetailPopup_MainMenu, isSetting);
+        // TODO) 기능 작성
+    }
+
+    /// <summary>
+    /// [버튼 콜백] 착용 / 해제 버튼을 클릭 시의 이벤트 입니다.
+    /// </summary>
+    public void OnClickSetUnSetBtn(bool isSetting)
+    {
+        
+
+        if (isSetting == true)
+        {
+            // TODO) 기능 작성
+
+        }
+        else
+        {
+            // TODO) 기능 작성
+        }
     }
 
     #endregion
