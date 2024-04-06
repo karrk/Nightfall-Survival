@@ -40,6 +40,8 @@ public enum eEventType
     ActShowUpgradePopup_MainMenu,
     /// <summary> 콜렉션을 켭니다.</summary>
     ActShowCollectionPopup_MainMenu,
+    /// <summary> 인벤토리 창을 켭니다. </summary>
+    ActShowInventoryPopup_MainMenu,
     #endregion
 
     #region InGame

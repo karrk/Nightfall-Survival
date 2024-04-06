@@ -27,7 +27,7 @@ public class Panel_InGameUI : MonoBehaviour
     /// </summary>
     public void OnClickInventory()
     {
-
+        GameManager.Instance.Event.CallEvent(eEventType.ActShowInventoryPopup_MainMenu);
     }
 
     /// <summary>

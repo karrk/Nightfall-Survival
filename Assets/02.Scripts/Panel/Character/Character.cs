@@ -155,12 +155,10 @@ public class Character : Base_Unit
         if (velocity.x > 0)
         {
             _renderer.flipX = false;
-            //facingDirection = 1;
         }
         else
         {
             _renderer.flipX = true;
-            //facingDirection = -1;
         }
 
         this.transform.position += velocity * UnitStat.MoveSpeed * Time.fixedDeltaTime;
