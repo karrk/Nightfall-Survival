@@ -6,8 +6,6 @@ using static UnityEngine.InputSystem.InputSettings;
 
 public class Panel_InventoryPopup : Base_AnimationPopup
 {
-    // Parameter
-    private bool isDetailPopupOpened = false;
     protected override void Logic_Init_Base()
     {
         base.Logic_Init_Base();
