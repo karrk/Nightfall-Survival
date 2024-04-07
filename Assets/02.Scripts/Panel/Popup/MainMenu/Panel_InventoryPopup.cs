@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VS.Base.Popup;
-using static UnityEngine.InputSystem.InputSettings;
 
 public class Panel_InventoryPopup : Base_AnimationPopup
 {
@@ -16,6 +13,7 @@ public class Panel_InventoryPopup : Base_AnimationPopup
     /// <summary>
     /// [기능] 팝업을 엽니다.
     /// </summary>
+    [ContextMenu("Show_Test")]
     private void ShowPopup()
     {
         base.Logic_Toggle_Base();
