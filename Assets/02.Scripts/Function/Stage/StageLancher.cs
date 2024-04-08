@@ -84,6 +84,13 @@ public class StageLancher : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.Event.RegisterEvent(eEventType.CharacterDead, StopSpawn);
+        GameManager.Instance.Event.RegisterEvent
+            <eWeaponType>(eEventType.WeaponLevelUp, WeaponLevelUp);
+    }
+
+    private void WeaponLevelUp(eWeaponType type)
+    {
+        Global_Data._inventory[type].Data.LevelUp();
     }
 
     public void StageStart()

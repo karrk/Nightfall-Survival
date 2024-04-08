@@ -64,13 +64,11 @@ public class Character : Base_Unit
         GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon,this.transform);
         string componentName = type.ToString();
         Weapon wp = (Weapon)obj.AddComponent(Type.GetType(componentName));
-        obj.SetActive(false);
-
-        wp.ApplyUserStat(this);
+        obj.transform.position = this.transform.position * 200f;
 
         Global_Data._inventory.Add(_characterData.weapon, wp);
-        _wpCoolTimes[type][0] = 0;
-        _wpCoolTimes[type][1] = wp.WpStat.Delay;
+        _wpCoolTimes[type][0] = 1;
+        //_wpCoolTimes[type][1] = wp.WpStat.Delay;
     }
 
     public void ActiveCharacter()
@@ -129,6 +127,7 @@ public class Character : Base_Unit
     private Vector3 _tempVec;
     private float _moveRate;
     private Vector3 _dir;
+    public Vector3 CharacterDir => _dir;
 
     private void Input_Move()
     {
@@ -141,6 +140,60 @@ public class Character : Base_Unit
         _dir = Vector3.Normalize(_tempVec);
 
         this.transform.position += _dir * UnitStat.MoveSpeed * _moveRate * Time.deltaTime;
+    }
+
+    #endregion
+
+    #region 몬스터 탐색
+
+    private Vector2 _screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+    float _closetDist = float.MaxValue;
+    float _dist;
+    private GameObject _closetUnit = null;
+    private LayerMask _mobLayer = 1 << 3;
+    private Vector3 _randPos;
+
+    public GameObject FindClosetUnit(bool anyMob = false)
+    {
+        Camera cam = Camera.main;
+        Vector2 boxCenter = cam.ScreenToWorldPoint(_screenCenter);
+        Vector2 boxSize = cam.ScreenToWorldPoint
+            (new Vector3(Screen.width, Screen.height)) - cam.ScreenToWorldPoint(Vector3.zero);
+
+        Collider2D[] mobs = Physics2D.OverlapBoxAll(boxCenter, boxSize, 0, _mobLayer);
+
+        if (anyMob)
+        {
+            return mobs[UnityEngine.Random.Range(0, mobs.Length)].gameObject;
+        }
+
+        foreach (var mob in mobs)
+        {
+            _dist = Vector2.Distance(this.transform.position, mob.transform.position);
+
+            if (_dist < _closetDist)
+            {
+                _dist = _closetDist;
+                _closetUnit = mob.gameObject;
+            }
+        }
+        _closetDist = float.MaxValue;
+        return _closetUnit;
+    }
+
+    public Vector3 GetClosetUnitPos(bool anyMob = false)
+    {
+        FindClosetUnit(anyMob);
+
+        if (_closetUnit == null)
+        {
+            Vector3 centerPos = this.transform.position;
+            _randPos.x = UnityEngine.Random.Range(centerPos.x - 10f, centerPos.x + 10f);
+            _randPos.y = UnityEngine.Random.Range(centerPos.y - 10f, centerPos.y + 10f);
+            return _randPos;
+        }
+
+        return _closetUnit.transform.position;
     }
 
     #endregion
@@ -192,7 +245,11 @@ public class Character : Base_Unit
             if (_wpCoolTimes[weapon][0] <= 0)
             {
                 _wpCoolTimes[weapon][0] = _wpCoolTimes[weapon][1];
-                Global_Data._inventory[weapon].Use();
+                GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon);
+                obj.GetComponent<Weapon>().Action(weapon);
+                //Weapon clone = Global_Data._inventory[weapon].WeaponCopy(obj);
+                //clone.WeaponSetReady(this);
+                //clone.Fire();
             }
             else
             {
@@ -211,4 +268,5 @@ public class Character : Base_Unit
 
     #endregion
 
+    
 }

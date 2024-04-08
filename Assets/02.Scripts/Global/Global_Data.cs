@@ -50,6 +50,23 @@ public class Global_Data : MonoBehaviour
     private static Data_StageParts _stageParts;
     #endregion
 
+    //public static Vector3 _screenWorldSize = Vector3.zero;
+
+    //public static Vector3 GetScreenSize()
+    //{
+    //    if (_screenWorldSize == Vector3.zero)
+    //        SetScreenSize();
+
+    //    return _screenWorldSize;
+    //}
+
+    //public static void SetScreenSize()
+    //{
+    //    _screenWorldSize =
+    //    Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height,
+    //        Camera.main.farClipPlane));
+    //}
+
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
     /// </summary>
@@ -151,13 +168,18 @@ public class Global_Data : MonoBehaviour
     public static Dictionary<int, Data_Stage> stageTable => _stageTable;
 
 
-    private static Dictionary<int, Data_Weapon> _weaponTable = new Dictionary<int, Data_Weapon>();
+    private static Dictionary<int, Data_Weapon_Stats> _weaponTable = new Dictionary<int, Data_Weapon_Stats>();
 
-    public static Dictionary<int, Data_Weapon> weaponTable => _weaponTable;
+    public static Dictionary<int, Data_Weapon_Stats> weaponTable => _weaponTable;
 
 
     private static Dictionary<int, Data_Character> _characterTable = new Dictionary<int, Data_Character>();
 
     public static Dictionary<int, Data_Character> characterTable => _characterTable;
+
+
+    private static Dictionary<int, Data_Weapon_Properties> _weaponPropertyTable = new Dictionary<int, Data_Weapon_Properties>();
+
+    public static Dictionary<int, Data_Weapon_Properties> weaponPropertyTable => _weaponPropertyTable;
     #endregion 
 }

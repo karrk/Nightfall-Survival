@@ -7,11 +7,12 @@ TagManager:
   - Map
   - Monster
   - Weapon
+  - SreenBox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
   - 

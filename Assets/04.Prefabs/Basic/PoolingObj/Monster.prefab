@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5270287839088761566}
   - component: {fileID: 5270287839088761565}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SubCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   - component: {fileID: 5270287839552391723}
   - component: {fileID: 5270287839552391764}
   - component: {fileID: 5270287839552391765}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}

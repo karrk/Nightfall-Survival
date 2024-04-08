@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class Monster : Base_Unit, IPoolingObj
@@ -39,7 +40,7 @@ public class Monster : Base_Unit, IPoolingObj
         {
             if (collision.TryGetComponent<Weapon>(out _contactWeapon))
             {
-                _attacker = _contactWeapon._user;
+                _attacker = _contactWeapon.Data.User;
                 this.UnitState = eUnitStates.OnDamage;
             }
         }
@@ -84,7 +85,7 @@ public class Monster : Base_Unit, IPoolingObj
         if (_isImmunte)
             return;
 
-        float hp = ApplyDamage(_contactWeapon.WpStat.Damage);
+        float hp = ApplyDamage(_contactWeapon.Data.GetDamageWithUnit());
 
         if (hp > 0)
         {
@@ -184,4 +185,5 @@ public class Monster : Base_Unit, IPoolingObj
     {
         ObjPoolManager.Instance.ReturnObj(ePoolingType.Monster, this.gameObject);
     }
+
 }

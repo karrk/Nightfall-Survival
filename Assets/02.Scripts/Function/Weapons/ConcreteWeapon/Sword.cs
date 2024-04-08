@@ -2,46 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : ContinuousWp
+public class Sword : Weapon
 {
-    protected override eWeaponType weaponType => eWeaponType.Sword;
+    //protected override eWeaponType weaponType => eWeaponType.Sword;
 
-    Vector3 _initPos = Vector3.zero;
-    Vector3 _offsetPos = Vector3.left * 1.5f;
+    //const float OffsetDist = 1f;
+    //private Vector3 _offset = Vector3.left * OffsetDist;
 
-    public override void Use()
-    {
-        Init();
-        this.gameObject.SetActive(true);
-        StartCoroutine(Rotate());
-    }
+    //public override void WeaponSetReady(Character user)
+    //{
+    //    base.WeaponSetReady(user);
 
-    protected override void Init()
-    {
-        this.transform.position = _user.transform.position + _initPos + _offsetPos;
-        this.transform.rotation = Quaternion.Euler(Vector3.zero);
-    }
+    //    WpFuncs = eWeaponFuncs.Rotatable;
+    //}
 
-    IEnumerator Rotate()
-    {
-        float useTimer = 0f;
+    //protected override void SetRotate()
+    //{
+    //    _startPos = this._user.transform.position + _offset;
+    //}
 
-        while (true)
-        {
-            if(useTimer >= _wpStat.Duration)
-            {
-                this.gameObject.SetActive(false);
-                break;
-            }
+    //public override void Fire()
+    //{
+    //    StopAllCoroutines();
+    //    StartCoroutine(Rotate());
+    //}
 
-            this.transform.RotateAround
-                    (_user.transform.position, Vector3.forward, _wpStat.MoveSpeed * Time.deltaTime);
+    //IEnumerator Rotate()
+    //{
+    //    while (true)
+    //    {
+    //        if (_durationTimer <= 0)
+    //        {
+    //            ReturnObj();
+    //            break;
+    //        }
 
-            useTimer += Time.deltaTime;
+    //        this.transform.RotateAround
+    //                (_user.transform.position, Vector3.forward, _wpStat.MoveSpeed * Time.deltaTime);
 
-            yield return null;
-        }
-    }
+    //        _durationTimer -= Time.deltaTime;
 
+    //        yield return null;
+    //    }
+    //}
 }
 
