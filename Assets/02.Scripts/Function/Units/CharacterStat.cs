@@ -150,12 +150,13 @@ public class CharacterStat : BaseStat
 
     #endregion
 
-    public BaseStat SetStats
-        (CharacterStat stats, Data_Character characterData)
+    public BaseStat SetStats(Data_Character characterData)
     {
-        stats = (CharacterStat)base.SetStats(stats, characterData);
+        base.SetStats(characterData);
 
-        stats
+        //stats = (CharacterStat)base.SetStats(stats, characterData);
+
+        this
             .SetRecoverHp(characterData.recoverHp)
             .SetLucky(characterData.lucky)
             .SetThrowCount(characterData.throwCount)
@@ -167,6 +168,6 @@ public class CharacterStat : BaseStat
             .SetBounsGold(characterData.bonusGold)
             .SetAvoidRate(characterData.avoidRate);
 
-        return stats;
+        return this;
     }
 }

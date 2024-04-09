@@ -60,17 +60,17 @@ public class Spawner : MonoBehaviour
     /// 카메라 뷰 테두리의 모서리에 외접한 원형태로 몹생성
     /// </summary>
     /// <param name="limitDegree">회전 시작지점은 마지막으로 스폰된 지점의 방향과 외접한 원의 반지름에서 시작</param>
-    public void CircleSpawn(Queue<Base_Unit> objs, float limitDegree)
+    public void CircleSpawn(Queue<Monster> objs, float limitDegree)
     {
         float rot = limitDegree / objs.Count;
 
         StartCoroutine(RotateCreate(objs, rot, limitDegree));
     }
 
-    IEnumerator RotateCreate(Queue<Base_Unit> objs, float intervalRot, float limitDegree = 360)
+    IEnumerator RotateCreate(Queue<Monster> objs, float intervalRot, float limitDegree = 360)
     {
         Vector3 size = _screenScale;
-        Base_Unit unit = null;
+        Monster unit = null;
 
         float cross = Mathf.Sqrt(Mathf.Pow(size.x, 2) + Mathf.Pow(size.y, 2));
         float radius = cross + _roundPadding;
@@ -101,7 +101,7 @@ public class Spawner : MonoBehaviour
             rot += intervalRot;
             unit = objs.Dequeue();
             unit.transform.position = edgeTr.position;
-            unit.Init();
+            unit.GetComponent<Monster>().Init();
 
             yield return null;
         }

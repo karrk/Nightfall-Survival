@@ -14,7 +14,7 @@ public enum eDataTableType
     Monsters = 2,
     Weapon = 3,
     Character = 4,
-    Temp_5,
+    WeaponProperty = 5,
     Temp_6,
     Temp_7,
     Temp_8,
@@ -96,6 +96,14 @@ public class DataManager : Base_Manager
     }
 
     /// <summary>
+    /// [기능] 무기 특성 테이블을 불러와 Global_Data를 갱신합니다.
+    /// </summary>
+    public void LoadData_WeaponPropertyTable()
+    {
+        _tableLoader.TryLoadData(eDataTableType.WeaponProperty);
+    }
+
+    /// <summary>
     /// [기능] 몬스터 테이블을 불러와 Global_Data를 갱신합니다.
     /// </summary>
     public void LoadData_TextTable()
@@ -132,6 +140,9 @@ public class DataManager : Base_Manager
                 break;
             case eDataTableType.Character:
                 Convert_CharacterTable(m_dataArray);
+                break;
+            case eDataTableType.WeaponProperty:
+                Convert_WeaponPropertyTable(m_dataArray);
                 break;
             case eDataTableType.CommonText:
                 Convert_CommonTextTable(m_dataArray);
@@ -316,7 +327,7 @@ public class DataManager : Base_Manager
 
         for (int i = 0; i < m_dataArray.Length; i++)
         {
-            Data_Weapon parsingData = new Data_Weapon();
+            Data_Weapon_Stats parsingData = new Data_Weapon_Stats();
             string[] dataSegment = m_dataArray[i].Split("\t");
 
             parsingData.ID = int.Parse(dataSegment[0]);
@@ -327,6 +338,51 @@ public class DataManager : Base_Manager
             parsingData.collectType = (eCollectionType)Enum.Parse(typeof(eCollectionType), dataSegment[5]);
             parsingData.duration = float.Parse(dataSegment[6]);
             parsingData.throwCount = float.Parse(dataSegment[7]);
+            parsingData.combineWeaponID = int.Parse(dataSegment[8]);
+            parsingData.PassCount = int.Parse(dataSegment[9]);
+            parsingData.maxLevel = int.Parse(dataSegment[10]);
+
+            string[] tempStringData = dataSegment[11].Split(",");
+            parsingData.addtionalDamages = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.addtionalDamages[j] = float.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[12].Split(",");
+            parsingData.addtionalMoveSpeeds = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.addtionalMoveSpeeds[j] = float.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[13].Split(",");
+            parsingData.addtionalDurations = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.addtionalDurations[j] = float.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[14].Split(",");
+            parsingData.reducionDelays = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.reducionDelays[j] = float.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[14].Split(",");
+            parsingData.addtionalThrowCount = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.addtionalThrowCount[j] = float.Parse(tempStringData[j]);
+            }
+
+            tempStringData = dataSegment[15].Split(",");
+            parsingData.addtionalPassCount = new float[tempStringData.Length];
+            for (int j = 0; j < tempStringData.Length; j++)
+            {
+                parsingData.addtionalPassCount[j] = float.Parse(tempStringData[j]);
+            }
 
             Global_Data.weaponTable.Add(parsingData.ID, parsingData);
         }
@@ -360,6 +416,34 @@ public class DataManager : Base_Manager
             parsingData.avoidRate = float.Parse(dataSegment[16]);
 
             Global_Data.characterTable.Add(parsingData.ID, parsingData);
+        }
+    }
+
+    private void Convert_WeaponPropertyTable(string[] m_dataArray)
+    {
+        Global_Data.weaponPropertyTable.Clear();
+
+        for (int i = 0; i < m_dataArray.Length; i++)
+        {
+            Data_Weapon_Properties parsingData = new Data_Weapon_Properties();
+            string[] dataSegment = m_dataArray[i].Split("\t");
+
+            parsingData.ID = int.Parse(dataSegment[0]);
+            parsingData.isTargeting = dataSegment[1] == "1" ? true : false;
+            parsingData.isContinuous = dataSegment[2] == "1" ? true : false;
+            parsingData.hasPostProcess = dataSegment[3] == "1" ? true : false;
+            parsingData.isCollisionMonster = dataSegment[4] == "1" ? true : false;
+            parsingData.isCollisionScreen = dataSegment[5] == "1" ? true : false;
+            parsingData.hasReflection = dataSegment[6] == "1" ? true : false;
+            parsingData.isNeedDir = dataSegment[7] == "1" ? true : false;
+            parsingData.isControllableDir = dataSegment[8] == "1" ? true : false;
+            parsingData.hasFlexiblePath = dataSegment[9] == "1" ? true : false;
+            parsingData.hasSpecificStartPos = dataSegment[10] == "1" ? true : false;
+            parsingData.isRotate = dataSegment[11] == "1" ? true : false;
+            parsingData.isFalling = dataSegment[12] == "1" ? true : false;
+            parsingData.isTargeting = dataSegment[13] == "1" ? true : false;
+
+            Global_Data.weaponPropertyTable.Add(parsingData.ID, parsingData);
         }
     }
 

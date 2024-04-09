@@ -6,6 +6,7 @@ using UnityEngine;
 public class WeaponStat
 {
     private int _id = -1;
+    private eWeaponType _wpType;
     private string _name;
     private float _damage;
     private float _speed;
@@ -13,8 +14,12 @@ public class WeaponStat
     private float _duration;
     private float _throwCount;
     private eCollectionType _collectionType;
+    private int _combineId;
+    private float _passCount;
+    private int _maxLevel;
 
     public int ID => _id;
+    public eWeaponType WeaponType => _wpType;
     public string Name => _name;
     public float MoveSpeed => _speed;
     public float Damage => _damage;
@@ -22,8 +27,11 @@ public class WeaponStat
     public float Duration => _duration;
     public float ThrowCount => _throwCount;
     public eCollectionType CollectionType => _collectionType;
+    public int CombineID => _combineId;
+    public float PassCount => _passCount;
+    public int MaxLevel => _maxLevel;
 
-    public void SetStats(Data_Weapon wpData)
+    public void SetStats(Data_Weapon_Stats wpData)
     {
         this
             .SetID(wpData.ID)
@@ -36,6 +44,9 @@ public class WeaponStat
             .SetThrowCount((int)wpData.throwCount);
     }
 
+    /// <summary>
+    /// 매개변수의 스텟데이터를 현재의 데이터값으로 변경합니다.
+    /// </summary>
     public void CopyStats(WeaponStat targetData)
     {
         if (targetData.ID == this._id)
@@ -61,6 +72,7 @@ public class WeaponStat
     public WeaponStat SetID(int id)
     {
         this._id = id;
+        this._wpType = (eWeaponType)id;
         return this;
     }
 
@@ -93,9 +105,27 @@ public class WeaponStat
         return this;
     }
 
-    public WeaponStat SetThrowCount(int count)
+    public WeaponStat SetThrowCount(float count)
     {
         this._throwCount = count;
+        return this;
+    }
+
+    public WeaponStat SetCombineWpID(int id)
+    {
+        this._combineId = id;
+        return this;
+    }
+
+    public WeaponStat SetPassCount(float count)
+    {
+        this._passCount = count;
+        return this;
+    }
+
+    public WeaponStat SetWpMaxLevel(int level)
+    {
+        this._maxLevel = level;
         return this;
     }
 
@@ -122,6 +152,11 @@ public class WeaponStat
         return this;
     }
     public WeaponStat AddThrowCount(float count)
+    {
+        this._throwCount += count;
+        return this;
+    }
+    public WeaponStat AddPassCount(float count)
     {
         this._throwCount += count;
         return this;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
@@ -9,9 +10,6 @@ public class StageBuilder : MonoBehaviour
     [SerializeField]
     private GameObject _joyStick;
 
-    //[SerializeField]
-    //private GameObject[] _weaponsPrefab;
-
     private Dictionary<eUnitType, List<Monster>> _monsterTable =
         new Dictionary<eUnitType, List<Monster>>()
         {
@@ -20,27 +18,12 @@ public class StageBuilder : MonoBehaviour
             { eUnitType.Boss , new List<Monster>() },
         };
 
-    public Character GetCharacter(eCharacterKind kind)
-    {
-        Character obj = Instantiate(_characterPrefab);
-        obj.SetStat(kind);
-        obj.SetJoyStick(this._joyStick.GetComponent<JoyStick>());
-        obj.SetKind(kind);
-
-        return obj;
-    }
-
-    public void ActiveJoyStick(bool active)
-    {
-        _joyStick.SetActive(active);
-    }
-
     /// <summary>
     /// 스테이지 ID 에 맞는 스테이지를 구성후 해당 스테이지를 반환합니다.
     /// </summary>
     public Stage Build()
     {
-        if (Global_Data._prevStageNum != Global_Data._stageNum)
+        if (! Global_Data.IsSamePreviousStage)
             SetMonsterTable();
         else
             InitTable();
@@ -78,7 +61,7 @@ public class StageBuilder : MonoBehaviour
         {
             Monster mob = new GameObject().AddComponent<Monster>();
             Data_Monster data = Global_Data.mosnterTable[(eMonsterKind)mobs[i]];
-            mob.UnitStat.SetStats(mob.UnitStat, data);
+            mob.UnitStat.SetStats(data);
 
             if (type == eUnitType.Named)
             {
@@ -103,7 +86,6 @@ public class StageBuilder : MonoBehaviour
     }
 
     #endregion
-
 
 }
 

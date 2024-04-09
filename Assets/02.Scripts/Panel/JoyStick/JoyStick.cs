@@ -10,10 +10,10 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 {
     [SerializeField]
     private RectTransform bg;
-    
+
     [SerializeField]
     private RectTransform handle;
-    
+
     [InputControl(layout = "Vector2")]
     [SerializeField]
     private string stickControlPath;
@@ -93,7 +93,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public Vector2 GetDirection()
     {
-        if(initialPosition != bg.anchoredPosition)
+        if (initialPosition != bg.anchoredPosition)
         {
             return Vector2.zero;
         }

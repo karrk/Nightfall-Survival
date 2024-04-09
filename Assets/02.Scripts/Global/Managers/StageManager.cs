@@ -25,21 +25,13 @@ public class StageManager : Base_Manager
 
     public void LanchGame()
     {
-        Global_Data._prevStageNum = Global_Data._stageNum;
         _lancher.StageStart();
     }
 
     public static void SetCharacter(eCharacterKind kind)
     {
-        Global_Data._character = _stageBuilder.GetCharacter(kind);
+        //Global_Data._character = _stageBuilder.GetCharacter(kind);
     }
-
-    public static void ActiveJoyStick(bool Active)
-    {
-        _stageBuilder.ActiveJoyStick(Active);
-    }
-
-
 
     private void Update()
     {

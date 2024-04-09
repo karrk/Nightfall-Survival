@@ -6,25 +6,31 @@ using VS.Base.Manager;
 public class ObjPoolManager : Base_Manager
 {
     private static ObjPoolManager _instance;
+
     public static ObjPoolManager Instance => _instance;
 
     private Dictionary<ePoolingType, ObjectPool> _pools =
         new Dictionary<ePoolingType, ObjectPool>();
 
-    private void Awake()
-    {
-        _instance = this;
-    }
-
     protected override void Logic_Init_Custom()
     {
-        //GameManager.Instance.Event.RegisterEvent(eEventType.CharacterDead, ReturnAllObj);
-        //수정해야됨
+        _instance = this;
+        GameManager.Instance.Event.RegisterEvent(eEventType.EndGame, ReturnAllObj);
+    }
+
+    public GameObject GetObj(ePoolingType poolingType)
+    {
+        return _pools[poolingType].GetObj(null);
     }
 
     public GameObject GetObj(ePoolingType poolingType,Transform parent)
     {
         return _pools[poolingType].GetObj(parent);
+    }
+
+    public void ReturnObj(ePoolingType poolType, GameObject obj)
+    {
+        _pools[poolType].ReturnObj(obj);
     }
 
     private void ReturnAllObj()

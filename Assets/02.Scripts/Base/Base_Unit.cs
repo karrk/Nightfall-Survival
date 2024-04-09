@@ -3,15 +3,12 @@ using UnityEngine;
 
 public abstract class Base_Unit : MonoBehaviour
 {
-    // 유닛의 스탯 정보 프로퍼티
     public abstract BaseStat UnitStat { get; }
-    // 무적시간 프로퍼티
     protected abstract float ImmunityTime { get; }
 
     protected UnitAnimatior _anim;
     protected SpriteRenderer _renderer;
     protected Rigidbody2D _rb;
-    protected CapsuleCollider2D _coll;
 
     public Base_Unit _attacker;
     protected bool _isImmunte;
@@ -57,23 +54,16 @@ public abstract class Base_Unit : MonoBehaviour
     {
         _anim = GetComponent<UnitAnimatior>();
         _renderer = GetComponent<SpriteRenderer>();
-        _coll = GetComponent<CapsuleCollider2D>();
         _rb = GetComponent<Rigidbody2D>();
     }
 
-
-    protected virtual void Start()
-    {
-        Init();
-    }
-
+    //empty
     public virtual void Init()
     {
-        UnitState = eUnitStates.None;
-        _isImmunte = false;
-        _anim.Init();
+
     }
 
+    //empty
     protected virtual void Idle()
     {
 
@@ -92,7 +82,6 @@ public abstract class Base_Unit : MonoBehaviour
     protected virtual void Dead()
     {
         _anim.SetDeadAnim(true);
-        StopAllCoroutines();
     }
 
     protected virtual void OnDamage()

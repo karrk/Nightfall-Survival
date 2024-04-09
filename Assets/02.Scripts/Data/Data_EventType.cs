@@ -99,4 +99,6 @@ public enum eEventType
     SpawnMobChange,
     CharacterDead,
     
+    WeaponLevelUp,
+
 }

@@ -19,11 +19,12 @@ public class MonsterPool : ObjectPool
 
         GameObject obj = pool.Dequeue();
 
-        obj.transform.position 
+        obj.transform.position
             = Camera.main.transform.position + Vector3.right * 100;
-
         obj.transform.SetParent(parent);
         obj.SetActive(true);
+
+        _outObjList.Add(obj);
 
         return obj;
     }

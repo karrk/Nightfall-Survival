@@ -34,9 +34,9 @@ public class BaseStat
             .SetType((int)this._type); 
     }
 
-    public BaseStat SetStats(BaseStat stats, Data_Unit data)
+    public BaseStat SetStats(Data_Unit data)
     {
-        stats
+        this
             .SetID(data.ID)
             .SetHp(data.hp)
             .SetName(data.name)
@@ -45,7 +45,7 @@ public class BaseStat
             .SetDamage(data.damage)
             .SetType((int)data.type);
 
-        return stats;
+        return this;
     }
 
     public float OnDamage(float damage)

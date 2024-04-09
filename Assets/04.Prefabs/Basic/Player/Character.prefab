@@ -51,7 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attacker: {fileID: 0}
   _joystick: {fileID: 0}
-  testWeapon: {fileID: 0}
 --- !u!114 &198201086550751340
 MonoBehaviour:
   m_ObjectHideFlags: 0

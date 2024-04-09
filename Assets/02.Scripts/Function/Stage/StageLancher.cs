@@ -73,17 +73,24 @@ public class StageLancher : MonoBehaviour
     private int _commonMonsterIdx;
     private int _spawnLimitCount = 0;
 
+    private bool _isStop = false;
+
     private Dictionary<TimeWithEventTypes, Queue<float[]>> _timeEventQueues
         = new Dictionary<TimeWithEventTypes, Queue<float[]>>();
 
-    private Queue<Base_Unit> _circleSpawnQueue = new Queue<Base_Unit>();
+    private Queue<Monster> _circleSpawnQueue = new Queue<Monster>();
     public static Dictionary<eMonsterKind, int> _mobCounts = new Dictionary<eMonsterKind, int>();
-
-
 
     private void Awake()
     {
-        _poolManager = FindObjectOfType<ObjPoolManager>();
+        GameManager.Instance.Event.RegisterEvent(eEventType.CharacterDead, StopSpawn);
+        GameManager.Instance.Event.RegisterEvent
+            <eWeaponType>(eEventType.WeaponLevelUp, WeaponLevelUp);
+    }
+
+    private void WeaponLevelUp(eWeaponType type)
+    {
+        Global_Data._inventory[type].Data.LevelUp();
     }
 
     public void StageStart()
@@ -93,8 +100,16 @@ public class StageLancher : MonoBehaviour
         StartCoroutine(StartTimer(_stageDataTable.clearTime));
     }
 
+    private void StopSpawn()
+    {
+        _isStop = true;
+    }
+
     private void Init()
     {
+        _poolManager = ObjPoolManager.Instance;
+        _isStop = false;
+
         InitVariables();
         InitEventTable();
         SetActiveMobsArr(ref _activeMobsArr);
@@ -104,7 +119,7 @@ public class StageLancher : MonoBehaviour
         _spawnDelay = _startFreq_ms;
         _commonMonsterIdx = 0;
 
-        _spawnLimitCount = Global_Data._mobLimitCouns;
+        _spawnLimitCount = Global_Data.MobLimitCouns;
 
         _circleSpawnQueue.Clear();
 
@@ -278,10 +293,10 @@ public class StageLancher : MonoBehaviour
     private void CircleEventLogic
         (eUnitType unitType, int mobIdx, int spawnCount, int degree = 360)
     {
-        Base_Unit mob;
+        Monster mob;
         for (int i = 0; i < spawnCount; i++)
         {
-            mob = GetMonster(unitType, mobIdx);
+            mob = (Monster)GetMonster(unitType, mobIdx);
             
             if (mob == null)
                 break;
@@ -377,6 +392,9 @@ public class StageLancher : MonoBehaviour
 
         while (true)
         {
+            if (_isStop)
+                break;
+
             if (targetMinute <= timerMinute && timerSecond <= targetSecond)
                 break;
 

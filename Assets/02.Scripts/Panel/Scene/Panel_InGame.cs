@@ -8,7 +8,6 @@ public class Panel_InGame : MonoBehaviour
         GameManager.Instance.Event.RegisterEvent(eEventType.ActGameReady, TempGameStart);
     }
 
-
     /// <summary>
     /// TODO :: 임시로 만들어진 게임 진행 함수입니다. 
     /// </summary>
@@ -31,15 +30,15 @@ public class Panel_InGame : MonoBehaviour
         yield return null;
 
         // TODO::캐릭터 배치
-        StageManager.ActiveJoyStick(true);
         StageManager.SetCharacter(Global_Data._selectedCharacter);
-        Global_Data.GetStageParts().spawner.SpawnCenter(Global_Data._character.gameObject);
         Camera.main.transform.SetParent(Global_Data._character.transform);
         yield return null;
 
         // TODO:: 기타 필요한거있으면 이런식으로 추가..
+        Global_Data.GetStageParts().spawner.SpawnCenter(Global_Data._character.gameObject);
         yield return null;
 
+        Global_Data.SetPrevStageNum(Global_Data._stageNum);
         yield return null;
 
         // TODO :: 팝업창을 만들어서, 실제 시작으로 넘어가도되고, 그이후부터는 몬스터가 배치되고 시간이 진행되어야합니다.
@@ -51,5 +50,8 @@ public class Panel_InGame : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
             TempGameStart();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            GameManager.Instance.Event.CallEvent(eEventType.EndGame);
     }
 }

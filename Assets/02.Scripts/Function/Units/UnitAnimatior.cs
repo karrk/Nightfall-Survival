@@ -7,6 +7,14 @@ public class UnitAnimatior : MonoBehaviour
     const string OnDamageParameter = "IsOnDamage";
     const string AttackParameter = "IsAttack";
 
+    public float CurrentAnimLength
+    {
+        get
+        {
+            return _anim.GetCurrentAnimatorStateInfo(0).length;
+        }
+    }
+
     private Animator _anim;
 
     private void Awake()

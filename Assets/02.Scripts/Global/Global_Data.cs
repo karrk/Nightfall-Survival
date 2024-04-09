@@ -8,18 +8,39 @@ public class Global_Data : MonoBehaviour
 
     private static Data_GameOption _option = new Data_GameOption();
 
-    public static int _prevStageNum = 0;
-    public static int _stageNum = 1;
+    #region 스테이지 데이터
 
     private static Stage _stage = null;
 
-    public static int _mobLimitCouns = 50;
+    private static int _prevStageNum = -1;
+    public static int _stageNum = 1;
 
-    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+    public static bool IsSamePreviousStage => _prevStageNum == _stageNum;
+    // 일반 몬스터별 생성 제한 횟수
+    public static int MobLimitCouns => 50;
+
+    #endregion
+
+    #region 오브젝트 풀 데이터
+    
+    public static int CreateOnceCount => 50;
+
+    #endregion
+
+    #region 캐릭터 데이터
 
     public static Character _character = null;
 
-    #region 맵 관련 변수
+    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+
+    public static Dictionary<eWeaponType, Weapon> _inventory
+        = new Dictionary<eWeaponType, Weapon>();
+
+    public static int LimitWeaponCount => 6;
+
+    #endregion
+
+    #region 맵 관련 테이터
     public static int _textureSize;
 
     public static int _mapTileDevideCount = 4;
@@ -28,6 +49,23 @@ public class Global_Data : MonoBehaviour
 
     private static Data_StageParts _stageParts;
     #endregion
+
+    //public static Vector3 _screenWorldSize = Vector3.zero;
+
+    //public static Vector3 GetScreenSize()
+    //{
+    //    if (_screenWorldSize == Vector3.zero)
+    //        SetScreenSize();
+
+    //    return _screenWorldSize;
+    //}
+
+    //public static void SetScreenSize()
+    //{
+    //    _screenWorldSize =
+    //    Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height,
+    //        Camera.main.farClipPlane));
+    //}
 
     /// <summary>
     /// [기능] 언어 설정을 변경합니다.
@@ -108,6 +146,12 @@ public class Global_Data : MonoBehaviour
         _stage = stage;
     }
 
+    public static void SetPrevStageNum(int num)
+    {
+        _prevStageNum = num;
+    }
+
+
     #endregion
 
     #endregion
@@ -124,13 +168,18 @@ public class Global_Data : MonoBehaviour
     public static Dictionary<int, Data_Stage> stageTable => _stageTable;
 
 
-    private static Dictionary<int, Data_Weapon> _weaponTable = new Dictionary<int, Data_Weapon>();
+    private static Dictionary<int, Data_Weapon_Stats> _weaponTable = new Dictionary<int, Data_Weapon_Stats>();
 
-    public static Dictionary<int, Data_Weapon> weaponTable => _weaponTable;
+    public static Dictionary<int, Data_Weapon_Stats> weaponTable => _weaponTable;
 
 
     private static Dictionary<int, Data_Character> _characterTable = new Dictionary<int, Data_Character>();
 
     public static Dictionary<int, Data_Character> characterTable => _characterTable;
+
+
+    private static Dictionary<int, Data_Weapon_Properties> _weaponPropertyTable = new Dictionary<int, Data_Weapon_Properties>();
+
+    public static Dictionary<int, Data_Weapon_Properties> weaponPropertyTable => _weaponPropertyTable;
     #endregion 
 }
