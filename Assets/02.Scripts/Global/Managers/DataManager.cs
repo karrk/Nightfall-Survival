@@ -60,6 +60,7 @@ public class DataManager : Base_Manager
         LoadData_MonsterTable();
         LoadData_WeaponTable();
         LoadData_CharacterTable();
+        LoadData_WeaponPropertyTable();
         LoadData_TextTable();
     }
 
@@ -339,7 +340,7 @@ public class DataManager : Base_Manager
             parsingData.duration = float.Parse(dataSegment[6]);
             parsingData.throwCount = float.Parse(dataSegment[7]);
             parsingData.combineWeaponID = int.Parse(dataSegment[8]);
-            parsingData.PassCount = int.Parse(dataSegment[9]);
+            parsingData.passCount = int.Parse(dataSegment[9]);
             parsingData.maxLevel = int.Parse(dataSegment[10]);
 
             string[] tempStringData = dataSegment[11].Split(",");
@@ -441,7 +442,6 @@ public class DataManager : Base_Manager
             parsingData.hasSpecificStartPos = dataSegment[10] == "1" ? true : false;
             parsingData.isRotate = dataSegment[11] == "1" ? true : false;
             parsingData.isFalling = dataSegment[12] == "1" ? true : false;
-            parsingData.isTargeting = dataSegment[13] == "1" ? true : false;
 
             Global_Data.weaponPropertyTable.Add(parsingData.ID, parsingData);
         }

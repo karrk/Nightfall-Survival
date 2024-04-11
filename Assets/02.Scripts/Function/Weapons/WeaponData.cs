@@ -52,7 +52,7 @@ public class WeaponData
 
         _collectType = _statTable.collectType;
 
-        //_properties = Global_Data. // 데이터 로드 필요
+        _properties = Global_Data.weaponPropertyTable[(int)type]; // 데이터 로드 필요
 
         _maxLevel = _statTable.maxLevel;
         _currentLevel = 1;
@@ -71,7 +71,7 @@ public class WeaponData
         data._weaponStat.CopyStats(this._weaponStat);
 
         eWeaponType type = data._weaponStat.WeaponType;
-        //this._properties = Global_Data..
+        this._properties = data._properties;
     }
 
     public void LevelUp()

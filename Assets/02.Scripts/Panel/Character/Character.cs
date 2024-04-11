@@ -52,23 +52,30 @@ public class Character : Base_Unit
         Global_Data._inventory.Clear();
         _wpCoolTimes.Clear();
 
-        AddWeapon(_characterData.weapon);
+        RegistWeapon(eWeaponType.G);
     }
 
     // 캐릭터 무기적용 임시함수
-    public void AddWeapon(eWeaponType type)
+    public void ActiveWeapon(eWeaponType type)
     {
+        GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon,this.transform);
+        obj.GetComponent<Weapon>().Action(type);
+    }
+
+    public void RegistWeapon(eWeaponType type)
+    {
+        GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon, this.transform);
+        Weapon weapon = obj.AddComponent<Weapon>();
+        weapon.SetWeapon(type);
+
+        obj.transform.position = Vector3.right * 1000;
+        Global_Data._inventory.Add(type, weapon);
+
         if (!_wpCoolTimes.ContainsKey(type))
             _wpCoolTimes.Add(type, new float[2]);
 
-        GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon,this.transform);
-        string componentName = type.ToString();
-        Weapon wp = (Weapon)obj.AddComponent(Type.GetType(componentName));
-        obj.transform.position = this.transform.position * 200f;
-
-        Global_Data._inventory.Add(_characterData.weapon, wp);
-        _wpCoolTimes[type][0] = 1;
-        //_wpCoolTimes[type][1] = wp.WpStat.Delay;
+        _wpCoolTimes[type][0] = weapon.Data.Delay;
+        _wpCoolTimes[type][1] = weapon.Data.Delay;
     }
 
     public void ActiveCharacter()
@@ -126,7 +133,7 @@ public class Character : Base_Unit
 
     private Vector3 _tempVec;
     private float _moveRate;
-    private Vector3 _dir;
+    private Vector3 _dir = Vector3.right;
     public Vector3 CharacterDir => _dir;
 
     private void Input_Move()
@@ -160,6 +167,16 @@ public class Character : Base_Unit
         Vector2 boxSize = cam.ScreenToWorldPoint
             (new Vector3(Screen.width, Screen.height)) - cam.ScreenToWorldPoint(Vector3.zero);
 
+        Vector2 topLeft = boxCenter + new Vector2(-boxSize.x / 2, boxSize.y / 2);
+        Vector2 topRight = boxCenter + new Vector2(boxSize.x / 2, boxSize.y / 2);
+        Vector2 bottomLeft = boxCenter + new Vector2(-boxSize.x / 2, -boxSize.y / 2);
+        Vector2 bottomRight = boxCenter + new Vector2(boxSize.x / 2, -boxSize.y / 2);
+
+        Debug.DrawLine(topLeft, topRight, Color.red, 10f);
+        Debug.DrawLine(topRight, bottomRight, Color.red, 10f);
+        Debug.DrawLine(bottomRight, bottomLeft, Color.red, 10f);
+        Debug.DrawLine(bottomLeft, topLeft, Color.red, 10f);
+
         Collider2D[] mobs = Physics2D.OverlapBoxAll(boxCenter, boxSize, 0, _mobLayer);
 
         if (anyMob)
@@ -180,6 +197,7 @@ public class Character : Base_Unit
         _closetDist = float.MaxValue;
         return _closetUnit;
     }
+    
 
     public Vector3 GetClosetUnitPos(bool anyMob = false)
     {
@@ -227,7 +245,7 @@ public class Character : Base_Unit
 
     public void SubCoroutine(float freq)
     {
-        WeaponsCheckLogic(freq);
+        WeaponsTimeCheckLogic(freq);
 
         if (_isMoving)
         {
@@ -236,7 +254,7 @@ public class Character : Base_Unit
         }
     }
 
-    private void WeaponsCheckLogic(float frequency)
+    private void WeaponsTimeCheckLogic(float frequency)
     {
         foreach (var e in _wpCoolTimes)
         {
@@ -245,11 +263,7 @@ public class Character : Base_Unit
             if (_wpCoolTimes[weapon][0] <= 0)
             {
                 _wpCoolTimes[weapon][0] = _wpCoolTimes[weapon][1];
-                GameObject obj = ObjPoolManager.Instance.GetObj(ePoolingType.Weapon);
-                obj.GetComponent<Weapon>().Action(weapon);
-                //Weapon clone = Global_Data._inventory[weapon].WeaponCopy(obj);
-                //clone.WeaponSetReady(this);
-                //clone.Fire();
+                ActiveWeapon(weapon);
             }
             else
             {
@@ -268,5 +282,29 @@ public class Character : Base_Unit
 
     #endregion
 
-    
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.B))
+            RegistWeapon(eWeaponType.B);
+
+        if (Input.GetKeyDown(KeyCode.K))
+            RegistWeapon(eWeaponType.K);
+
+        if (Input.GetKeyDown(KeyCode.C))
+            RegistWeapon(eWeaponType.C);
+
+        if (Input.GetKeyDown(KeyCode.D))
+            RegistWeapon(eWeaponType.D);
+
+        if (Input.GetKeyDown(KeyCode.E))
+            RegistWeapon(eWeaponType.E);
+
+        if (Input.GetKeyDown(KeyCode.F))
+            RegistWeapon(eWeaponType.F);
+
+        if (Input.GetKeyDown(KeyCode.G))
+            RegistWeapon(eWeaponType.G);
+
+
+    }
 }

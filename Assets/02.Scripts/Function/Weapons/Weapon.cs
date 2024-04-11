@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
     public WeaponData Data => _data;
 
     private Base_Unit _contactUnit = null;
-
+    private ScreenCollider _contactScn = null;
 
     // 격발 시작지점.
     private Vector3 _firePos = Vector3.zero;
@@ -31,23 +31,27 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
     // 관통수가 없으면 반환
     private int _passCount = 0;
 
-    private void Start()
+    private void Awake()
     {
         _collider = GetComponent<CapsuleCollider2D>();
         _render = GetComponent<SpriteRenderer>();
-        _contactUnit = null;
+        _collider.enabled = false;
     }
 
-    public void Action(eWeaponType type) // 프로퍼티 설정예정
+    public void SetWeapon(eWeaponType type)
     {
+        this._weaponType = type;
+
         if (this._data == null)
             _data = new WeaponData(type);
 
-        if (this._weaponType != type)
-        {
             _render.sprite = Resources.Load<Sprite>(WeaponDirPath + type.ToString());
-            _data.UpdateData(Global_Data._inventory[type].Data);
-        }
+    }
+
+    public void Action(eWeaponType type)
+    {
+        SetWeapon(type);
+        _data.UpdateData(Global_Data._inventory[type].Data);
 
         Init();
         Process = eWeaponProcess.CheckFireType;
@@ -102,10 +106,14 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
     private void SetDirectionTypes()
     {
         if (Data.IsTargeting)
+        {
             _dir = Data.User.GetClosetUnitPos().normalized;
+            Debug.DrawRay(Data.User.transform.position, _dir, Color.green, 0.5f);
+        }
 
-        //else if (Data.IsCtrlDirable)
-            //_dir = GetCustomDir(_weaponType);
+
+        else if (Data.IsCtrlDirable)
+            _dir = GetCustomDir(_weaponType);
 
         else
             _dir = GetRandDir();
@@ -134,23 +142,23 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
         _dir = Vector3.down;
     }
 
-    //private Vector3 GetCustomDir(eWeaponType type)
-    //{
-    //    switch (type)
-    //    {
-    //        case eWeaponType.채찍:
-    //            return Vector3.right * Data.User.CharacterDir.x;
+    private Vector3 GetCustomDir(eWeaponType type)
+    {
+        switch (type)
+        {
+            case eWeaponType.A:
+                return Vector3.right * Data.User.CharacterDir.x;
 
-    //        case eWeaponType.단검:
-    //            return Data.User.CharacterDir;
+            case eWeaponType.B:
+                return Data.User.CharacterDir;
 
-    //        case eWeaponType.마나의노래:
-    //            return Vector3.up;
+            case eWeaponType.F:
+                return Vector3.up;
 
-    //        default:
-    //            return Vector3.zero;
-    //    }
-    //}
+            default:
+                return Vector3.zero;
+        }
+    }
 
     #endregion
 
@@ -159,8 +167,11 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
     {
         this.transform.position = _firePos;
 
+        // 유동형
+        if (Data.HasFelxiblePath)
+            FireByFlexiblePath();
         // 방향형
-        if (Data.IsNeedDir)
+        else if (Data.IsNeedDir)
             StartCoroutine(FireByDir());
 
         // 회전형
@@ -174,16 +185,14 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
         // 지속형
         else if (Data.IsContinuous)
             StartCoroutine(FireContinuous());
-
-        // 유동형
-        else if (Data.HasFelxiblePath)
-            FireByFlexiblePath();
     }
 
     #region 타입별 격발 코루틴
 
     private IEnumerator FireByDir()
     {
+        this.transform.SetParent(null);
+
         while (true)
         {
             if (_durationTimer <= 0)
@@ -195,6 +204,8 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
             yield return null;
         }
+
+        Process = eWeaponProcess.ProcessFinish;
     }
 
     private IEnumerator FireByRotation()
@@ -205,12 +216,13 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
                 break;
 
             this.transform.RotateAround
-                    (Data.User.transform.position, _dir , Data.MoveSpeed * Time.deltaTime);
+                    (Data.User.transform.position, _dir , Data.MoveSpeed * 100 * Time.deltaTime);
 
             _durationTimer -= Time.deltaTime;
 
             yield return null;
         }
+        Process = eWeaponProcess.ProcessFinish;
     }
 
     private IEnumerator FireByDrop()
@@ -232,6 +244,7 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
             yield return null;
         }
+        Process = eWeaponProcess.ProcessFinish;
     }
 
     private IEnumerator FireContinuous()
@@ -248,10 +261,10 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
     private void FireByFlexiblePath()
     {
-        //if (this._weaponType == 도끼)
-        //    StartCoroutine(GravityFall(3f));
-        //else if (this._weaponType == 십자가)
-        //    ReturnToBack();
+        if (this._weaponType == eWeaponType.J)
+            StartCoroutine(GravityFall(3f));
+        else if (this._weaponType == eWeaponType.C)
+            StartCoroutine(ReturnToBack());
     }
 
     private IEnumerator GravityFall(float mass)
@@ -271,15 +284,42 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
         }
     }
 
-    private void ReturnToBack()
+    private IEnumerator ReturnToBack() 
     {
-        this.transform.DOKill();
-        this.transform.DOMove
-            (Data.MoveSpeed * _dir, Data.Duration*0.3f).SetEase(Ease.OutCubic)
-            
-            .OnComplete(() =>
-            this.transform.DOMove
-            (Data.MoveSpeed * (_dir * -1), Data.Duration*0.7f).SetEase(Ease.InCubic));
+        this.transform.SetParent(null);
+
+        float runTime = 0f;
+        float forwardTime = _durationTimer / 3f;
+
+        Vector3 startPos = this.transform.position;
+        Vector3 targetPos = startPos + Data.MoveSpeed * _dir;
+        Vector3 returnPos = startPos + Data.MoveSpeed * 2 * (-1f * _dir);
+
+        float t = 0f;
+
+        while (runTime < Data.Duration)
+        {
+            runTime += Time.deltaTime;
+            // 전반부와 후반부에 대한 t 계산을 분리
+            t = Mathf.Sin((Mathf.Min(runTime, forwardTime) / forwardTime) * Mathf.PI / 2);
+
+            if (runTime <= forwardTime)
+            {
+                // 전반부 이동: 시작 지점에서 중간 지점으로
+                transform.position = Vector3.Lerp(startPos, targetPos, t);
+            }
+            else
+            {
+                // 후반부 이동 중간 지점에서 시작 지점으로
+                // 후반부 시작 시점에 t 값을 리셋
+                t = Mathf.Sin(((runTime - forwardTime) / forwardTime) * Mathf.PI / 2);
+                transform.position = Vector3.Lerp(targetPos, returnPos, t);
+            }
+
+            yield return null;
+        }
+
+        Process = eWeaponProcess.ProcessFinish;
     }
 
     #endregion
@@ -293,11 +333,8 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
         else if (Data.IsCollisionMob)
             SetNextProcessCollMob();
 
-        //else if (Data.IsCollisionScn)
-        //    SetNextProcessCollScn();
-
-        if (Data.HasReflection)
-            _dir = GetReflectionDir(_dir); // 기능부족
+        else if (Data.IsCollisionScn)
+            SetNextProcessCollScn();
 
     }
 
@@ -305,15 +342,28 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
     private void SetNextProcessCollMob()
     {
-        int count = --_passCount;
+        if(--_passCount <= 0)
+            Process = eWeaponProcess.ProcessFinish;
 
-        Process = eWeaponProcess.ProcessFinish;
+        if (Data.HasReflection)
+            _dir = GetReflectionDir(_dir);
     }
 
-    //private void SetNextProcessCollScn()
-    //{
+    private void SetNextProcessCollScn()
+    {
+        if(Data.HasReflection)
+        {
+            if (_contactScn._screen == ScreenColliderType.top ||
+                _contactScn._screen == ScreenColliderType.bottom)
+                _dir.y *= -1;
 
-    //}
+            if (_contactScn._screen == ScreenColliderType.right ||
+                _contactScn._screen == ScreenColliderType.left)
+                _dir.x *= -1;
+        }
+
+
+    }
 
     #endregion
 
@@ -333,10 +383,10 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
     private Vector3 GetRandDir()
     {
-        return new Vector3(_dir.x, Random.Range(-10f, 10f));
+        return Vector3.Normalize(new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f)));
     }
 
-    protected virtual Vector3 GetReflectionDir(Vector3 dir) // 수정필요해보임
+    protected virtual Vector3 GetReflectionDir(Vector3 dir)
     {
         float angleX = Mathf.Abs(dir.x);
         float angleY = Mathf.Abs(dir.y);
@@ -351,6 +401,25 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
 
     #endregion
 
+    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Monster") && Data.IsCollisionMob)
+        {
+            collision.TryGetComponent<Base_Unit>(out _contactUnit);
+            
+            Process = eWeaponProcess.PostProcess;
+        }
+
+        else if (collision.CompareTag("ScreenBox") && Data.IsCollisionScn)
+        {
+            collision.TryGetComponent<ScreenCollider>(out _contactScn);
+
+            Process = eWeaponProcess.PostProcess;
+        }
+    }
+
     private void Init()
     {
         this.transform.position = _data.User.transform.position;
@@ -359,27 +428,7 @@ public class Weapon : MonoBehaviour, ICollection, IPoolingObj
         _passCount = Data.PassCount;
         _firePos = Data.User.transform.position;
         _collider.enabled = true;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Monster"))
-        {
-            collision.TryGetComponent<Base_Unit>(out _contactUnit);
-            
-            Process = eWeaponProcess.PostProcess;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (!Data.IsCollisionScn)
-            return;
-
-        if (collision.CompareTag("ScreenBox"))
-        {
-            Process = eWeaponProcess.PostProcess;
-        }
+        _contactUnit = null;
     }
 
     public void ReturnObj()

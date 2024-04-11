@@ -35,6 +35,7 @@ public class Logic_WebTableLoader : MonoBehaviour
             case eDataTableType.Monsters:
             case eDataTableType.Weapon:
             case eDataTableType.Character:
+            case eDataTableType.WeaponProperty:
                 return URL_googleCommon + settingData.dataTableList[m_type].Item2 + "&range=" + settingData.dataTableList[m_type].Item1;
             case eDataTableType.BasicText:
                 return URL_googleCommon + settingData.basicTextTableURL + "&range=" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[0] + ":" + Global_Data.GetLanguageChar() + settingData.basicTextTableCount[1];

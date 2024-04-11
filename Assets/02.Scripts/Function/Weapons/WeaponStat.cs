@@ -41,7 +41,11 @@ public class WeaponStat
             .SetDelay(wpData.delay)
             .SetCollectType(wpData.collectType)
             .SetDuration(wpData.duration)
-            .SetThrowCount((int)wpData.throwCount);
+            .SetThrowCount((int)wpData.throwCount)
+            .SetCollectType(wpData.collectType)
+            .SetCombineWpID(wpData.combineWeaponID)
+            .SetPassCount(wpData.passCount)
+            .SetWpMaxLevel(wpData.maxLevel);
     }
 
     /// <summary>
@@ -60,7 +64,11 @@ public class WeaponStat
             .SetDelay(this._delay)
             .SetCollectType(this._collectionType)
             .SetDuration(this._duration)
-            .SetThrowCount((int)this._throwCount);
+            .SetThrowCount((int)this._throwCount)
+            .SetCollectType(this.CollectionType)
+            .SetCombineWpID(this.CombineID)
+            .SetPassCount(this.PassCount)
+            .SetWpMaxLevel(this.MaxLevel);
     }
 
     public WeaponStat SetCollectType(eCollectionType type)
@@ -90,7 +98,7 @@ public class WeaponStat
 
     public WeaponStat SetSpeed(float speed)
     {
-        this._speed = speed * 0.1f;
+        this._speed = speed;
         return this;
     }
 

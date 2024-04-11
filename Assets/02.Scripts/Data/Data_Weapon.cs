@@ -100,7 +100,7 @@ public struct Data_Weapon_Stats
     /// <summary>
     /// 관통 가능 횟수입니다.
     /// </summary>
-    public float PassCount;
+    public float passCount;
     /// <summary>
     /// 무기 최대 레벨입니다.
     /// </summary>

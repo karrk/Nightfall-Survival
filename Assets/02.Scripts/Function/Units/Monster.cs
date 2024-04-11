@@ -17,6 +17,7 @@ public class Monster : Base_Unit, IPoolingObj
     private Weapon _contactWeapon;
     private static Base_Unit _chaseTarget;
 
+    private CapsuleCollider2D _triggerCollider;
     private CapsuleCollider2D _collidableCollider;
 
     private bool _isRight;
@@ -27,11 +28,16 @@ public class Monster : Base_Unit, IPoolingObj
     public override void Init()
     {
         if (_collidableCollider == null)
+        {
+            _triggerCollider = GetComponent<CapsuleCollider2D>();
             _collidableCollider = transform.GetChild(0).GetComponent<CapsuleCollider2D>();
+        }
 
         _anim.Init();
         SetStateIdle();
-        _collidableCollider.isTrigger = false;
+
+        _triggerCollider.enabled = true;
+        _collidableCollider.enabled = true;
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -74,7 +80,8 @@ public class Monster : Base_Unit, IPoolingObj
     }
     protected override void Dead()
     {
-        _collidableCollider.isTrigger = true;
+        _triggerCollider.enabled = false;
+        _collidableCollider.enabled = false;
         StopAllCoroutines();
         base.Dead();
         StartCoroutine(WaitDeadAnim());
