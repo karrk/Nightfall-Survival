@@ -31,7 +31,7 @@ public class Global_Data : MonoBehaviour
 
     public static Character _character = null;
 
-    public static eCharacterKind _selectedCharacter = eCharacterKind.A;
+    public static eCharacterKind _selectedCharacter = eCharacterKind.Archer;
 
     public static Dictionary<eWeaponType, Weapon> _inventory
         = new Dictionary<eWeaponType, Weapon>();

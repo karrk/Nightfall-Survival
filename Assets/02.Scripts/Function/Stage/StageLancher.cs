@@ -64,7 +64,7 @@ public class StageLancher : MonoBehaviour
     [SerializeField]
     private int[] _activeMobsArr;
 
-    private int _activeMobs;
+    private long _activeMobs;
     private float _branchTime;
     private float _startFreq_ms;
     private float _clearTime;
@@ -80,6 +80,8 @@ public class StageLancher : MonoBehaviour
 
     private Queue<Monster> _circleSpawnQueue = new Queue<Monster>();
     public static Dictionary<eMonsterKind, int> _mobCounts = new Dictionary<eMonsterKind, int>();
+
+    Queue<long[]> _mobQueue = new Queue<long[]>();
 
     private void Awake()
     {
@@ -112,6 +114,12 @@ public class StageLancher : MonoBehaviour
 
         InitVariables();
         InitEventTable();
+
+        for (int i = 0; i < _stageDataTable.mobChangeTimes.Length; i++)
+        {
+            _mobQueue.Enqueue(new long[] {_stageDataTable.mobChangeTimes[i] , _stageDataTable.mobChanges[i] });
+        }
+
         SetActiveMobsArr(ref _activeMobsArr);
 
         _playMinute = -1;
@@ -138,6 +146,18 @@ public class StageLancher : MonoBehaviour
         _clearTime = _stageDataTable.clearTime;
     }
 
+    private void FixedUpdate()
+    {
+        if (_playSecond <= 0)
+            return;
+
+        if(_mobQueue.Peek()[0] <= _playMinute)
+        {
+            _activeMobs = _mobQueue.Dequeue()[1];
+            SetActiveMobsArr(ref _activeMobsArr);
+        }
+    }
+
     #endregion
 
     #region 시간별 이벤트 테이블 초기화, 설정
@@ -149,7 +169,7 @@ public class StageLancher : MonoBehaviour
             _timeEventQueues.Add(TimeWithEventTypes.MainEvent, new Queue<float[]>());
             _timeEventQueues.Add(TimeWithEventTypes.SubEvent, new Queue<float[]>());
             _timeEventQueues.Add(TimeWithEventTypes.SpectialEvent, new Queue<float[]>());
-            _timeEventQueues.Add(TimeWithEventTypes.MobChange, new Queue<float[]>());
+            //_timeEventQueues.Add(TimeWithEventTypes.MobChange, new Queue<float[]>());
             _timeEventQueues.Add(TimeWithEventTypes.ReduceFrequency, new Queue<float[]>());
         }
         else
@@ -174,9 +194,9 @@ public class StageLancher : MonoBehaviour
         EnqueueTimeEvents(
             targetQueue, _stageDataTable.specialEventTimes, _stageDataTable.specialEventTypes);
 
-        targetQueue = _timeEventQueues[TimeWithEventTypes.MobChange];
-        EnqueueTimeEvents(
-            targetQueue, _stageDataTable.mobChangeTimes, _stageDataTable.mobChanges);
+        //targetQueue = _timeEventQueues[TimeWithEventTypes.MobChange];
+        //EnqueueTimeEvents(
+        //    targetQueue, _stageDataTable.mobChangeTimes, _stageDataTable.mobChanges);
 
         targetQueue = _timeEventQueues[TimeWithEventTypes.ReduceFrequency];
 
@@ -187,6 +207,14 @@ public class StageLancher : MonoBehaviour
     }
 
     private void EnqueueTimeEvents(Queue<float[]> queue, int[] times, int[] events)
+    {
+        for (int i = 0; i < times.Length; i++)
+        {
+            queue.Enqueue(new float[] { times[i], events[i] });
+        }
+    }
+
+    private void EnqueueTimeEvents(Queue<float[]> queue, int[] times, long[] events)
     {
         for (int i = 0; i < times.Length; i++)
         {
@@ -227,7 +255,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            Base_Unit bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[(int)eventNum]);
+            Base_Unit bossMob = GetMonster(eUnitType.Boss, _stageDataTable.bosses[(long)eventNum]);
             _stage.Spawner.RandomSpawn(bossMob);
         }
 
@@ -235,7 +263,7 @@ public class StageLancher : MonoBehaviour
         if (queue.Count > 0 && time == queue.Peek()[0])
         {
             eventNum = queue.Dequeue()[1];
-            Base_Unit namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[(int)eventNum]);
+            Base_Unit namedMob = GetMonster(eUnitType.Named, _stageDataTable.nameds[(long)eventNum]);
             _stage.Spawner.RandomSpawn(namedMob);
         }
 
@@ -246,13 +274,13 @@ public class StageLancher : MonoBehaviour
             StartSpecialEvent((SpecialEventTypes)eventNum);
         }
 
-        queue = _timeEventQueues[TimeWithEventTypes.MobChange];
-        if (queue.Count > 0 && time == queue.Peek()[0])
-        {
-            eventNum = queue.Dequeue()[1];
-            this._activeMobs = (int)eventNum;
-            GameManager.Instance.Event.CallEvent(eEventType.SpawnMobChange);
-        }
+        //queue = _timeEventQueues[TimeWithEventTypes.MobChange];
+        //if (queue.Count > 0 && time == queue.Peek()[0])
+        //{
+        //    eventNum = queue.Dequeue()[1];
+        //    this._activeMobs = (int)eventNum;
+        //    GameManager.Instance.Event.CallEvent(eEventType.SpawnMobChange);
+        //}
 
         queue = _timeEventQueues[TimeWithEventTypes.ReduceFrequency];
         if (queue.Count > 0 && time == queue.Peek()[0])
@@ -325,25 +353,28 @@ public class StageLancher : MonoBehaviour
 
     #region 몬스터 스폰 로직
 
-    private Base_Unit GetMonster(eUnitType unitType, int mobIdx)
+    private Base_Unit GetMonster(eUnitType unitType, long mobIdx)
     {
         Base_Unit origin = _stage.GetOriginMonster(unitType, mobIdx);
 
-        if(unitType == eUnitType.Common)
-        {
-            eMonsterKind mobKind = (eMonsterKind)origin.UnitStat.ID;
-           
-            if (_mobCounts[mobKind] > _spawnLimitCount)
-                return null;
-
-            _mobCounts[mobKind]++;
-        }
         
         GameObject mob = _poolManager.GetObj(ePoolingType.Monster,this.transform);
         mob.TryGetComponent<Monster>(out Monster unit);
 
         origin.UnitStat.StatCopy(unit.UnitStat);
         unit.Init();
+
+        if (unitType == eUnitType.Common)
+        {
+            eMonsterKind mobKind = (eMonsterKind)origin.UnitStat.ID;
+
+            if (_mobCounts[mobKind] > _spawnLimitCount)
+                return null;
+
+            _mobCounts[mobKind]++;
+        }
+
+        unit.SetMobType(unitType);
 
         return unit;
     }
@@ -440,11 +471,11 @@ public class StageLancher : MonoBehaviour
     {
         mobArr = new int[_stage.GetMonsterCount(eUnitType.Common)];
 
-        int temp = _activeMobs;
+        long temp = _activeMobs;
 
         for (int i = 0; i < mobArr.Length; i++)
         {
-            mobArr[(mobArr.Length - 1) - i] = temp % 10;
+            mobArr[(mobArr.Length - 1) - i] = (int)(temp % 10);
             temp /= 10;
         }
     }

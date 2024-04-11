@@ -41,19 +41,19 @@ public struct Data_Stage
     /// 해당 스테이지에서 등장하는 몬스터의 종류입니다.
     /// <br> Index :: monsters의 몬스터 배열 순서 </br>
     /// </summary>
-    public int[] monsters;
+    public long[] monsters;
 
     /// <summary>
     /// 해당 스테이지에서 등장하는 네임드 몬스터의 종류입니다.
     /// <br> Index :: monsters의 몬스터 배열 순서 </br>
     /// /// </summary>
-    public int[] nameds;
+    public long[] nameds;
 
     /// <summary>
     /// 해당 스테이지에서 등장하는 보스 몬스터의 종류입니다.
     /// <br> Index :: monsters의 몬스터 배열 순서 </br>
     /// /// </summary>
-    public int[] bosses;
+    public long[] bosses;
 
     /// <summary>
     /// 해당 스테이지의 클리어 시간입니다
@@ -111,7 +111,7 @@ public struct Data_Stage
     /// 해당 스테이지에서 어떤 몬스터를 출현시킬지 결정하는 목록입니다.
     /// <br> Index :: 어떤 몬스터들을 스폰할지 결정하는 배열 순서</br>
     /// </summary>
-    public int[] mobChanges;
+    public long[] mobChanges;
 
     /// <summary>
     /// 해당 값마다 일반몬스터 출현빈도시간을 줄여줍니다.

@@ -5,9 +5,21 @@
 public enum eMonsterKind
 {
     None = 0,
-    Orc = 1,
-    Fox = 2,
-    Tiger = 3,
+    Bat = 1,
+    Bear = 2,
+    Bee = 3,
+    Boar,
+    Crab,
+    Duck,
+    Flower,
+    Frog,
+    Pig,
+    Rat,
+    Scorpion,
+    Spider,
+    Stump,
+    Tortoise,
+    Wolf,
 }
 
 

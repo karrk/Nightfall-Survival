@@ -6,8 +6,7 @@ public abstract class Base_Unit : MonoBehaviour
     public abstract BaseStat UnitStat { get; }
     protected abstract float ImmunityTime { get; }
 
-    protected UnitAnimatior _anim;
-    protected SpriteRenderer _renderer;
+    //protected UnitAnimatior _anim;
     protected Rigidbody2D _rb;
 
     public Base_Unit _attacker;
@@ -33,10 +32,10 @@ public abstract class Base_Unit : MonoBehaviour
             case eUnitStates.Idle:
                 Idle();
                 break;
-            case eUnitStates.Move:
+            case eUnitStates.Run:
                 Move();
                 break;
-            case eUnitStates.Dead:
+            case eUnitStates.Death:
                 Dead();
                 break;
             case eUnitStates.Attack:
@@ -52,18 +51,16 @@ public abstract class Base_Unit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _anim = GetComponent<UnitAnimatior>();
-        _renderer = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    //empty
+
     public virtual void Init()
     {
 
     }
 
-    //empty
+
     protected virtual void Idle()
     {
 
@@ -71,17 +68,17 @@ public abstract class Base_Unit : MonoBehaviour
 
     protected virtual void Move()
     {
-        _anim.SetMoveAnim(true);
+
     }
 
     protected virtual void Attack()
     {
-        _anim.PlayAttackAnim();
+
     }
 
     protected virtual void Dead()
     {
-        _anim.SetDeadAnim(true);
+
     }
 
     protected virtual void OnDamage()
@@ -93,12 +90,11 @@ public abstract class Base_Unit : MonoBehaviour
 
         if (hp > 0)
         {
-            _anim.PlayOnDamagedAnim();
             StartCoroutine(ImmunityRoutines(ImmunityTime));
         }
         else
         {
-            UnitState = eUnitStates.Dead;
+            UnitState = eUnitStates.Death;
         }
     }
 
@@ -134,9 +130,9 @@ public abstract class Base_Unit : MonoBehaviour
         this.UnitState = eUnitStates.Idle;
     }
 
-    protected void SetSortOrder()
+    protected void SetSortOrder(SpriteRenderer render)
     {
-        _renderer.sortingOrder = (int)(this.transform.position.y * -100);
+        render.sortingOrder = (int)(this.transform.position.y * -100);
     }
 }
 

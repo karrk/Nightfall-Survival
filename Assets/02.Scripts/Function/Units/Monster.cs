@@ -8,7 +8,9 @@ public class Monster : Base_Unit, IPoolingObj
     private readonly static WaitForSeconds IdleTime = new WaitForSeconds(IdleDelay);
     private const float MoveDelay = 0.03f;
     private readonly static WaitForSeconds MoveTime = new WaitForSeconds(MoveDelay);
-    private readonly static float NearDistance = 0.5f;
+    private readonly static float NearDistance = 0.7f;
+
+    private UnitAnimatior _anim = null;
 
     protected override float ImmunityTime => 0.3f;
     public override BaseStat UnitStat => _stat;
@@ -25,6 +27,23 @@ public class Monster : Base_Unit, IPoolingObj
 
     private Coroutine _stepCoroutine;
 
+    public void SetMobType(eUnitType type)
+    {
+        if (type == eUnitType.Common)
+        {
+            this.transform.localScale = new Vector3(1, 1, 1);
+            return;
+        }
+
+        this.gameObject.transform.localScale += new Vector3(1, 1);
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _anim = GetComponent<UnitAnimatior>();
+    }
+
     public override void Init()
     {
         if (_collidableCollider == null)
@@ -34,6 +53,8 @@ public class Monster : Base_Unit, IPoolingObj
         }
 
         _anim.Init();
+        _anim.SetSpriteAsset(this._stat.Name);
+        _anim.SetStateAnim(eUnitStates.Idle);
         SetStateIdle();
 
         _triggerCollider.enabled = true;
@@ -59,27 +80,31 @@ public class Monster : Base_Unit, IPoolingObj
         if (_stepCoroutine != null)
             StopCoroutine(_stepCoroutine);
 
+        
         _stepCoroutine = StartCoroutine(ReadyChase());
     }
 
     protected override void Move()
     {
         base.Move();
+        _anim.SetMoveAnim(true);
         _stepCoroutine = StartCoroutine(Chase());
     }
     protected override void Attack()
     {
+        _anim.PlayAttackAnim();
         base.Attack();
         _chaseTarget._attacker = this;
         _chaseTarget.UnitState = eUnitStates.OnDamage;
 
-        if(_chaseTarget.UnitState == eUnitStates.Dead)
+        if (_chaseTarget.UnitState == eUnitStates.Death)
             { _chaseTarget = null; }
 
         this.UnitState = eUnitStates.Idle;
     }
     protected override void Dead()
     {
+        _anim.SetDeadAnim(true);
         _triggerCollider.enabled = false;
         _collidableCollider.enabled = false;
         StopAllCoroutines();
@@ -96,13 +121,13 @@ public class Monster : Base_Unit, IPoolingObj
 
         if (hp > 0)
         {
-            _anim.PlayOnDamagedAnim();
+            //_anim.PlayOnDamagedAnim();
             StartCoroutine(ImmunityRoutines(ImmunityTime));
             UnitState = eUnitStates.Idle;
         }
         else
         {
-            UnitState = eUnitStates.Dead;
+            UnitState = eUnitStates.Death;
         }
     }
 
@@ -118,7 +143,7 @@ public class Monster : Base_Unit, IPoolingObj
 
             if (_chaseTarget != null)
             {
-                UnitState = eUnitStates.Move;
+                UnitState = eUnitStates.Run;
                 break;
             }
 
@@ -146,7 +171,7 @@ public class Monster : Base_Unit, IPoolingObj
                 _stat.MoveSpeed * MoveDelay);
 
             SetForward(targetPos.x);
-            SetSortOrder();
+            //SetSortOrder();
 
             if (Vector3.Distance(transform.position, targetPos) <= NearDistance)
             {
@@ -182,7 +207,7 @@ public class Monster : Base_Unit, IPoolingObj
         if (_isRight == _tempIsRight)
         {
             _isRight = !_tempIsRight;
-            _renderer.flipX = _isRight;
+            _anim.Render.flipX = _isRight;
         }
     }
 
@@ -190,6 +215,8 @@ public class Monster : Base_Unit, IPoolingObj
 
     public void ReturnObj()
     {
+        eMonsterKind kind = (eMonsterKind)_stat.ID;
+        StageLancher._mobCounts[kind]--;
         ObjPoolManager.Instance.ReturnObj(ePoolingType.Monster, this.gameObject);
     }
 

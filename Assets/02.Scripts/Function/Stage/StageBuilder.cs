@@ -55,7 +55,7 @@ public class StageBuilder : MonoBehaviour
     /// <summary>
     /// 등급별 원본 몬스터 테이블 생성
     /// </summary>
-    private void SetMob(eUnitType type, int[] mobs)
+    private void SetMob(eUnitType type, long[] mobs)
     {
         for (int i = 0; i < mobs.Length; i++)
         {

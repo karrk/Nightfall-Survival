@@ -19,9 +19,9 @@ public class Stage
         _spawner = spawner;
     }
 
-    public Monster GetOriginMonster(eUnitType type, int tableIndex)
+    public Monster GetOriginMonster(eUnitType type, long tableIndex)
     {
-        return _monsterTable[type][tableIndex - 1];
+        return _monsterTable[type][(int)tableIndex - 1];
     }
 
     public int GetMonsterCount(eUnitType type = eUnitType.None)

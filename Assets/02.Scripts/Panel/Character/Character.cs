@@ -26,11 +26,14 @@ public class Character : Base_Unit
     private bool _isMoving;
     private bool _isDead;
 
+    CharacterAnimator _anim;
+
     protected override void Awake()
     {
         base.Awake();
         GameManager.Instance.Event.RegisterEvent(eEventType.StageSetupCompleted, Init);
         GameManager.Instance.Event.RegisterEvent(eEventType.OnGameComplete, ActiveCharacter);
+        _anim = GetComponent<CharacterAnimator>();
     }
 
     public override void Init()
@@ -39,20 +42,23 @@ public class Character : Base_Unit
 
         _rb.isKinematic = false;
 
-        _anim.Init();
+        
         this._characterKind = Global_Data._selectedCharacter;
         
         _characterData = Global_Data.characterTable[(int)_characterKind];
         UnitStat.SetStats(_characterData);
 
+        _anim.Init();
+        _anim.SetSpriteAsset(_characterKind.ToString());
+        _anim.SetStateAnim(eUnitStates.Idle);
+
         _isDead = false;
         _isMoving = false;
 
-        // 인벤토리, 장비가 제작되면 반영, 수정
         Global_Data._inventory.Clear();
         _wpCoolTimes.Clear();
 
-        RegistWeapon(eWeaponType.G);
+        RegistWeapon(eWeaponType.A);
     }
 
     // 캐릭터 무기적용 임시함수
@@ -87,14 +93,24 @@ public class Character : Base_Unit
 
     protected override void Idle()
     {
-        _anim.SetMoveAnim(false);
+        _anim.SetIdleAnim(true);
+    }
+
+    protected override void Move()
+    {
+        base.Move();
+        _anim.SetMoveAnim(true);
+    }
+
+    protected override void OnDamage()
+    {
+        _anim.PlayOnDamagedAnim();
+        base.OnDamage();
     }
 
     protected override void Dead()
-    // 애니메이션을 재생하고 이벤트를 호출할까
-    // 애니메이션 재생과 이벤트를 동시에 호출할까 (현재)
     {
-        base.Dead();
+        _anim.SetDeadAnim(true);
         _isDead = true;
         _rb.isKinematic = true;
 
@@ -115,7 +131,7 @@ public class Character : Base_Unit
             if (!_isMoving)
             {
                 _isMoving = true;
-                UnitState = eUnitStates.Move;
+                UnitState = eUnitStates.Run;
             }
             Input_Move();
         }
@@ -249,7 +265,7 @@ public class Character : Base_Unit
 
         if (_isMoving)
         {
-            base.SetSortOrder();
+            base.SetSortOrder(_anim.Render);
             SetFlipX();
         }
     }
@@ -275,9 +291,9 @@ public class Character : Base_Unit
     private void SetFlipX()
     {
         if (_dir.x > 0)
-            _renderer.flipX = false;
+            _anim.Render.flipX = false;
         else
-            _renderer.flipX = true;
+            _anim.Render.flipX = true;
     }
 
     #endregion

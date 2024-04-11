@@ -17,8 +17,8 @@ public enum eUnitStates
 {
     None,
     Idle,
-    Move,
-    Dead,
+    Run,
+    Death,
     Attack,
     OnDamage,
 }

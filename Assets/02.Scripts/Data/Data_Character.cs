@@ -2,10 +2,20 @@
 public enum eCharacterKind
 {
     None = 0,
-    A = 1,
-    B = 2,
-    C = 3,
-    D = 4,
+    Archer,
+    DarkWizard,
+    FireWizard,
+    Goblin,
+    GoblinArcher,
+    Knight,
+    Naked,
+    Orc,
+    Pirate,
+    Skeleton,
+    Spearman,
+    Thief,
+    Viking,
+    WhiteWizard,
 }
 
 public class Data_Character : Data_Unit

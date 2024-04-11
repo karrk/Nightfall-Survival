@@ -192,24 +192,24 @@ public class DataManager : Base_Manager
             parsingData.tileKind = (eMapTileKind)Enum.Parse(typeof(eMapTileKind), dataSegment[1]);
 
             string[] tempStringData = dataSegment[2].Split(",");
-            parsingData.monsters = new int[tempStringData.Length];
+            parsingData.monsters = new long[tempStringData.Length];
             for (int j = 0; j < tempStringData.Length; j++)
             {
-                parsingData.monsters[j] = int.Parse(tempStringData[j]);
+                parsingData.monsters[j] = long.Parse(tempStringData[j]);
             }
 
             tempStringData = dataSegment[3].Split(",");
-            parsingData.nameds = new int[tempStringData.Length];
+            parsingData.nameds = new long[tempStringData.Length];
             for (int j = 0; j < tempStringData.Length; j++)
             {
-                parsingData.nameds[j] = int.Parse(tempStringData[j]);
+                parsingData.nameds[j] = long.Parse(tempStringData[j]);
             }
 
             tempStringData = dataSegment[4].Split(",");
-            parsingData.bosses = new int[tempStringData.Length];
+            parsingData.bosses = new long[tempStringData.Length];
             for (int j = 0; j < tempStringData.Length; j++)
             {
-                parsingData.bosses[j] = int.Parse(tempStringData[j]);
+                parsingData.bosses[j] = long.Parse(tempStringData[j]);
             }
 
             parsingData.clearTime = int.Parse(dataSegment[5]);
@@ -271,10 +271,10 @@ public class DataManager : Base_Manager
             }
 
             tempStringData = dataSegment[14].Split(",");
-            parsingData.mobChanges = new int[tempStringData.Length];
+            parsingData.mobChanges = new long[tempStringData.Length];
             for (int j = 0; j < tempStringData.Length; j++)
             {
-                parsingData.mobChanges[j] = int.Parse(tempStringData[j]);
+                parsingData.mobChanges[j] = long.Parse(tempStringData[j]);
             }
 
             parsingData.branchDelay = float.Parse(dataSegment[15]);
@@ -441,7 +441,7 @@ public class DataManager : Base_Manager
             parsingData.hasFlexiblePath = dataSegment[9] == "1" ? true : false;
             parsingData.hasSpecificStartPos = dataSegment[10] == "1" ? true : false;
             parsingData.isRotate = dataSegment[11] == "1" ? true : false;
-            parsingData.isFalling = dataSegment[12] == "1" ? true : false;
+            //parsingData.isFalling = dataSegment[12] == "1" ? true : false;
 
             Global_Data.weaponPropertyTable.Add(parsingData.ID, parsingData);
         }

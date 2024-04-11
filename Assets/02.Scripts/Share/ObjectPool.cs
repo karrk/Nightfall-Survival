@@ -87,7 +87,7 @@ public abstract class ObjectPool : MonoBehaviour
         }
     }
 
-    public void ReturnObj()
+    public virtual void ReturnObj()
     {
         for (int i = _outObjList.Count-1 ; i >= 0; i--)
         {
@@ -95,7 +95,7 @@ public abstract class ObjectPool : MonoBehaviour
         }
     }
 
-    public void ReturnObj(GameObject obj)
+    public virtual void ReturnObj(GameObject obj)
     {
         this._outObjList.Remove(obj);
 
