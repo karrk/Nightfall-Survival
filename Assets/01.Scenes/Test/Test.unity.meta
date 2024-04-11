@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/02.Scripts/Function/Units.meta
+guid: 2610c51b5d81d94478fa0c43db76a14b
+folderAsset: yes
+========
 guid: e19cb2cc03fec8c4593c8ff3ebf87e04
+>>>>>>>> b757374 (# 1.4):Assets/01.Scenes/Test/Test.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
