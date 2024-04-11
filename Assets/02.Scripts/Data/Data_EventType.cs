@@ -8,4 +8,41 @@
 public enum eEventType
 {
     Test,
+
+    #region 게임 진행
+
+    #endregion
+
+    #region 입력
+    /// <summary> 스페이스바가 눌렸을때 호출되는 이벤트 입니다. </summary>
+    OnSpacebarPress,
+    /// <summary> ESC 버튼이 눌렸을때 호출되는 이벤트 입니다. </summary>
+    OnESCPress,
+    #endregion
+
+    #region 네트워크 통신
+    /// <summary> 테이블 데이터에 관한 네트워크 응답이 온경우에 반환됩니다.</summary>
+    OnResponseData_Table,
+    #endregion
+
+    #region 팝업관련
+    #region 공통팝업
+    /// <summary> 버튼이 없는 형태의 공통 팝업을 설정합니다. </summary>
+    SetNoButtonPopup,
+    /// <summary> 확인 버튼만 있는 형태의 공통 팝업을 설정합니다. </summary>
+    SetOneButtonPopup,
+    /// <summary> 확인과 취소 버튼이 있는 공통 팝업을 설정합니다.</summary>
+    SetTwoButtonPopup,
+    #endregion
+
+    #region 팝업조작
+    /// <summary> 모든 열려있는 팝업창을 닫습니다.</summary>
+    ActAllClosePopup,
+
+    #endregion
+    #endregion
+    StartGame,
+    EndGame,
+    StageSetupCompleted,
+    StageReady,
 }

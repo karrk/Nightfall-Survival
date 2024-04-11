@@ -157,7 +157,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.karks.VampireSuvivor
-    Standalone: com.Company.ProductName
+    Standalone: com.karks.VampireSuvivor
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -777,7 +777,8 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Standalone: DevelopeMode
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -880,7 +881,7 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: aaa6292d-042b-4c45-bcd8-bf2185ccbc97
   framebufferDepthMemorylessMode: 0
