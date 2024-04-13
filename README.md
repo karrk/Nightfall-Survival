@@ -1,2 +1,3 @@
-# VampireSurvivor
-뱀파이어 서바이벌 게임
+# Nightfall Suvival
+개발기간 2024년 3월 24일 - 2024년 4월 14일
+공동 제작자 : 장동진, 이지호, 김현지
