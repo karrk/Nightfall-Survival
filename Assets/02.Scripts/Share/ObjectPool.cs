@@ -12,7 +12,9 @@ public abstract class ObjectPool : MonoBehaviour
     [SerializeField]
     protected GameObject _prefab;
 
+    // 비활성화된 오브젝트 풀
     protected Queue<GameObject> pool = new Queue<GameObject>();
+    // 씬 내 활성화중인 오브젝트 요소 목록
     protected List<GameObject> _outObjList = new List<GameObject>();
 
     protected int _maxSize;
@@ -25,6 +27,7 @@ public abstract class ObjectPool : MonoBehaviour
         InitPool();
     }
 
+    // 풀 초기화 함수
     protected void InitPool()
     {
         for (int i = 0; i < InitCount; i++)
@@ -35,6 +38,7 @@ public abstract class ObjectPool : MonoBehaviour
         _maxSize = InitCount;
     }
 
+    // 인스펙터에 등록된 오브젝트 인스턴스 생성
     protected GameObject CreateObj()
     {
         if (_prefab == null) // 테스트중 임시코드
@@ -47,6 +51,9 @@ public abstract class ObjectPool : MonoBehaviour
         return obj;
     }
 
+    // 오브젝트 풀의 오브젝트 반환
+    // 만약 지정된 트랜스폼이 없는경우 오브젝트의 부모는 현재 위치 그대로 유지한다.
+    // 오브젝트가 없는경우 생성량을 두배로 늘림
     public virtual GameObject GetObj(Transform parent)
     {
         tempParent = parent == null ? this.transform : parent;
@@ -67,6 +74,7 @@ public abstract class ObjectPool : MonoBehaviour
         return obj;
     }
 
+    // 프로그램의 성능 보완을 위해 작성한 함수로 많은 생성 호출시 해당 생성량을 CreateOnceCount 수로 분할하여 생성
     protected IEnumerator DevideCreate(int requestCount)
     {
         int count = requestCount;
@@ -87,6 +95,7 @@ public abstract class ObjectPool : MonoBehaviour
         }
     }
 
+    // 풀 반환 함수로, 특정 대상이 없는경우 전체반환처리
     public virtual void ReturnObj()
     {
         for (int i = _outObjList.Count-1 ; i >= 0; i--)
@@ -95,6 +104,7 @@ public abstract class ObjectPool : MonoBehaviour
         }
     }
 
+    // 특정 대상을 outedList에서 내부 오브젝트 풀로 반환하는 함수
     public virtual void ReturnObj(GameObject obj)
     {
         this._outObjList.Remove(obj);
