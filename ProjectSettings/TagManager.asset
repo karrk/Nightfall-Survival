@@ -5,11 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Map
+  - Monster
+  - Weapon
+  - ScreenBox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
   - 
