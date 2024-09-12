@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/07.Fonts/NotoSansJP-Medium SDF.asset.meta
+guid: 25187815fa1182b428b97e07444f5ce6
+NativeFormatImporter:
+========
+guid: 13bbf223d4fd1df46af03168967c8714
+folderAsset: yes
+DefaultImporter:
+>>>>>>>> ae42d35 (#0.0.8 캐릭터, 조이스틱 원복):Assets/06.Animations/Character.meta
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
