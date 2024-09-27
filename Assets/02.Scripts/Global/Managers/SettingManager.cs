@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class SettingManager : MonoBehaviour
 {
@@ -16,7 +16,6 @@ public class SettingManager : MonoBehaviour
             return _instance;
         }
     }
-
 
     public Vector2 ScreenSize
     {
